@@ -38,7 +38,9 @@ WHERE e_eventID = $eventID AND e_roomID = r_roomID;";
 	$connection->query($query);
 	if($connection->result_size() != 1)
 	{
-		echo "Invalid Event ID, please check that you are using the correct EventID.  If you are report this to Kitsune on the Mewcon Forums via PM";
+		echo "Invalid Event ID, please check that you are using the correct EventID.  If you are, report this to Kitsune on the Mewcon Forums via PM. <br /><br />";
+		$page->addURL("test.php","Back to event schedule.");
+		break;
 	}
 	$row = $connection->fetch_row();
 	$event = new Event($row[0], $row[1], $row[2], $row[3], $row[4], $row[5], $row[6], $row[7]);
