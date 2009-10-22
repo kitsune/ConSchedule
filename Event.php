@@ -3,6 +3,7 @@
  *      Event.php
  *      
  *      Copyright 2008 Dylan Enloe <ninina@Siren>
+ *		Copyright 2009 Drew Fisher <kakudevel@gmail.com>
  *      
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -24,20 +25,18 @@ class Event
 {
 	private $eventname;
 	private $roomname;
-	private $day;
-	private $start;
-	private $end;
+	private $startDate;
+	private $endDate;
 	private $desc;
 	private $panelist;
 	private $color;
 	
-	function __construct($eventname, $roomname, $day, $start, $end, $desc, $panelist, $color)
+	function __construct($eventname, $roomname, $startDate, $endDate, $desc, $panelist, $color)
 	{
 		$this->eventname = $eventname;
 		$this->roomname = $roomname;
-		$this->day = $day;
-		$this->start = $start;
-		$this->end = $end;
+		$this->startDate = date_create($startDate);
+		$this->endDate = date_create($endDate);
 		$this->desc = $desc;
 		$this->panelist = $panelist;
 		$this->color = $color;
@@ -53,19 +52,14 @@ class Event
 		return $this->roomname;
 	}
 	
-	public function getDay()
+	public function getStartDate()
 	{
-		return $this->day;
+		return $this->startDate;
 	}
 	
-	public function getStart()
+	public function getEndDate()
 	{
-		return $this->start;
-	}
-	
-	public function getEnd()
-	{
-		return $this->end;
+		return $this->endDate;
 	}
 	
 	public function getDesc()
@@ -81,6 +75,16 @@ class Event
 	public function getColor()
 	{
 		return $this->color;
+	}
+	
+	public function getEventLength()
+	{
+		return ($this->endDate->format("U") - $this->startDate->format("U"))/60/60;
+	}
+	
+	public function getEventLengthInHalfHours()
+	{
+		return (($this->endDate->format("U") - $this->startDate->format("U"))/60/60)*2;
 	}
 }
 ?>
