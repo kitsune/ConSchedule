@@ -3,6 +3,7 @@
  *      Webpage.php
  *      
  *      Copyright 2008 Dylan Enloe <ninina@koneko-hime>
+ *		Copyright 2009 Drew Fisher <kakudevel@gmail.com>
  *      
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -49,50 +50,57 @@ class Webpage {
 		echo "<center>No events were found</center>";
 	}
 	
-	public function printDaySchedule($schedule, $rooms, $day, $start = 0, $end = 48)
-	{
-		echo '<table border="1"><thead><td></td>';
+	// conOpens and conCloses are epxected to be of type Date
+	public function printDaySchedule($schedule, $roomNames, $conOpens, $conCloses) 
+	{	
+		$halfHoursOpen = ((($conCloses->format("U") - $conOpens->format("U"))/60/60)*2)+1;
+		$tableTime = clone($conOpens);
+		
+		echo '<table border="1" cellpadding="5" cellspacing="0"><thead><td></td>';
 		//initialize the wait on each room to zero
-		//mind as well print out the top row too
-		foreach($rooms as $id => $room)
+		//might as well print out the top row too
+		foreach($roomNames as $roomName)
 		{
-			echo "<td>$room</td>";
-			$wait[$id] = 0;
+			echo "<td align='center'>$roomName</td>";
+			$wait[$roomName] = 0;
 		}
 		echo "</thead>";
-		for($i=$start; $i < $end;$i+=1)
+		for($i=0; $i < $halfHoursOpen; $i+=1)
 		{
 			echo '<tr>';
-			$time = $this->getRealTime($i);
-			echo "<td>$time</td>";
-			foreach($rooms as $id => $room)
+			$tF = $tableTime->format("H:i");
+			echo "<td>$tF</td>";
+		
+			foreach($roomNames as $roomName)
 			{
-				if($wait[$id] == 0)
+				if($wait[$roomName] == 0)
 				{
-					if(isset($schedule[$day][$i][$id]))
-					{
-					
+					$tF = $tableTime->format("Y-m-d H:i:s");
+					if(isset($schedule[$tF][$roomName]))
+					{			
 						//print the item
-						$name = $schedule[$day][$i][$id]->getEventName();
-						$color = $schedule[$day][$i][$id]->getColor();
-						$size = $schedule[$day][$i][$id]->getSize();
-						$eventID = $schedule[$day][$i][$id]->getEventID();
+						$name = $schedule[$tF][$roomName]->getEventName();
+						$color = $schedule[$tF][$roomName]->getColor();
+						$size = $schedule[$tF][$roomName]->getEventLengthInHalfHours();
+						//$eventID = $schedule[$day][$i][$roomName]->getEventID();
 						echo "<td rowspan=\"$size\" bgcolor=\"$color\">";
-						$this->addURL("view.php?event=$eventID",$name);
+						//$this->addURL("view.php?event=$eventID",$name);
+						echo $name;
 						echo"</td>";
-						$wait[$id] = $size - 1;
+						$wait[$roomName] = $size - 1;
 					}
 					else
 					{
-						echo "<td></td>";
+						echo "<td> </td>";
 					}
 				}
 				else
 				{
-					$wait[$id] -= 1;
+					$wait[$roomName] -= 1;
 				}
 			}
 			echo '</tr>';
+			$tableTime->modify("+30 minutes");
 		}
 		echo '</table>';
 	}
