@@ -1,6 +1,6 @@
 <?php
 /*
- *      test.php
+ *      test_view.php
  *      
  *      Copyright 2009 Drew Fisher <kakudevel@gmail.com>
  *      
@@ -23,6 +23,29 @@
 function __autoload($class_name) {
     require_once $class_name . '.php';
 }
+
+$page = new Webpage("Test View Event");
+
+if(isset($_GET['event']))
+{
+	#open the database connection to validate the eventID
+	$connection = new Connection();
+	$eventID = $connection->validate_string($_GET['event']);
+	$query = "
+SELECT e_eventID, e_eventname, r_roomname, e_dateStart, e_dateEnd, e_eventDesc, e_panelist, e_color
+FROM events, rooms
+WHERE e_eventID = $eventID AND e_roomID = r_roomID;";
+	$connection->query($query);
+	if($connection->result_size() != 1)
+	{
+		echo "Invalid Event ID, please check that you are using the correct EventID.  If you are report this to Kitsune on the Mewcon Forums via PM";
+	}
+	$row = $connection->fetch_row();
+	$event = new Event($row[0], $row[1], $row[2], $row[3], $row[4], $row[5], $row[6], $row[7]);
+	//ok lets pass this info to the page so it can display it
+	$page->printEvent($event);
+}
+/*
 
 $C = new Connection();
 
@@ -61,73 +84,6 @@ for( $i=0; $i<$eventCount; $i++ ) {
 
 unset($C); // close the connection
 
-// set up the schedule var
-$t = date_create("2009-12-30 08:00:00");
-for( $i = 0; $i < 37; $i++ ) 
-{
-	foreach( $roomNames as $roomName ) 
-	{
-		foreach( $events as $event ) 
-		{
-			
-			$sDF = $event->getStartDate()->format("U");
-			$tF = $t->format("U");
-			$diff = $sDF - $tF;
-			
-			if( $event->getRoomName() == $roomName && $diff == 0 )
-			{
-				$tF = $t->format("Y-m-d H:i:s");
-				$schedule[$tF][$roomName] = $event;
-			}
-			
-		}
-	}
-	$t->modify("+30 minutes");
-}
-
-$page = new Webpage("Con Schedule Test");
-
-$conStarts = date_create("2009-12-30 08:00:00");
-$conEnds = date_create("2009-12-31 02:00:00");
-
-echo "<center><h2>";
-echo "Schedule for " . $conStarts->format("F d, Y");
-echo "</h2></center>";
-
-echo "<hr />";
-echo "<hr />";
-
-echo "<p>";
-$page->printDaySchedule($schedule, $roomNames, $conStarts, $conEnds);
-echo "</p>";
-
-$conStarts->modify("+24 hours");
-$conEnds->modify("+24 hours");
-
-echo "<hr />";
-echo "<hr />";
-echo "<center><h2>";
-echo "Schedule for " . $conStarts->format("F d, Y");
-echo "</h2></center>";
-echo "<hr />";
-echo "<hr />";
-
-echo "<p>";
-$page->printDaySchedule($schedule, $roomNames, $conStarts, $conEnds);
-echo "</p>";
-
-$conStarts->modify("+1 day");
-$conEnds->modify("+1 day");
-
-echo "<hr />";
-echo "<hr />";
-echo "<center><h2>";
-echo "Schedule for " . $conStarts->format("F d, Y");
-echo "</h2></center>";
-echo "<hr />";
-echo "<hr />";
-
-echo "<p>";
-$page->printDaySchedule($schedule, $roomNames, $conStarts, $conEnds);
-echo "</p>";
+$page = new Webpage("Con Schedule View Test");
+$page->printEvent($events[0]); */
 ?>

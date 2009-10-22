@@ -23,6 +23,7 @@
 
 class Event
 {
+	private $eventID;
 	private $eventname;
 	private $roomname;
 	private $startDate;
@@ -31,8 +32,9 @@ class Event
 	private $panelist;
 	private $color;
 	
-	function __construct($eventname, $roomname, $startDate, $endDate, $desc, $panelist, $color)
+	function __construct($eventID, $eventname, $roomname, $startDate, $endDate, $desc, $panelist, $color)
 	{
+		$this->eventID = $eventID;
 		$this->eventname = $eventname;
 		$this->roomname = $roomname;
 		$this->startDate = date_create($startDate);
@@ -40,6 +42,11 @@ class Event
 		$this->desc = $desc;
 		$this->panelist = $panelist;
 		$this->color = $color;
+	}
+	
+	public function getEventID()
+	{
+		return $this->eventID;
 	}
 	
 	public function getEventName()

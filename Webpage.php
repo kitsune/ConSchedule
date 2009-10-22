@@ -79,13 +79,13 @@ class Webpage {
 					if(isset($schedule[$tF][$roomName]))
 					{			
 						//print the item
-						$name = $schedule[$tF][$roomName]->getEventName();
-						$color = $schedule[$tF][$roomName]->getColor();
-						$size = $schedule[$tF][$roomName]->getEventLengthInHalfHours();
-						//$eventID = $schedule[$day][$i][$roomName]->getEventID();
+						$event = $schedule[$tF][$roomName];
+						$name = $event->getEventName();
+						$color = $event->getColor();
+						$size = $event->getEventLengthInHalfHours();
+						$eventID = $event->getEventID();
 						echo "<td rowspan=\"$size\" bgcolor=\"$color\">";
-						//$this->addURL("view.php?event=$eventID",$name);
-						echo $name;
+						$this->addURL("test_view.php?event=$eventID",$name);
 						echo"</td>";
 						$wait[$roomName] = $size - 1;
 					}
@@ -162,25 +162,24 @@ Select Room:
 	{
 		$name = $event->getEventName();
 		$room = $event->getRoomName();
-		$day = $this->getRealDate($event->getDay());
-		$start = $this->getRealTime($event->getStart());
-		$end = $this->getRealTime($event->getEnd());
+		$start = $event->getStartDate();
+		$end = $event->getEndDate();
 		$desc = $event->getDesc();
 		$panelist = $event->getPanelist();
 		echo "
-Panel Name: $name<br>
-The panel will be held in the $room.<br>
-The panel will be from $start to $end on the $day.<br>";
+Panel Name: $name<br />
+The panel will be held in the $room.<br />
+The panel will be from " . $start->format('H:i') ." to " . $end->format('H:i') ." on " . $start->format('D, F d, Y') .".<br />";
 		if($panelist != "")
 		{
-			echo "The primary panalist can be reached on the forum under the name of $panalist.<br>";
+			echo "The primary panelist can be reached on the forum under the name of \"$panelist.\"<br>";
 		}
 		if($desc != "")
 		{
-			echo "A brief description of the panal:<br> $desc<br>";
+			echo "A brief description of the panel:<br /> $desc<br />";
 		}
 		echo "<br>";
-		$this->addURL("index.php", "Back to event schedule");	
+		$this->addURL("test.php", "Back to event schedule");	
 	}
 	
 	public function printAdminEdit($event, $eventID, $connection)
