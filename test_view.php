@@ -45,45 +45,4 @@ WHERE e_eventID = $eventID AND e_roomID = r_roomID;";
 	//ok lets pass this info to the page so it can display it
 	$page->printEvent($event);
 }
-/*
-
-$C = new Connection();
-
-$q = "
-SELECT r_roomName
-FROM rooms";
-$C->query( $q );
-$roomCount = $C->result_size();
-
-// store the room names
-for( $i=0; $i < $roomCount; $i++ ) {
-	$row = $C->fetch_assoc();
-	$roomNames[$i] = $row['r_roomName'];
-}
-
-$q = "
-SELECT e_eventID, e_eventName, r_roomName, e_dateStart, e_dateEnd, 
-	e_eventName, e_eventDesc, e_color, e_panelist
-FROM events, rooms
-WHERE e_roomID = r_roomID
-;";
-
-$C->query( $q );
-$eventCount = $C->result_size();
-
-// create the events
-for( $i=0; $i<$eventCount; $i++ ) {
-	$row = $C->fetch_assoc();
-
-	$events[$i] = new Event( 
-		$row['e_eventID'], $row['e_eventName'], $row['r_roomName'], 
-		$row['e_dateStart'],$row['e_dateEnd'], $row['e_eventDesc'], 
-		$row['e_panelist'], $row['e_color'] 
-	);
-}
-
-unset($C); // close the connection
-
-$page = new Webpage("Con Schedule View Test");
-$page->printEvent($events[0]); */
 ?>
