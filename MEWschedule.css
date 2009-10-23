@@ -1,0 +1,60 @@
+table
+{
+	border: 1px solid black;
+	border-right: 0;
+	border-bottom: 0;
+}
+
+table thead
+{
+	font-weight: bold;
+	text-align: center;
+}
+
+table td
+{
+	border-bottom: 1px solid black;
+	border-right: 1px solid black;
+	padding: .5em;
+}
+
+.timeColumn 
+{
+	font-weight: bold;
+}
+
+.foundEvent
+{
+	padding: 0em;
+}
+
+.foundEvent span
+{
+	width: 100%;
+	height: 100%;
+	position: relative;
+}
+.foundEvent .startTime
+{
+	padding:  2px 0em;
+	margin: 0em;
+	font-size: x-small;
+	text-align: center;
+	border-bottom: 1px dashed black;
+	width: 100%;
+}
+
+.foundEvent .event
+{
+	margin: .5em;
+}
+
+.foundEvent .endTime
+{
+	padding: 2px 0em;
+	margin: 0em;
+	font-size: x-small;
+	text-align: center;
+	border-top: 1px dashed black;
+	width: 100%;
+}

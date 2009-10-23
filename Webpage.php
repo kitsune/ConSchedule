@@ -31,6 +31,7 @@ class Webpage {
 <head>
 	<title>Mewcon: $title</title>
 	<meta http-equiv=\"content-type\" content=\"text/html;charset=utf-8\" />
+	<LINK href='MEWschedule.css' rel='stylesheet' type='text/css'>
 </head>
 <body>";
 	}
@@ -56,12 +57,12 @@ class Webpage {
 		$halfHoursOpen = ((($conCloses->format("U") - $conOpens->format("U"))/60/60)*2)+1;
 		$tableTime = clone($conOpens);
 		
-		echo '<table border="1" cellpadding="5" cellspacing="0"><thead><td></td>';
+		echo '<table cellpadding=0 cellspacing=0><thead><td></td>';
 		//initialize the wait on each room to zero
 		//might as well print out the top row too
 		foreach($roomNames as $roomName)
 		{
-			echo "<td align='center'>$roomName</td>";
+			echo "<td>$roomName</td>";
 			$wait[$roomName] = 0;
 		}
 		echo "</thead>";
@@ -69,7 +70,7 @@ class Webpage {
 		{
 			echo '<tr>';
 			$tF = $tableTime->format("H:i");
-			echo "<td>$tF</td>";
+			echo "<td class=\"timeColumn\">" . $tF . "</td>";
 		
 			foreach($roomNames as $roomName)
 			{
@@ -84,8 +85,33 @@ class Webpage {
 						$color = $event->getColor();
 						$size = $event->getEventLengthInHalfHours();
 						$eventID = $event->getEventID();
-						echo "<td rowspan=\"$size\" bgcolor=\"$color\">";
+						
+						echo "<td class=\"foundEvent\" rowspan=\"" . $size \
+							. "\" bgcolor=\"" . $color . "\">";
+						
+						echo "<div class=\"startTime\">";
+						echo $event->getStartDate()->format("H:i");
+						echo "</div>";
+						
+						if ( $size <= 3 )
+						{
+							echo "<div class=\"event\">";
+						}
+						else if ( $size > 3 && $size < 7 )
+						{
+							echo "<div class=\"event\" style=\"padding: " . ($size/2) ."em 0em;\">";
+						}
+						else
+						{
+							echo "<div class=\"event\" style=\"padding: " . ($size-2) ."em 0em;\">";
+						}
+						
 						$this->addURL("test_view.php?event=$eventID",$name);
+						echo "</div>";
+						
+						echo "<div class=\"endTime\">";
+						echo $event->getEndDate()->format("H:i");
+						echo "</div>";
 						echo"</td>";
 						$wait[$roomName] = $size - 1;
 					}
