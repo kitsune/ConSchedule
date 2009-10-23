@@ -27,10 +27,7 @@ function __autoload($class_name) {
 $page = new Webpage("Test View Event");
 
 $admin = FALSE;
-$username = "Kaku";
-
-echo "Admin: $admin <br />";
-echo "Username: $username <br />";
+$username = "nobody";
 
 if(isset($_GET['event']))
 {
