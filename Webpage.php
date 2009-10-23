@@ -86,7 +86,7 @@ class Webpage {
 						$size = $event->getEventLengthInHalfHours();
 						$eventID = $event->getEventID();
 						
-						echo "<td class=\"foundEvent\" rowspan=\"" . $size \
+						echo "<td class=\"foundEvent\" rowspan=\"" . $size
 							. "\" bgcolor=\"" . $color . "\">";
 						
 						echo "<div class=\"startTime\">";
@@ -205,16 +205,15 @@ The panel will be from " . $start->format('H:i') ." to " . $end->format('H:i') .
 			echo "A brief description of the panel:<br /> $desc<br />";
 		}
 		echo "<br>";
-		$this->addURL("test.php", "Back to event schedule");	
+		//$this->addURL("test.php", "Back to event schedule");	
 	}
 	
 	public function printAdminEdit($event, $eventID, $connection)
 	{
 		$name = $event->getEventName();
 		$room = $event->getRoomName();
-		$day = $event->getDay();
-		$start = floatval($event->getStart())/2;
-		$end = floatval($event->getEnd())/2;
+		$start = $event->getStartDate();
+		$end = $event->getEndDate();
 		$desc = $event->getDesc();
 		$panelist = $event->getPanelist();
 		$color = $event->getColor();
@@ -230,16 +229,11 @@ Color to make event (html color):
 <br><br>
 Change the time of the event:
 <br>
-*Hack alert: For this year I'm using a speed hack so I don't have to do alot of dev
-<br> Day is an integer, 1 being the first day, 0 being set up, 2 being third day
-<br> time is the number of hours since the beginning of the day. ie 8:30 is 8.5
-<br> If an event spans multiple days it needs to be entered once of each day.
-<br>
-Day : <input type=\"text\" name=\"day\" size=\"3\" value = \"$day\"> 
-Start : <input type=\"text\" name=\"start\" size=\"3\" value = \"$start\"> 
-End: <input type=\"text\" name=\"end\" size=\"3\" value = \"$end\">
+Format is: YYYY-MM-DD HH:MM:SS (e.g. 2009-8-2 14:30:00)<br />
+Start : <input type=\"text\" name=\"start\" size=\"20\" value = \"" . $start->format("Y-m-d H:i:s") . "\"> 
+End: <input type=\"text\" name=\"end\" size=\"20\" value = \"" . $end->format("Y-m-d H:i:s") . "\">
 <br><br>
-Primary panelist's forum name(may be empty):
+Primary panelist's forum name (may be empty):
 <br>
 <input type=\"text\" name=\"panalist\" value= \"$panelist\">
 <br><br>
@@ -281,35 +275,11 @@ Edit the Description of this Panel:<br>
 Update Event Name: 
 <br>
 <input type=\"text\" name=\"name\" value=\"$name\">
-<br>
+<br><br>
 Edit the Description of this Panel:<br>
 <textarea name=\"desc\" rows=\"10\" cols=\"60\">$desc</textarea>
 <br><br>
 <input type=\"submit\" name=\"add\" value=\"Update\"></form><br>";
-	}
-	
-	private function getRealTime($time)
-	{
-		$hours = intval($time/2);
-		if($hours * 2 != $time)
-		{
-			#it's a 1/2 hour
-			return "$hours:30";
-		}else
-		{
-			return "$hours:00";
-		}
-	}
-	
-	private function getRealDate($date)
-	{
-		#this is just a big if switch
-		if($date == 0)
-			return "December 30th";
-		if($date == 1)
-			return "December 31st";
-		if($date == 2)
-			return "January 1st";
 	}
 }
 ?>
