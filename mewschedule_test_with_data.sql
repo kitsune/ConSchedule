@@ -4,7 +4,7 @@
 #
 # Host: localhost (MySQL 5.1.37)
 # Database: mewschedule_test
-# Generation Time: 2009-10-23 02:15:33 -0700
+# Generation Time: 2009-10-24 10:47:26 -0700
 # ************************************************************
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -32,7 +32,7 @@ CREATE TABLE `events` (
   `e_eventDesc` text NOT NULL,
   `e_panelist` tinytext NOT NULL,
   PRIMARY KEY (`e_eventID`)
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 
 LOCK TABLES `events` WRITE;
 /*!40000 ALTER TABLE `events` DISABLE KEYS */;
@@ -42,7 +42,8 @@ VALUES
 	(2,1,'2009-12-30 14:00:00','2009-12-30 16:30:00','another fairly long title for T2','#CCCCCC','','Kaku'),
 	(3,2,'2009-12-30 14:00:00','2009-12-30 18:00:00','Test 3','#0066FF','this is a description for test 3','Admin'),
 	(4,5,'2009-12-30 16:00:00','2009-12-30 17:30:00','yet more wasted space with Test 4','#FFCA52','Description for Test 4','Kitsune'),
-	(5,4,'2009-12-30 09:00:00','2009-12-30 10:00:00','obscenely and gratuitously long title involving a sql test for T5','#00FF00','','Admin');
+	(5,4,'2009-12-30 09:00:00','2009-12-30 10:00:00','obscenely and gratuitously long title involving a sql test for T5','#00FF00','','Admin'),
+	(6,3,'2009-12-30 22:00:00','2009-12-31 01:30:00','Late Night Test 6','#0066FF','Test to make sure going from previous day to next works as expected.','Kaku');
 
 /*!40000 ALTER TABLE `events` ENABLE KEYS */;
 UNLOCK TABLES;
