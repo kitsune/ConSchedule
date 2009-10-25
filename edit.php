@@ -3,6 +3,7 @@
  *      edit.php
  *      
  *      Copyright 2008 Dylan Enloe <ninina@Siren>
+ *		Copyright 2009 Drew Fisher <kakudevel@gmail.com>
  *      
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -44,27 +45,63 @@ if(!isset($_GET['update']))
 
 $action = $_GET['update'];
 
-if($user->is_Admin() && $action = "admin")
+// make sure the supplied update field is valid
+if( $action != "panelist" && $action != "admin" )
+{
+	echo "Unknown edit level: $action.";
+	exit(0);
+}
+
+$name = $connection->validate_string( $_POST['name'] );
+
+if ( str_word_count($name) == 0 )
+{
+	echo "Name cannot be blank. Please go back and supply one.<br />";
+	exit(0);
+}
+// check to make sure the eventID exists within the db
+$query = "SELECT e_eventID, e_panelist FROM events WHERE e_eventID = $eventID;";
+$connection->query($query);
+
+if( $connection->result_size() != 1 ) {
+	echo "EventID does not exist.";
+	exit(0);
+}
+
+$row = $connection->fetch_assoc();
+$panelist = $row['e_panelist'];
+
+if($user->is_Admin() && $action == "admin")
 {
 	$name = $connection->validate_string($_POST['name']);
-	$day = $connection->validate_string($_POST['day']);
-	$start = floatval($connection->validate_string($_POST['start'])) * 2;
-	$end = floatval($connection->validate_string($_POST['end'])) * 2;
+	$start = date_create($connection->validate_string($_POST['start']));
+	$end = date_create($connection->validate_string($_POST['end']));
 	$color = $connection->validate_string($_POST['color']);
 	$panelist = $connection->validate_string($_POST['panalist']);
 	$desc = $connection->validate_string($_POST['desc']);
 	$room = $connection->validate_string($_POST['room']);
 
-	
-
 	$query = "
 UPDATE events
-SET e_eventname = '$name', e_roomID = $room, e_day = $day, e_start = $start, e_end = $end, e_desc = '$desc', e_panelist = '$panelist', e_color = '$color'
+SET e_eventName = '$name', e_roomID = $room, e_dateStart = '" . $start->format("Y-m-d H:i:s") . "', e_dateEnd = '" . $end->format("Y-m-d H:i:s") . "', e_eventDesc = '$desc', e_panelist = '$panelist', e_color = '$color'
 WHERE e_eventID = $eventID;";
 
 	$connection->query($query);
 	
-	echo "<center>Event successfully updated<br>";
-	$page->addURL("index.php","Return to main schedule");
 }
+else if( $user->get_Username() == $panelist && $action == "panelist" )
+{
+	$name = $connection->validate_string($_POST['name']);
+	$desc = $connection->validate_string($_POST['desc']);
+	
+	$query = "UPDATE events 
+SET e_eventName = '$name', e_eventDesc = '$desc' 
+WHERE e_eventID = $eventID;";
+	
+	$connection->query($query);
+}
+echo "<center>Event successfully updated</center><br />";
+
+$page->addURL("index.php","Return to main schedule");
+
 ?>
