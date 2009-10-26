@@ -3,6 +3,7 @@
  *      delete.php
  *      
  *      Copyright 2008 Dylan Enloe <ninina@Siren>
+ *		Copyright 2009 Drew Fisher <kakudevel@gmail.com>
  *      
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -51,8 +52,8 @@ WHERE e_eventID = $eventID;";
 	{
 		echo "<center>Do you really want to delete this event?<br>";
 		$page->addURL("delete.php?event=$eventID&confirm='Yes'","Yes");
-		echo "   ";
-		$page->addURL("index.php","no"); 
+		echo "&nbsp;&nbsp;&nbsp;";
+		$page->addURL("index.php","No"); 
 	}
 }
 else
