@@ -53,7 +53,7 @@ WHERE e_eventID = $eventID;";
 		echo "<center>Do you really want to delete this event?<br>";
 		$page->addURL("delete.php?event=$eventID&confirm='Yes'","Yes");
 		echo "&nbsp;&nbsp;&nbsp;";
-		$page->addURL("index.php","No"); 
+		$page->addURL("test.php","No"); 
 	}
 }
 else
