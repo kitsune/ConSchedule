@@ -106,7 +106,7 @@ class Webpage {
 							echo "<div class=\"event\" style=\"padding: " . ($size-2) ."em 0em;\">";
 						}
 						
-						$this->addURL("test_view.php?event=$eventID",$name);
+						$this->addURL("view.php?event=$eventID",$name);
 						echo "</div>";
 						
 						echo "<div class=\"endTime\">";
