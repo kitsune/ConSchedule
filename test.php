@@ -1,7 +1,8 @@
 <?php
 /*
- *      test.php
- *      
+ *      index.php
+ *
+ *      Copyright 2008 Dylan Enloe <ninina@koneko-hime>
  *      Copyright 2009 Drew Fisher <kakudevel@gmail.com>
  *      
  *      This program is free software; you can redistribute it and/or modify
@@ -36,7 +37,7 @@ $C = new Connection();
 $schedule = NULL;
 
 // rooms query
-$q = "SELECT r_roomName FROM rooms";
+$q = "SELECT r_roomName FROM rooms;";
 $C->query( $q );
 $roomCount = $C->result_size();
 
@@ -45,7 +46,6 @@ if( $roomCount < 1 )
 	echo "<center>";
 	echo "<h2>Possible error with database involving rooms. =T.T=</h2>";
 	echo "Please inform Kitsune of the problem via a PM in the forums.<br />";
-	echo "Be sure to supply a copy of the URL to help with the debugging process.";
 	echo "</center>";
 	exit(0);
 }
