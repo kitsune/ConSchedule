@@ -1,8 +1,9 @@
 <?php
 /*
  *      index.php
- *      
+ *
  *      Copyright 2008 Dylan Enloe <ninina@koneko-hime>
+ *      Copyright 2009 Drew Fisher <kakudevel@gmail.com>
  *      
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -24,72 +25,140 @@ function __autoload($class_name) {
     require_once $class_name . '.php';
 }
 
-/*First find out if we are dealing with any parameters*/
-if(isset($_GET['day']))
-	$params = "WHERE e_day = " +$_GET['day'];
-	
-if(isset($_GET['start']))
-	if(isset($params))
-		$params += "AND e_start >= " +$_GET['start'];
-	else
-		$params = "WHERE e_start >= " +$_GET['start'];
+$conTimes[0]['start'] = "2009-12-31 08:00:00";
+$conTimes[0]['end'] = "2010-01-01 02:00:00";
+$conTimes[1]['start'] = "2010-01-01 08:00:00";
+$conTimes[1]['end'] = "2010-01-02 02:00:00";
+$conTimes[2]['start'] = "2010-01-02 08:00:00";
+$conTimes[2]['end'] = "2010-01-03 00:00:00";
 
-if(isset($_GET['end']))
-	if(isset($params))
-		$params += "AND e_end >= " +$_GET['end'];
-	else
-		$params = "WHERE e_end >= " +$_GET['end'];
+$C = new Connection();
 
-if(isset($_GET['room']))
-	if(isset($params))
-		$params += "AND e_roomID >= " +$_GET['room'];
-	else
-		$params = "WHERE e_roomID >= " +$_GET['room'];
+$schedule = NULL;
 
-$connection = new Connection();
+// rooms query
+$q = "SELECT r_roomName FROM rooms;";
+$C->query( $q );
+$roomCount = $C->result_size();
 
-$query = "
-SELECT e_eventID, e_eventname, e_roomID, e_start, e_end, e_color, e_day
-FROM events;";
-
-if(isset($params))
-	$query += $params;
-	
-$connection->query($query);
-
-if($connection->result_size() == 0)
+if( $roomCount < 1 ) 
 {
-	$page = new Webpage("Con Schedule");
-	$page->printNoEvents();
+	echo "<center>";
+	echo "<h2>Possible error with database involving rooms. =T.T=</h2>";
+	echo "Please inform Kitsune of the problem via a PM in the forums.<br />";
+	echo "</center>";
 	exit(0);
 }
 
-while($row = $connection->fetch_row())
-{
-	$size = $row[4] - $row[3];
-	$schedule[$row[6]][$row[3]][$row[2]] = new Entry($row[0], $row[1], $row[5], $size);
-}
-
-//get rooms and their names
-$query = "
-SELECT r_roomID, r_roomname
-FROM rooms
-ORDER BY r_roomID";
-
-$connection->query($query);
-
-while($row = $connection->fetch_row())
-{
-	$rooms[$row[0]] = $row[1];
+// store the room names
+for( $i=0; $i < $roomCount; $i++ ) {
+	$row = $C->fetch_assoc();
+	$roomNames[$i] = $row['r_roomName'];
 }
 
 
-/*Ok we have the array of requested entries so now we make a webpage and print to it*/
-$page = new Webpage("Con Schedule");
+// events query
+$q = "
+SELECT e_eventID, e_eventName, r_roomName, e_dateStart, e_dateEnd, 
+	e_eventName, e_eventDesc, e_color, e_panelist
+FROM events, rooms
+WHERE e_roomID = r_roomID
+;";
 
-echo "<center>Schedule for December 31st";
-$page->printDaySchedule($schedule, $rooms, 1, 16);
-echo "Schedule for January 1st";
-$page->printDaySchedule($schedule, $rooms, 2);
-echo "</center>";
+$C->query( $q );
+$eventCount = $C->result_size();
+
+if( $eventCount < 1 ) 
+{
+	echo "<center>";
+	echo "<h2>No events have yet been planned =T.T=</h2>";
+	echo "</center>";
+	exit(0);
+}
+
+// create the events
+for( $i=0; $i<$eventCount; $i++ ) {
+	$row = $C->fetch_assoc();
+
+	$events[$i] = new Event( 
+		$row['e_eventID'], $row['e_eventName'], $row['r_roomName'], 
+		$row['e_dateStart'],$row['e_dateEnd'], $row['e_eventDesc'], 
+		$row['e_panelist'], $row['e_color'] 
+	);
+}
+
+unset($C); // close the connection
+
+// set up the schedule var
+$t = date_create( $conTimes[0]['start'] );
+for( $i = 0; $i < 37; $i++ ) 
+{
+	foreach( $roomNames as $roomName ) 
+	{
+		foreach( $events as $event ) 
+		{
+			$sDF = $event->getStartDate()->format("U");
+			$tF = $t->format("U");
+			$diff = $sDF - $tF;
+			
+			if( $event->getRoomName() == $roomName && $diff == 0 )
+			{
+				$tF = $t->format("Y-m-d H:i:s");
+				$schedule[$tF][$roomName] = $event;
+			}
+			
+		}
+	}
+	$t->modify("+30 minutes");
+}
+
+// print the schedule(s)
+$page = new Webpage("Con Schedule Test");
+
+echo "<center>";
+
+if( isset($_GET['day']) ) 
+{
+	$day = $_GET['day'];
+
+	if( ! isset($conTimes[$day]) ) 
+	{
+		echo "<h2>Incorrect day passed. Try 0, 1, or 2</h2>"; 
+		exit(0);
+	}
+	
+	$dayStarts = date_create( $conTimes[$day]['start'] );
+	$dayEnds = date_create( $conTimes[$day]['end'] );
+	
+	echo "<hr /><hr />";
+	echo "<h2>";
+	echo "Schedule for " . $dayStarts->format("F d, Y");
+	echo "</h2>";
+	echo "<hr /><hr />";
+	
+	echo "<p>"; 
+	$page->printDaySchedule($schedule, $roomNames, $dayStarts, $dayEnds);
+	echo "</p>"; 
+}
+else
+{
+	
+	for( $i = 0; $i < 3; $i++ )
+	{
+		$dayStarts = date_create( $conTimes[$i]['start'] );
+		$dayEnds = date_create( $conTimes[$i]['end'] );
+	
+		echo "<hr /><hr />";
+		echo "<h2>";
+		echo "Schedule for " . $dayStarts->format("F d, Y");
+		echo "</h2>";
+		echo "<hr /><hr />";
+	
+		echo "<p>"; 
+		$page->printDaySchedule($schedule, $roomNames, $dayStarts, $dayEnds);
+		echo "</p>"; 
+	}
+} 
+
+echo "</center>"; 
 ?>
