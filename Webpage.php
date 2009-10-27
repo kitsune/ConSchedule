@@ -141,7 +141,7 @@ FROM rooms
 ORDER BY (r_roomID);";
 		$connection->query($query);
 	
-		echo "<center>
+		echo "
 <form action=\"add.php?action=add\" method=\"post\" enctype=\"multipart/form-data\">
 Event Name: 
 <br>
@@ -179,7 +179,7 @@ Select Room:
 <br><br>
 <input type=\"submit\" name=\"add\" value=\"Finished\">
 </form>
-</center>";	
+";	
 	}
 	
 	public function printEvent($event)
