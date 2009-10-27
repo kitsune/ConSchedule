@@ -48,7 +48,9 @@ class Webpage {
 	
 	public function printNoEvents()
 	{
-		echo "<center>No events were found</center>";
+		echo "<center>";
+		echo "<h2>No events have yet been planned =T.T=</h2>";
+		echo "</center>";
 	}
 	
 	// conOpens and conCloses are epxected to be of type Date
