@@ -24,11 +24,19 @@ function __autoload($class_name) {
     require_once $class_name . '.php';
 }
 
+$conTimes[0]['start'] = "2009-12-31 08:00:00";
+$conTimes[0]['end'] = "2010-01-01 02:00:00";
+$conTimes[1]['start'] = "2010-01-01 08:00:00";
+$conTimes[1]['end'] = "2010-01-02 02:00:00";
+$conTimes[2]['start'] = "2010-01-02 08:00:00";
+$conTimes[2]['end'] = "2010-01-03 00:00:00";
+
 $C = new Connection();
 
-$q = "
-SELECT r_roomName
-FROM rooms";
+$schedule = NULL;
+
+// rooms query
+$q = "SELECT r_roomName FROM rooms";
 $C->query( $q );
 $roomCount = $C->result_size();
 
@@ -48,6 +56,8 @@ for( $i=0; $i < $roomCount; $i++ ) {
 	$roomNames[$i] = $row['r_roomName'];
 }
 
+
+// events query
 $q = "
 SELECT e_eventID, e_eventName, r_roomName, e_dateStart, e_dateEnd, 
 	e_eventName, e_eventDesc, e_color, e_panelist
@@ -80,14 +90,13 @@ for( $i=0; $i<$eventCount; $i++ ) {
 unset($C); // close the connection
 
 // set up the schedule var
-$t = date_create("2009-12-30 08:00:00");
+$t = date_create( $conTimes[0]['start'] );
 for( $i = 0; $i < 37; $i++ ) 
 {
 	foreach( $roomNames as $roomName ) 
 	{
 		foreach( $events as $event ) 
 		{
-			
 			$sDF = $event->getStartDate()->format("U");
 			$tF = $t->format("U");
 			$diff = $sDF - $tF;
@@ -103,75 +112,53 @@ for( $i = 0; $i < 37; $i++ )
 	$t->modify("+30 minutes");
 }
 
+// print the schedule(s)
 $page = new Webpage("Con Schedule Test");
-
-$printDay =  array( FALSE, FALSE, FALSE );
-
-if( !isset($_GET['day']) || ( $_GET['day'] > 2 || $_GET['day'] < 0 ) || $_GET['day'] == "" )
-{
-	$printDay = array( TRUE, TRUE, TRUE );
-}
-else if ( $_GET['day'] <= 2 && $_GET['day'] >= 0 ) 
-{
-	$printDay[ $_GET['day'] ] = TRUE;
-}
 
 echo "<center>";
 
-if( $printDay[0] == TRUE )
+if( isset($_GET['day']) ) 
 {
-	$conStarts = date_create("2009-12-31 08:00:00");
-	$conEnds = date_create("2010-01-01 02:00:00");
+	$day = $_GET['day'];
 
-	echo "<hr />";
-	echo "<hr />";
-	echo "<h2>";
-	echo "Schedule for " . $conStarts->format("F d, Y");
-	echo "</h2>";
-
-	echo "<hr />";
-	echo "<hr />";
-
-	echo "<p>";
-	$page->printDaySchedule($schedule, $roomNames, $conStarts, $conEnds);
-	echo "</p>";
-}
-
-if( $printDay[1] == TRUE )
-{
-	$conStarts = date_create("2010-01-01 08:00:00");
-	$conEnds = date_create("2010-01-02 02:00:00");
+	if( ! isset($conTimes[$day]) ) 
+	{
+		echo "<h2>Incorrect day passed. Try 0, 1, or 2</h2>"; 
+		exit(0);
+	}
 	
-	echo "<hr />";
-	echo "<hr />";
+	$dayStarts = date_create( $conTimes[$day]['start'] );
+	$dayEnds = date_create( $conTimes[$day]['end'] );
+	
+	echo "<hr /><hr />";
 	echo "<h2>";
-	echo "Schedule for " . $conStarts->format("F d, Y");
+	echo "Schedule for " . $dayStarts->format("F d, Y");
 	echo "</h2>";
-	echo "<hr />";
-	echo "<hr />";
-
-	echo "<p>";
-	$page->printDaySchedule($schedule, $roomNames, $conStarts, $conEnds);
-	echo "</p>";
+	echo "<hr /><hr />";
+	
+	echo "<p>"; 
+	$page->printDaySchedule($schedule, $roomNames, $dayStarts, $dayEnds);
+	echo "</p>"; 
 }
-
-if( $printDay[2] == TRUE )
+else
 {
-	$conStarts = date_create("2010-01-02 08:00:00");
-	$conEnds = date_create("2010-01-03 00:00:00");
+	
+	for( $i = 0; $i < 3; $i++ )
+	{
+		$dayStarts = date_create( $conTimes[$i]['start'] );
+		$dayEnds = date_create( $conTimes[$i]['end'] );
+	
+		echo "<hr /><hr />";
+		echo "<h2>";
+		echo "Schedule for " . $dayStarts->format("F d, Y");
+		echo "</h2>";
+		echo "<hr /><hr />";
+	
+		echo "<p>"; 
+		$page->printDaySchedule($schedule, $roomNames, $dayStarts, $dayEnds);
+		echo "</p>"; 
+	}
+} 
 
-	echo "<hr />";
-	echo "<hr />";
-	echo "<h2>";
-	echo "Schedule for " . $conStarts->format("F d, Y");
-	echo "</h2>";
-	echo "<hr />";
-	echo "<hr />";
-
-	echo "<p>";
-	$page->printDaySchedule($schedule, $roomNames, $conStarts, $conEnds);
-	echo "</p>";
-}
-
-echo "</center>";
+echo "</center>"; 
 ?>
