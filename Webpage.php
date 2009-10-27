@@ -146,19 +146,15 @@ ORDER BY (r_roomID);";
 Event Name: 
 <br>
 <input type=\"text\" name=\"name\">
+<br><br />
+NOTE: If an event spans multiple days, you'll have to add the event to each day individually.
+<br><br />
+Time of the event:<br />
+Format is: YYYY-MM-DD HH:MM (e.g. 2009-8-2 14:30)<br />
+Start : <input type=\"text\" name=\"start\" size=\"16\"> 
+End: <input type=\"text\" name=\"end\" size=\"16\">
 <br>
-Time of the event:
-<br>
-*Hack alert: For this year I'm using a speed hack so I don't have to do alot of dev
-<br> Day is an integer, 1 being the first day, 0 being set up, 2 being third day
-<br> time is the number of hours since the beginning of the day. ie 8:30 is 8.5
-<br> If an event spans multiple days it needs to be entered once of each day.
-<br>
-Day : <input type=\"text\" name=\"day\" size=\"3\"> 
-Start : <input type=\"text\" name=\"start\" size=\"3\"> 
-End: <input type=\"text\" name=\"end\" size=\"3\">
-<br>
-Color to make event (html color):
+Color to make event (html color, including the #):
 <br>
 <input type=\"text\" name=\"color\">
 <br>
@@ -166,7 +162,7 @@ Primary panelist's forum name(may be empty):
 <br>
 <input type=\"text\" name=\"panalist\">
 <br>
-Description of the event(may be empty):
+Description of the event (may be empty):
 <br>
 <textarea name=\"desc\" rows=\"10\" cols=\"60\"></textarea>
 <br>
@@ -230,9 +226,9 @@ Color to make event (html color):
 <br><br>
 Change the time of the event:
 <br>
-Format is: YYYY-MM-DD HH:MM:SS (e.g. 2009-8-2 14:30:00)<br />
-Start : <input type=\"text\" name=\"start\" size=\"20\" value = \"" . $start->format("Y-m-d H:i:s") . "\"> 
-End: <input type=\"text\" name=\"end\" size=\"20\" value = \"" . $end->format("Y-m-d H:i:s") . "\">
+Format is: YYYY-MM-DD HH:MM (e.g. 2009-8-2 14:30)<br />
+Start : <input type=\"text\" name=\"start\" size=\"18\" value = \"" . $start->format("Y-m-d H:i") . "\"> 
+End: <input type=\"text\" name=\"end\" size=\"18\" value = \"" . $end->format("Y-m-d H:i") . "\">
 <br><br>
 Primary panelist's forum name (may be empty):
 <br>

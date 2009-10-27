@@ -90,26 +90,17 @@ for( $i=0; $i<$eventCount; $i++ ) {
 unset($C); // close the connection
 
 // set up the schedule var
-$t = date_create( $conTimes[0]['start'] );
-for( $i = 0; $i < 37; $i++ ) 
+
+foreach( $roomNames as $roomName )
 {
-	foreach( $roomNames as $roomName ) 
+	foreach( $events as $event )
 	{
-		foreach( $events as $event ) 
+		if( $event->getRoomName() == $roomName )
 		{
-			$sDF = $event->getStartDate()->format("U");
-			$tF = $t->format("U");
-			$diff = $sDF - $tF;
-			
-			if( $event->getRoomName() == $roomName && $diff == 0 )
-			{
-				$tF = $t->format("Y-m-d H:i:s");
-				$schedule[$tF][$roomName] = $event;
-			}
-			
+			$fmt = $event->getStartDate()->format("Y-m-d H:i:s");
+			$schedule[$fmt][$roomName] = $event;
 		}
 	}
-	$t->modify("+30 minutes");
 }
 
 // print the schedule(s)

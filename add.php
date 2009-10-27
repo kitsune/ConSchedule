@@ -3,6 +3,7 @@
  *      add.php
  *      
  *      Copyright 2008 Dylan Enloe <ninina@Siren>
+ *		Copyright 2009 Drew Fisher <kakudevel@gmail.com>
  *      
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -36,27 +37,30 @@ if(!$user->is_Admin())
 
 if(isset($_POST['add']))
 {
-	#ok we'll add the entry here.
+	//ok we'll add the entry here.
 	
-	#get data from post and varify it
-	#we need a connection to varify data
+	//get data from post and varify it
+	//we need a connection to varify data
 	$connection = new Connection();
+	
 	$name = $connection->validate_string($_POST['name']);
-	$day = $connection->validate_string($_POST['day']);
-	$start = floatval($connection->validate_string($_POST['start'])) * 2;
-	$end = floatval($connection->validate_string($_POST['end'])) * 2;
+	$start = date_create($connection->validate_string($_POST['start']));
+	$end = date_create($connection->validate_string($_POST['end']));
 	$color = $connection->validate_string($_POST['color']);
 	$panelist = $connection->validate_string($_POST['panalist']);
 	$desc = $connection->validate_string($_POST['desc']);
 	$room = $connection->validate_string($_POST['room']);
-	#now we should create the query
+	
+	//now we should create the query
 	$query = "
-INSERT INTO events(e_roomID, e_day, e_start, e_end, e_eventname, e_color, e_desc, e_panelist)
-VALUES ($room, $day, $start, $end, '$name', '$color', '$desc', '$panelist');";
-	#ok now insert the data
+INSERT INTO events(e_roomID, e_dateStart, e_dateEnd, e_eventName, e_color, e_eventDesc, e_panelist)
+VALUES ($room, '" . $start->format("Y-m-d H:i:s") . "', '" . $end->format("Y-m-d H:i:s") . "', '$name', '$color', '$desc', '$panelist');";
+	
+	//ok now insert the data
 	$connection->query($query);
 	$row = $connection->get_insert_ID();
 	$eventID = $row[0];
+	
 	$page = new Webpage("Add Event");
 	echo "<center>Successfully created Event<br>";
 	$page->addURL("view.php?event=$eventID","View Event");
@@ -65,7 +69,6 @@ VALUES ($room, $day, $start, $end, '$name', '$color', '$desc', '$panelist');";
 	echo "<br>";
 	$page->addURL("index.php","Return to main schedule");
 	echo "</center>";
-	
 }
 else
 {
