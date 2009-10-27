@@ -207,7 +207,6 @@ The panel will be from " . $start->format('H:i') ." to " . $end->format('H:i') .
 			echo "A brief description of the panel:<br /> $desc<br />";
 		}
 		echo "<br>";
-		//$this->addURL("test.php", "Back to event schedule");	
 	}
 	
 	public function printAdminEdit($event, $eventID, $connection)

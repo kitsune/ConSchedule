@@ -44,7 +44,7 @@ WHERE e_eventID = $eventID AND e_roomID = r_roomID;";
 	{
 		echo "Invalid Event ID, please check that you are using the correct EventID. ";
 		echo "If you are, report this to Kitsune on the Mewcon Forums via PM. <br /><br />";
-		$page->addURL("test.php","Back to event schedule.");
+		$page->addURL("index.php","Back to event schedule.");
 		break;
 	}
 	
@@ -78,5 +78,5 @@ else
 {
 	echo "<center>No eventID provided.</center><br />";
 }
-$page->addURL("test.php","Back to event schedule.");
+$page->addURL("index.php","Back to event schedule.");
 ?>
