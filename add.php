@@ -51,6 +51,24 @@ if(isset($_POST['add']))
 	$desc = $connection->validate_string($_POST['desc']);
 	$room = $connection->validate_string($_POST['room']);
 	
+	
+	$page = new Webpage("Add Event");
+	
+	
+	$diff = $end->format("U") - $start->format("U");
+	
+	if( $diff <= 0 )
+	{
+		echo "<center>"; 
+		echo "<h2>Incorrect date(s) passed.</h2>";
+		echo "Make sure the end date is not the same as, or earlier than, the start date.</h2>";
+		echo "</center>"; 
+		$page->addURL("add.php","Try again.");
+		echo "<br />";
+		$page->addURL("index.php", "Back to schedule.");
+		exit(0);
+	}
+	
 	//now we should create the query
 	$query = "
 INSERT INTO events(e_roomID, e_dateStart, e_dateEnd, e_eventName, e_color, e_eventDesc, e_panelist)
@@ -61,7 +79,7 @@ VALUES ($room, '" . $start->format("Y-m-d H:i:s") . "', '" . $end->format("Y-m-d
 	$row = $connection->get_insert_ID();
 	$eventID = $row[0];
 	
-	$page = new Webpage("Add Event");
+	
 	echo "<center>Successfully created Event<br>";
 	$page->addURL("view.php?event=$eventID","View Event");
 	echo "<br>";

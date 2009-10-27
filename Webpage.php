@@ -150,7 +150,7 @@ Event Name:
 NOTE: If an event spans multiple days, you'll have to add the event to each day individually.
 <br><br />
 Time of the event:<br />
-Format is: YYYY-MM-DD HH:MM (e.g. 2009-8-2 14:30)<br />
+Format is: YYYY-MM-DD HH:MM (e.g. 2009-08-02 14:30)<br />
 Start : <input type=\"text\" name=\"start\" size=\"16\"> 
 End: <input type=\"text\" name=\"end\" size=\"16\">
 <br>
@@ -226,9 +226,9 @@ Color to make event (html color):
 <br><br>
 Change the time of the event:
 <br>
-Format is: YYYY-MM-DD HH:MM (e.g. 2009-8-2 14:30)<br />
-Start : <input type=\"text\" name=\"start\" size=\"18\" value = \"" . $start->format("Y-m-d H:i") . "\"> 
-End: <input type=\"text\" name=\"end\" size=\"18\" value = \"" . $end->format("Y-m-d H:i") . "\">
+Format is: YYYY-MM-DD HH:MM (e.g. 2009-08-02 14:30)<br />
+Start : <input type=\"text\" name=\"start\" size=\"16\" value = \"" . $start->format("Y-m-d H:i") . "\"> 
+End: <input type=\"text\" name=\"end\" size=\"16\" value = \"" . $end->format("Y-m-d H:i") . "\">
 <br><br>
 Primary panelist's forum name (may be empty):
 <br>

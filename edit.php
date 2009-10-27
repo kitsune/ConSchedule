@@ -81,6 +81,20 @@ if($user->is_Admin() && $action == "admin")
 	$desc = $connection->validate_string($_POST['desc']);
 	$room = $connection->validate_string($_POST['room']);
 
+	$diff = $end->format("U") - $start->format("U");
+	
+	if( $diff <= 0 )
+	{
+		echo "<center>"; 
+		echo "<h2>Incorrect date(s) passed.</h2>";
+		echo "Make sure the end date is not the same as, or earlier than, the start date.</h2>";
+		echo "</center>"; 
+		$page->addURL("view.php?event=$eventID","Try again.");
+		echo "<br />";
+		$page->addURL("index.php", "Back to schedule.");
+		exit(0);
+	}
+
 	$query = "
 UPDATE events
 SET e_eventName = '$name', e_roomID = $room, e_dateStart = '" . $start->format("Y-m-d H:i:s") . "', e_dateEnd = '" . $end->format("Y-m-d H:i:s") . "', e_eventDesc = '$desc', e_panelist = '$panelist', e_color = '$color'
