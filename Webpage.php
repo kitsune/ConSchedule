@@ -64,7 +64,7 @@ class Webpage {
 		//might as well print out the top row too
 		foreach($roomNames as $roomName)
 		{
-			echo "<td>$roomName</td>";
+			echo "<td style=\"width: 13%;\">$roomName</td>";
 			$wait[$roomName] = 0;
 		}
 		echo "</thead>";
