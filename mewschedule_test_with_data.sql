@@ -38,12 +38,12 @@ LOCK TABLES `events` WRITE;
 /*!40000 ALTER TABLE `events` DISABLE KEYS */;
 INSERT INTO `events` (`e_eventID`,`e_roomID`,`e_dateStart`,`e_dateEnd`,`e_eventName`,`e_color`,`e_eventDesc`,`e_panelist`)
 VALUES
-	(1,1,'2009-12-30 12:00:00','2009-12-30 14:00:00','Test 1','#FF0000','This is a 2-hour event being held on 2009-10-20 starting at 12:00 and going till 14:00, in r_roomID 0.','Admin'),
-	(2,1,'2009-12-30 14:00:00','2009-12-30 16:30:00','another fairly long title for T2','#CCCCCC','','Kaku'),
-	(3,2,'2009-12-30 14:00:00','2009-12-30 18:00:00','Test 3','#0066FF','this is a description for test 3','Admin'),
-	(4,5,'2009-12-30 16:00:00','2009-12-30 17:30:00','yet more wasted space with Test 4','#FFCA52','Description for Test 4','Kitsune'),
-	(5,4,'2009-12-30 09:00:00','2009-12-30 10:00:00','obscenely and gratuitously long title involving a sql test for T5','#00FF00','','Admin'),
-	(6,3,'2009-12-30 22:00:00','2009-12-31 01:30:00','Late Night Test 6','#0066FF','Test to make sure going from previous day to next works as expected.','Kaku');
+	(1,1,'2009-12-31 12:00:00','2009-12-31 14:00:00','Test 1','#FF0000','This is a 2-hour event being held on 2009-10-20 starting at 12:00 and going till 14:00, in r_roomID 0.','Admin'),
+	(2,1,'2009-12-31 14:00:00','2009-12-31 16:30:00','another fairly long title for T2','#CCCCCC','','Kaku'),
+	(3,2,'2009-12-31 14:00:00','2009-12-31 18:00:00','Test 3','#0066FF','this is a description for test 3','Admin'),
+	(4,5,'2009-12-31 16:00:00','2009-12-31 17:30:00','yet more wasted space with Test 4','#FFCA52','Description for Test 4','Kitsune'),
+	(5,4,'2009-12-31 09:00:00','2009-12-31 10:00:00','obscenely and gratuitously long title involving a sql test for T5','#00FF00','','Admin'),
+	(6,3,'2009-12-31 22:00:00','2010-01-01 01:30:00','Late Night Test 6','#0066FF','Test to make sure going from previous day to next works as expected.','Kaku');
 
 /*!40000 ALTER TABLE `events` ENABLE KEYS */;
 UNLOCK TABLES;
