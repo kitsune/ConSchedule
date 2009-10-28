@@ -72,7 +72,7 @@ class Webpage {
 		{
 			echo '<tr>';
 			$tF = $tableTime->format("H:i");
-			echo "<td class=\"timeColumn\">" . $tF . "</td>";
+			echo "<td class=\"timeColumn\" style=\"width: 5%;\" align=\"center\">" . $tF . "</td>";
 		
 			foreach($roomNames as $roomName)
 			{
@@ -99,14 +99,19 @@ class Webpage {
 						{
 							echo "<div class=\"event\">";
 						}
-						else if ( $size > 3 && $size < 7 )
+						else if ( $size > 3 && $size <= 7 )
 						{
-							echo "<div class=\"event\" style=\"padding: " . ($size/2) ."em 0em;\">";
+							echo "<div class=\"event\" style=\"padding: " . (($size/2)+1) ."em 0em;\">";
+						}
+						else if ($size > 7 && $size <= 10 )
+						{
+							echo "<div class=\"event\" style=\"padding: " . ($size) ."em 0em;\">";
 						}
 						else
 						{
-							echo "<div class=\"event\" style=\"padding: " . ($size-2) ."em 0em;\">";
-						}
+							echo "<div class=\"event\" style=\"padding: " . ($size+3) . "em 0em;\">"; 	
+
+						} 
 						
 						$this->addURL("view.php?event=$eventID",$name);
 						echo "</div>";
