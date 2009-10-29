@@ -263,7 +263,10 @@ ORDER BY (r_roomID);";
 Edit the Description of this Panel:<br>
 <textarea name=\"desc\" rows=\"10\" cols=\"60\">$desc</textarea>
 <br><br>
-<input type=\"submit\" name=\"add\" value=\"Update\"></form><br>";
+<input type=\"submit\" name=\"add\" value=\"Update\">
+</form><br />";
+	echo "<form action=\"delete.php?event=$eventID\" method=\"post\" enctype=\"multipart/form-data\">";
+	echo "<input type=\"submit\" value=\"Delete Event\"></form><br />";
 	}
 
 	public function printPanelistEdit($event, $eventID)

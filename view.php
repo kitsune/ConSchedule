@@ -63,8 +63,6 @@ WHERE e_eventID = $eventID AND e_roomID = r_roomID;";
 	{
 		echo "<br/ ><hr ><hr ><br/ >";
 		$page->printAdminEdit($event, $eventID, $connection);
-		echo "<br />";
-		$page->addURL("delete.php?event=$eventID", "Delete this event");
 	}
 	else if( $user->get_Username() == $event->getPanelist())
 	{
