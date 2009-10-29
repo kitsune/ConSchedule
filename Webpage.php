@@ -187,7 +187,7 @@ Select Room:
 		echo "</colgroup>";
 		echo "<tr><td>Panel<br />Name</td><td>" . $name . "</td></tr>";
 		echo "<tr><td>Room</td><td>" . $room . "</td></tr>";
-		echo "<tr><td>Date</td><td>" . $start->format("D, F d Y") . "</td></tr>";
+		echo "<tr><td>Date</td><td>" . $start->format("l, F d Y") . "</td></tr>";
 		echo "<tr><td>Start Time</td><td>" . $start->format("H:i");
 			echo "&nbsp; &nbsp; &nbsp;(" . $start->format("g:i a") . ")</td></tr>";
 		echo "<tr><td>End Time</td><td>" . $end->format("H:i");
