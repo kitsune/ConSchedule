@@ -178,19 +178,34 @@ Select Room:
 		$end = $event->getEndDate();
 		$desc = $event->getDesc();
 		$panelist = $event->getPanelist();
-		echo "
-Panel Name: $name<br />
-The panel will be held in the $room.<br />
-The panel will be from " . $start->format('H:i') ." to " . $end->format('H:i') ." on " . $start->format('D, F d, Y') .".<br />";
-		if($panelist != "")
+		
+		echo "<center>";
+		echo "<table id=\"viewEvent\" cellpadding=0 cellspacing=0>";
+		echo "<colgroup>";
+		echo "<col class=\"property\" />";
+		echo "<col class=\"value\" />";
+		echo "</colgroup>";
+		echo "<tr><td>Panel<br />Name</td><td>" . $name . "</td></tr>";
+		echo "<tr><td>Room</td><td>" . $room . "</td></tr>";
+		echo "<tr><td>Date</td><td>" . $start->format("D, F d Y") . "</td></tr>";
+		echo "<tr><td>Start Time</td><td>" . $start->format("H:i");
+			echo "&nbsp; &nbsp; &nbsp;(" . $start->format("g:i a") . ")</td></tr>";
+		echo "<tr><td>End Time</td><td>" . $end->format("H:i");
+			echo "&nbsp; &nbsp; &nbsp;(" . $end->format("g:i a") . ")</td></tr>";
+		
+		if( $panelist != "")
 		{
-			echo "The primary panelist can be reached on the forum under the name of \"$panelist.\"<br>";
+			echo "<tr><td>Panelist</td><td>" . $panelist . "</td></tr>";
 		}
-		if($desc != "")
+		
+		if( $desc != "")
 		{
-			echo "A brief description of the panel:<br /> $desc<br />";
+			$desc = str_replace("\\n","<br /><br />",$desc);
+			echo "<tr><td>Description</td><td>" . $desc . "</td></tr>";
 		}
-		echo "<br>";
+		
+		echo "</table>";
+		echo "</center>";
 	}
 	
 	public function printAdminEdit($event, $eventID, $connection)

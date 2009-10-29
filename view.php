@@ -61,7 +61,7 @@ WHERE e_eventID = $eventID AND e_roomID = r_roomID;";
 	
 	if( $user->is_Admin() == TRUE)
 	{
-		echo "<br/ ><br/ >";
+		echo "<br/ ><hr ><hr ><br/ >";
 		$page->printAdminEdit($event, $eventID, $connection);
 		echo "<br />";
 		$page->addURL("delete.php?event=$eventID", "Delete this event");
@@ -69,7 +69,7 @@ WHERE e_eventID = $eventID AND e_roomID = r_roomID;";
 	else if( $user->get_Username() == $event->getPanelist())
 	{
 		//this is the panelist for this panel so give them access to the desc editing
-		echo "<br><br>";
+		echo "<br /><hr /><hr /><br />";
 		$page->printPanelistEdit($event, $eventID);
 	}
 	echo "<br />";
@@ -78,5 +78,7 @@ else
 {
 	echo "<center>No eventID provided.</center><br />";
 }
+echo "<center>";
 $page->addURL("index.php","Back to event schedule.");
+echo "</center>";
 ?>

@@ -52,3 +52,16 @@ table td
 	border-top: 1px dashed black;
 	width: 100%;
 }
+
+
+/* VIEW EVENT SECTION */
+
+table#viewEvent
+{
+	width: 50%;
+}
+
+table#viewEvent col.property
+{
+	background: #BBF;
+}
