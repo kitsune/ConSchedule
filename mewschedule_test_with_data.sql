@@ -38,7 +38,7 @@ LOCK TABLES `events` WRITE;
 /*!40000 ALTER TABLE `events` DISABLE KEYS */;
 INSERT INTO `events` (`e_eventID`,`e_roomID`,`e_dateStart`,`e_dateEnd`,`e_eventName`,`e_color`,`e_eventDesc`,`e_panelist`)
 VALUES
-	(1,1,'2009-12-31 12:00:00','2009-12-31 14:00:00','Event Test 1: The Beginning.','#FF0000','In the beginning, Japan created Anime while the West created Fantasy/Sci-Fi, and it wad decent.\\nThen Admin descended upon the world and gave us MEWcon, and it was awesome.','Admin'),
+	(1,1,'2009-12-31 12:00:00','2009-12-31 14:00:00','Event Test 1: The Beginning.','#FF0000','In the beginning, Japan created Anime while the West created Fantasy/Sci-Fi, and it was decent.\\nThen Admin descended upon the world and gave us MEWcon, and it was awesome.','Admin'),
 	(2,1,'2009-12-31 14:00:00','2009-12-31 16:30:00','Event Test 2, with a fairly long name, but no description.','#CCCCCC','','Kaku'),
 	(3,2,'2009-12-31 14:00:00','2009-12-31 18:00:00','Event Test 3: Revenge of the Event Test.','#0066FF','You remember him from Events 1 and 2, now Event Test returns in a cinematographic exercise in unbelievability.','Admin'),
 	(4,5,'2009-12-31 16:00:00','2009-12-31 17:30:00','Event Test 4, which also wastes some space with its name.','#FFCA52','A non-witty description for Event Test 4.','Kitsune'),
@@ -63,7 +63,7 @@ VALUES
 	(23,7,'2009-12-31 16:30:00','2009-12-31 20:00:00','Event Test 23','#CC00CC','',''),
 	(24,1,'2009-12-31 17:00:00','2009-12-31 19:30:00','Event Test 24','#C0C0C0','',''),
 	(25,3,'2009-12-31 17:30:00','2009-12-31 19:00:00','Event Test 25','#CC99FF','',''),
-	(26,1,'2010-01-01 12:00:00','2010-01-01 14:00:00','D2 Event Test 1: The Beginning.','#FF0000','In the beginning, Japan created Anime while the West created Fantasy/Sci-Fi, and it wad decent.\\nThen Admin descended upon the world and gave us MEWcon, and it was awesome.','Admin'),
+	(26,1,'2010-01-01 12:00:00','2010-01-01 14:00:00','D2 Event Test 1: The Beginning.','#FF0000','In the beginning, Japan created Anime while the West created Fantasy/Sci-Fi, and it was decent.\\nThen Admin descended upon the world and gave us MEWcon, and it was awesome.','Admin'),
 	(27,1,'2010-01-01 14:00:00','2010-01-01 16:30:00','D2 Event Test 2, with a fairly long name, but no description.','#CCCCCC','','Kaku'),
 	(28,2,'2010-01-01 14:00:00','2010-01-01 18:00:00','D2 Event Test 3: Revenge of the D2 Event Test.','#0066FF','You remember him from Events 1 and 2, now D2 Event Test returns in a cinematographic exercise in unbelievability.','Admin'),
 	(29,5,'2010-01-01 16:00:00','2010-01-01 17:30:00','D2 Event Test 4, which also wastes some space with its name.','#FFCA52','A non-witty description for D2 Event Test 4.','Kitsune'),
@@ -88,7 +88,7 @@ VALUES
 	(48,7,'2010-01-01 16:30:00','2010-01-01 20:00:00','D2 Event Test 23','#CC00CC','',''),
 	(49,1,'2010-01-01 17:00:00','2010-01-01 19:30:00','D2 Event Test 24','#C0C0C0','',''),
 	(50,3,'2010-01-01 17:30:00','2010-01-01 19:00:00','D2 Event Test 25','#CC99FF','',''),
-	(51,1,'2010-01-02 12:00:00','2010-01-02 14:00:00','D3 Event Test 1: The Beginning.','#FF0000','In the beginning, Japan created Anime while the West created Fantasy/Sci-Fi, and it wad decent.\\nThen Admin descended upon the world and gave us MEWcon, and it was awesome.','Admin'),
+	(51,1,'2010-01-02 12:00:00','2010-01-02 14:00:00','D3 Event Test 1: The Beginning.','#FF0000','In the beginning, Japan created Anime while the West created Fantasy/Sci-Fi, and it was decent.\\nThen Admin descended upon the world and gave us MEWcon, and it was awesome.','Admin'),
 	(52,1,'2010-01-02 14:00:00','2010-01-02 16:30:00','D3 Event Test 2, with a fairly long name, but no description.','#CCCCCC','','Kaku'),
 	(53,2,'2010-01-02 14:00:00','2010-01-02 18:00:00','D3 Event Test 3: Revenge of the D3 Event Test.','#0066FF','You remember him from Events 1 and 2, now D3 Event Test returns in a cinematographic exercise in unbelievability.','Admin'),
 	(54,5,'2010-01-02 16:00:00','2010-01-02 17:30:00','D3 Event Test 4, which also wastes some space with its name.','#FFCA52','A non-witty description for D3 Event Test 4.','Kitsune'),
