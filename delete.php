@@ -30,7 +30,10 @@ $connection = new Connection();
 
 if(!isset($_GET['event']))
 {
-	echo "You need to provide an event to delete one";
+	echo "<center>";
+	echo "<h2>You need to provide an event to delete one</h2>";
+	$page->addURL("index.php","Return to event schedule.");
+	echo "</center>";
 	exit(0);
 }
 
@@ -40,24 +43,32 @@ if($user->is_Admin())
 {
 	if(isset($_GET['confirm']))
 	{
-		#they want to delete it so lets delete it
-		$query = "
-DELETE FROM events
-WHERE e_eventID = $eventID;";
+		// they want to delete it so lets delete it
+		$query = "DELETE FROM events WHERE e_eventID = $eventID;";
 		$connection->query($query);
 		echo "<center>Event successfully deleted<br>";
-		$page->addURL("index.php","Return to main schedule");
+		$page->addURL("index.php","Return to event schedule.");
 	}
 	else
 	{
-		echo "<center>Do you really want to delete this event?<br>";
+		$query = "SELECT e_eventName FROM events WHERE e_eventID = $eventID";
+		$connection->query($query);
+		
+		$row = $connection->fetch_row();
+		
+		$eventName = $row[0];
+		
+		echo "<center>Do you really want to delete the event \"<strong>$eventName</strong>?\"<br />";
 		$page->addURL("delete.php?event=$eventID&confirm='Yes'","Yes");
 		echo "&nbsp;&nbsp;&nbsp;";
-		$page->addURL("index.php","No"); 
+		$page->addURL("view.php?event=$eventID","No"); 
 	}
 }
 else
 {
-	echo "You cannot delete events.";
+	echo "<center>";
+	echo "<h2>You cannot delete events.</h2>";
+	$page->addURL("index.php","Return to event schedule.");
+	echo "</center>";
 }
 ?>
