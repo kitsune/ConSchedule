@@ -95,24 +95,7 @@ class Webpage {
 						echo $event->getStartDate()->format("H:i");
 						echo "</div>";
 						
-						if ( $size <= 3 )
-						{
-							echo "<div class=\"event\">";
-						}
-						else if ( $size > 3 && $size <= 7 )
-						{
-							echo "<div class=\"event\" style=\"padding: " . (($size/2)+1) ."em 0em;\">";
-						}
-						else if ($size > 7 && $size <= 10 )
-						{
-							echo "<div class=\"event\" style=\"padding: " . ($size) ."em 0em;\">";
-						}
-						else
-						{
-							echo "<div class=\"event\" style=\"padding: " . ($size+3) . "em 0em;\">"; 	
-
-						} 
-						
+						echo "<div class=\"event\">"; 
 						$this->addURL("view.php?event=$eventID",$name);
 						echo "</div>";
 						
