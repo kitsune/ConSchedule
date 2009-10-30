@@ -61,7 +61,7 @@ WHERE e_eventID = $eventID AND e_roomID = r_roomID;";
 	
 	if( $user->is_Admin() == TRUE)
 	{
-		echo "<br/ ><hr ><hr ><br/ >";
+		echo "<br/ ><hr /><hr /><br/ >";
 		$page->printAdminEdit($event, $eventID, $connection);
 	}
 	else if( $user->get_Username() == $event->getPanelist())
@@ -74,7 +74,9 @@ WHERE e_eventID = $eventID AND e_roomID = r_roomID;";
 }
 else
 {
-	echo "<center>No eventID provided.</center><br />";
+	echo "<center>";
+	echo "<h2>No eventID provided</h2>";
+	echo "</center>";
 }
 echo "<center>";
 $page->addURL("index.php","Back to event schedule.");
