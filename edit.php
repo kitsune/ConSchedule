@@ -114,8 +114,9 @@ WHERE e_eventID = $eventID;";
 	
 	$connection->query($query);
 }
-echo "<center>Event successfully updated</center><br />";
 
+echo "<center>";
+echo "<h2>Event successfully updated</h2>";
 $page->addURL("index.php","Return to main schedule");
-
+echo "</center>";
 ?>
