@@ -31,7 +31,11 @@ $user = new User();
 if(!$user->is_Admin())
 {
 	$page = new Webpage("Add Event");
-	echo "Only Admins can create new Panels. Sorry";
+	
+	echo "<center>";
+	echo "<h2>Only Admins can create new events.</h2>";
+	$page->addURL("index.php","Return to event schedule.");
+	echo "</center>";
 	exit(0);
 }
 
@@ -44,6 +48,19 @@ if(isset($_POST['add']))
 	$connection = new Connection();
 	
 	$name = $connection->validate_string($_POST['name']);
+	
+	if ( str_word_count($name) == 0 )
+	{
+		$page = new Webpage("Add Event");
+		
+		echo "<center>";
+		echo "<h2>Name cannot be blank. Please go back and supply one.</h2>";
+		$page->addURL("add.php","Return to adding an event.");
+		echo "<br /><br />";
+		$page->addURL("index.php","Return to event schedule.");
+		exit(0);
+	}
+	
 	$start = date_create($connection->validate_string($_POST['start']));
 	$end = date_create($connection->validate_string($_POST['end']));
 	$color = $connection->validate_string($_POST['color']);
@@ -62,10 +79,10 @@ if(isset($_POST['add']))
 		echo "<center>"; 
 		echo "<h2>Incorrect date(s) passed.</h2>";
 		echo "Make sure the end date is not the same as, or earlier than, the start date.</h2>";
-		echo "</center>"; 
 		$page->addURL("add.php","Try again.");
 		echo "<br />";
 		$page->addURL("index.php", "Back to schedule.");
+		echo "</center>";
 		exit(0);
 	}
 	
@@ -93,6 +110,10 @@ else
 	$connection = new Connection();
 
 	$page = new Webpage("Add event");
+	echo "<center>";
+	echo "<h2>Add an Event</h2>";
+	echo "</center>";
+	echo "<hr /><hr />";
 	$page->createEventForm($connection);
 }
 ?>
