@@ -65,3 +65,11 @@ table#viewEvent col.property
 {
 	background: #BBF;
 }
+
+div#addBox
+{
+	width: 40%;
+	padding: 1em 0em;
+	border: 1px dashed black;
+	border-top: none;
+}
