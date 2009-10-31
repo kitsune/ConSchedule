@@ -172,6 +172,7 @@ Select Room:
 	
 	public function printEvent($event)
 	{
+		$eventID = $event->getEventID();
 		$name = $event->getEventName();
 		$room = $event->getRoomName();
 		$start = $event->getStartDate();
@@ -205,6 +206,9 @@ Select Room:
 		}
 		
 		echo "</table>";
+		echo "<div id=\"addBox\">";
+		$this->addURL("addUserEvent.php?event=$eventID","Add this event to your schedule.");
+		echo "</div>";
 		echo "</center>";
 	}
 	
@@ -283,6 +287,13 @@ Edit the Description of this Panel:<br>
 <textarea name=\"desc\" rows=\"10\" cols=\"60\">$desc</textarea>
 <br><br>
 <input type=\"submit\" name=\"add\" value=\"Update\"></form><br>";
+	}
+	
+	public function printError($err)
+	{
+		echo "<center>";
+		echo "<h2>". $err ."</h2>";
+		echo "</center>";
 	}
 }
 ?>
