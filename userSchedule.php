@@ -28,6 +28,17 @@ $C = new Connection();
 $U = new User();
 $page = new Webpage("User Schedule Test");
 
+if( ! $U->is_User())
+{
+	$page->printError("You must be a forum user to create your own schedule.");
+	echo "<center>";
+	$page->addURL("http://www.mewcon.com/forum/index.php","Go to the forums to Register or Sign In.");
+	echo "<br /><br />";
+	$page->addURL("index.php","Return to the event schedule.");
+	echo "</center>";
+	exit(0);
+}
+
 $username = $U->get_Username();
 
 $q = "SELECT us_selectedEvents FROM userSchedule WHERE us_forumName = '$username';";
@@ -69,8 +80,11 @@ for($i = 0; $i < $eventCount; $i++)
 	);
 }
 
-echo '<table class="userSchedule" cellpadding=0 cellspacing=0>';
-echo '<thead><td>Event Name</td><td>Room</td><td>Day</td><td>Start Time</td><td>End Time</td></thead>';
+$page->printError("Custom schedule for $username.");
+
+echo "<center>";
+echo '<table id="userSchedule" cellpadding=0 cellspacing=0>';
+echo '<thead><td id="eventName">Event Name</td><td id="room">Room</td><td id="day">Day</td><td id="startTime">Start Time</td><td id="endTime">End Time</td></thead>';
 
 foreach( $events as $e )
 {
@@ -83,6 +97,7 @@ foreach( $events as $e )
 }
 
 echo '</table>';
+echo '</center>';
 
 
 ?>
