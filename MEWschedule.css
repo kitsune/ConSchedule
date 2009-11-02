@@ -68,8 +68,41 @@ table#viewEvent col.property
 
 div#addBox
 {
-	width: 40%;
-	padding: 1em 0em;
+	width: 35%;
+	padding: 1em .5em;
 	border: 1px dashed black;
 	border-top: none;
+}
+
+/* USER SCHEDULE SECTION */
+
+table#userSchedule
+{
+	width: 80%;
+}
+
+#userSchedule td#day
+{
+	width: 20%;
+}
+
+#userSchedule td#room
+{
+	width: 15%;
+}
+
+#userSchedule td#startTime
+{
+	width: 15%;
+}
+
+#userSchedule td#endTime
+{
+	width: 15%;
+}
+
+div#addUserEvent_submit
+{
+	padding-right: 1em;
+	float: right;
 }
