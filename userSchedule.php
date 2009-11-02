@@ -25,10 +25,10 @@ function __autoload($class_name) {
 }
 
 $C = new Connection();
-$U = new User();
+$user = new User();
 $page = new Webpage("User Schedule Test");
 
-if( ! $U->is_User())
+if( ! $user->is_User())
 {
 	$page->printError("You must be a forum user to create your own schedule.");
 	echo "<center>";
@@ -39,54 +39,58 @@ if( ! $U->is_User())
 	exit(0);
 }
 
-$username = $U->get_Username();
+// get the user's current event schedule
 
-$q = "SELECT us_selectedEvents FROM userSchedule WHERE us_forumName = '$username';";
-$C->query($q);
-
-if( $C->result_size() != 1 )
-{
-	echo "<center>";
-	echo "<h2>Silly $username, you have no events scheduled. =^.^=</h2>";
-	$page->addURL("index.php","Return to event schedule.");
-	echo "</center>";
-	exit(0);	
-}
-
-$row = $C->fetch_row();
+$uID = $user->get_UserID();
 
 $q = "
-SELECT 
-	e_eventID, r_roomName, e_dateStart, e_dateEnd, 
-	e_eventName, e_color, e_eventDesc, e_panelist
-FROM 
-	events, rooms
+SELECT
+	e_eventID, e_eventName, r_roomName, e_dateStart, 
+	e_dateEnd, e_eventDesc, e_panelist, e_color
+FROM
+	events, rooms, userSchedule_01
 WHERE
-	e_eventID IN ($row[0]) AND e_roomID = r_roomID
+	us_userID = $uID
+	AND
+	us_eventID = e_eventID
+	AND
+	e_roomID = r_roomID
+ORDER BY
+	e_dateStart
+	ASC
 ;";
-	
+
 $C->query($q);
 
-$eventCount = $C->result_size();
+if ( $C->result_size() < 1 )
+{
+	$page->printError("Silly ". $user->get_Username() .", you have no events scheduled. =^.^=");
+	echo "<center>";
+	$page->addURL("index.php","Return to event schedule.");
+	echo "</center>";
+	exit(0);
+}
 
-for($i = 0; $i < $eventCount; $i++)
+for( $i = 0; $i < $C->result_size(); $i++ )
 {
 	$row = $C->fetch_assoc();
 	
-	$events[$i] = new Event( 
+	
+	$userEvents[$i] = new Event( 
 		$row['e_eventID'], $row['e_eventName'], $row['r_roomName'], 
 		$row['e_dateStart'],$row['e_dateEnd'], $row['e_eventDesc'], 
 		$row['e_panelist'], $row['e_color'] 
 	);
+	
 }
 
-$page->printError("Custom schedule for $username.");
+$page->printError("Custom schedule for ". $user->get_Username() .".");
 
 echo "<center>";
 echo '<table id="userSchedule" cellpadding=0 cellspacing=0>';
 echo '<thead><td id="eventName">Event Name</td><td id="room">Room</td><td id="day">Day</td><td id="startTime">Start Time</td><td id="endTime">End Time</td></thead>';
 
-foreach( $events as $e )
+foreach( $userEvents as $e )
 {
 	$day = $e->getStartDate()->format("D, d M Y");
 	$startTime = $e->getStartDate()->format("H:i");
