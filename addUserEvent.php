@@ -30,6 +30,18 @@ $C = new Connection();
 $page = new Webpage("Add User Event");
 $user = new User();
 
+if( ! $user->is_User() )
+{
+	
+	$page->printError("You must be a forum user to create your own schedule.");
+	echo "<center>";
+	$page->addURL("http://www.mewcon.com/forum/index.php","Go to the forums to Register or Sign In.");
+	echo "<br /><br />";
+	$page->addURL("index.php","Return to the event schedule.");
+	echo "</center>";
+	exit(0);
+}
+
 if( ! isset($_GET['event']) )
 {
 	$page->printError("EventID must be supplied.");
@@ -40,6 +52,9 @@ if( ! isset($_GET['event']) )
 }
 
 // get the actual event from the db
+$eID = $C->validate_string($_GET['event']);
+$eID = intval($eID);
+
 $q = "
 SELECT
 	e_eventID, r_roomName, e_dateStart, e_dateEnd, 
@@ -47,7 +62,7 @@ SELECT
 FROM
 	events, rooms
 WHERE 
-	e_eventID = ". $_GET['event'] ."
+	e_eventID = ". $eID ."
 	AND
 	r_roomID = e_roomID
 ;";
@@ -74,45 +89,47 @@ $reqEvent = new Event(
 
 // get the user's current event schedule
 
-$username = $user->get_Username();
-$q = "SELECT us_selectedEvents FROM userSchedule WHERE us_forumName = '$username';";
-
-$C->query($q);
-
-if( $C->result_size() != 1 )
-{
-	echo "<center>";
-	echo "<h2>Silly $username, you have no events scheduled. =^.^=</h2>";
-	$page->addURL("index.php","Return to event schedule.");
-	echo "</center>";
-	exit(0);	
-}
-
-$row = $C->fetch_row();
+$uID = $user->get_UserID();
 
 $q = "
 SELECT
-	e_eventID, r_roomName, e_dateStart, e_dateEnd,
-	e_eventName, e_color, e_eventDesc, e_panelist
+	e_eventID, e_eventName, r_roomName, e_dateStart, 
+	e_dateEnd, e_eventDesc, e_panelist, e_color
 FROM
-	events, rooms
+	events, rooms, userSchedule_01
 WHERE
-	e_eventID IN ($row[0])
+	us_userID = $uID
+	AND
+	us_eventID = e_eventID
 	AND
 	e_roomID = r_roomID
+ORDER BY
+	e_dateStart
+	ASC
 ;";
 
 $C->query($q);
 
-for( $i = 0; $i < $C->result_size(); $i++)
+if ( $C->result_size() < 1 )
+{
+	$page->printError("Silly ". $user->get_Username() .", you have no events scheduled. =^.^=");
+	echo "<center>";
+	$page->addURL("index.php","Return to event schedule.");
+	echo "</center>";
+	exit(0);
+}
+
+for( $i = 0; $i < $C->result_size(); $i++ )
 {
 	$row = $C->fetch_assoc();
+	
 	
 	$userEvents[$i] = new Event( 
 		$row['e_eventID'], $row['e_eventName'], $row['r_roomName'], 
 		$row['e_dateStart'],$row['e_dateEnd'], $row['e_eventDesc'], 
 		$row['e_panelist'], $row['e_color'] 
 	);
+	
 }
 
 $req_start = $reqEvent->getStartDate()->format("U");
@@ -206,9 +223,11 @@ foreach($userEvents as $ue)
 
 if( $foundConflict )
 {
-	echo "<center>";
+	echo '<div id="addUserEvent_submit">';
+	echo '<input type="button" name="cancel" value="Cancel" />';
+	echo '&nbsp; ';
 	echo '<input type="submit" value="Submit" />';
-	echo "</center>";
+	echo "</div>";
 }
 
 ?>
