@@ -228,10 +228,25 @@ if( $foundConflict )
 	echo '&nbsp; ';
 	echo '<input type="submit" value="Submit" />';
 	echo "</div>";
-}
-else
-{
-	
+	exit(0);
 }
 
+// no conflict found, go ahead and add
+// the event to the database
+
+$q = "
+INSERT INTO
+	userSchedule(us_userID, us_eventID)
+VALUES
+	( $uID, ". $reqEvent->getEventID() ." )
+;";
+
+$C->query($q);
+
+$page->printError("Successfully added: " . $reqEvent->getEventName());
+echo "<center>";
+$page->addURL("userSchedule.php","View your custom schedule.");
+echo "<br />";
+$page->addURL("index.php","Return to event schedule.");
+echo "</center>";
 ?>

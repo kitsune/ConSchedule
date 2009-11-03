@@ -101,18 +101,19 @@ foreach( $userEvents as $e )
 	
 	if( strlen($name) > 35 )
 	{
-		echo substr($name,0,35) . "&#133;"; //&#133; is an elipsis
+		$page->addURL("view.php?event=". $e->getEventID(), substr($name,0,35) . "&#133;");
 	}
 	else 
 	{
-		echo $name;
+		$page->addURL("view.php?event=". $e->getEventID(), $name);
 	}
 	
 	echo '</td><td>'. $e->getRoomName() .'</td>';
 	echo '<td>'. $day .'</td><td>'. $startTime .'</td><td>'. $endTime .'</td><tr>';
 }
 
-echo '</table>';
+echo '</table><br />';
+$page->addURL("index.php","Return to event schedule.");
 echo '</center>';
 
 
