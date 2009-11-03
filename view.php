@@ -77,6 +77,11 @@ WHERE e_eventID = $eventID AND e_roomID = r_roomID;";
 		{
 			echo "This event is in ";
 			$page->addURL("userSchedule.php","your schedule.");
+			echo "<br />";
+			echo '<span style="font-size: small;">[';
+			$page->addURL("deleteUserEvent.php?event=$eventID","Remove");
+			echo "]</span>";
+			
 		}
 
 
