@@ -96,7 +96,7 @@ SELECT
 	e_eventID, e_eventName, r_roomName, e_dateStart, 
 	e_dateEnd, e_eventDesc, e_panelist, e_color
 FROM
-	events, rooms, userSchedule_01
+	events, rooms, userSchedule
 WHERE
 	us_userID = $uID
 	AND
@@ -228,6 +228,10 @@ if( $foundConflict )
 	echo '&nbsp; ';
 	echo '<input type="submit" value="Submit" />';
 	echo "</div>";
+}
+else
+{
+	
 }
 
 ?>
