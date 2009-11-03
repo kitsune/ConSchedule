@@ -58,6 +58,37 @@ WHERE e_eventID = $eventID AND e_roomID = r_roomID;";
 	
 	//ok lets pass this info to the page so it can display it
 	$page->printEvent($event);
+	echo "<center>";
+	echo "<div id=\"addBox\">";
+		
+	if( $user->is_User() )
+	{
+		// figure out if the event is already in the user's schedule
+		$eventID = $event->getEventID();
+		$query = "SELECT us_eventID FROM userSchedule WHERE us_eventID = $eventID;";
+		
+		$connection->query($query);
+		
+		if( $connection->result_size() == 0 )
+		{
+			$page->addURL("addUserEvent.php?event=$eventID","Add this event to your schedule.");
+		}
+		else
+		{
+			echo "This event is in ";
+			$page->addURL("userSchedule.php","your schedule.");
+		}
+
+
+	}
+	else
+	{
+		echo "Register or Sign In on the ";
+		$page->addURL("http://www.mewcon.com/forum/index.php","forums");
+		echo " to add this event to your own custom schedule!";
+	}	
+	echo "</div>";
+	echo "</center>";
 	
 	if( $user->is_Admin() == TRUE)
 	{
