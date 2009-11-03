@@ -206,21 +206,6 @@ Select Room:
 		}
 		
 		echo "</table>";
-		echo "<div id=\"addBox\">";
-		
-		$U = new User();
-		
-		if( $U->is_User() )
-		{
-			$this->addURL("addUserEvent.php?event=$eventID","Add this event to your schedule.");
-		}
-		else
-		{
-			echo "Register or Sign In on the ";
-			$this->addURL("http://www.mewcon.com/forum/index.php","forums");
-			echo " to add this event to your own custom schedule!";
-		}	
-		echo "</div>";
 		echo "</center>";
 	}
 	
