@@ -1,6 +1,6 @@
 <?php
 /*
- *      us_test.php
+ *      userSchedule.php
  *      
  *      Copyright 2009 Drew Fisher <kakudevel@gmail.com>
  *      
@@ -92,11 +92,23 @@ echo '<thead><td id="eventName">Event Name</td><td id="room">Room</td><td id="da
 
 foreach( $userEvents as $e )
 {
+	$name = $e->getEventName();
 	$day = $e->getStartDate()->format("D, d M Y");
 	$startTime = $e->getStartDate()->format("H:i");
 	$endTime = $e->getEndDate()->format("H:i");
 	
-	echo '<tr><td>'. $e->getEventName() .'</td><td>'. $e->getRoomName() .'</td>';
+	echo '<tr><td>';
+	
+	if( strlen($name) > 35 )
+	{
+		echo substr($name,0,35) . "&#133;"; //&#133; is an elipsis
+	}
+	else 
+	{
+		echo $name;
+	}
+	
+	echo '</td><td>'. $e->getRoomName() .'</td>';
 	echo '<td>'. $day .'</td><td>'. $startTime .'</td><td>'. $endTime .'</td><tr>';
 }
 
