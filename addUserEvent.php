@@ -86,7 +86,6 @@ $reqEvent = new Event(
 	$row['e_panelist'], $row['e_color']
 );
 
-
 // get the user's current event schedule
 
 $uID = $user->get_UserID();
@@ -123,6 +122,17 @@ for( $i = 0; $i < $C->result_size(); $i++ )
 {
 	$row = $C->fetch_assoc();
 	
+	// stop executing if the user's already got the requested event in their schedule.
+	if( $row['e_eventID'] == $reqEvent->getEventID() )
+	{
+		$page->printError("That event is already in your schedule.");
+		echo "<center>";
+		$page->addURL("view.php?event=$eID", "View event details.");
+		echo "<br /><br />";
+		$page->addURL("index.php", "Return to event schedule.");
+		echo "</center>";
+		exit(0);
+	}
 	
 	$userEvents[$i] = new Event( 
 		$row['e_eventID'], $row['e_eventName'], $row['r_roomName'], 
@@ -246,7 +256,7 @@ $C->query($q);
 $page->printError("Successfully added: " . $reqEvent->getEventName());
 echo "<center>";
 $page->addURL("userSchedule.php","View your custom schedule.");
-echo "<br />";
+echo "<br /><br />";
 $page->addURL("index.php","Return to event schedule.");
 echo "</center>";
 ?>
