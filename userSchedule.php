@@ -84,34 +84,70 @@ for( $i = 0; $i < $C->result_size(); $i++ )
 	
 }
 
+// print out the table
 $page->printError("Custom schedule for ". $user->get_Username() .".");
 
 echo "<center>";
 echo '<table id="userSchedule" cellpadding=0 cellspacing=0>';
-echo '<thead><td id="eventName">Event Name</td><td id="room">Room</td><td id="day">Day</td><td id="startTime">Start Time</td><td id="endTime">End Time</td></thead>';
+echo '<thead><td id="eventName">';
+echo 'Event Name';
+echo '</td><td id="room">';
+echo 'Room';
+echo '</td><td id="day">';
+echo 'Day';
+echo '</td><td id="startTime">';
+echo 'Start Time';
+echo '</td><td id="endTime">';
+echo 'End Time';
+echo '</td></thead>';
+
+$prevE = NULL; // holder for previous event as we run through the loop
+$maxLen = 44; // max length for event name
 
 foreach( $userEvents as $e )
-{
+{	
+	$id = $e->getEventID();
 	$name = $e->getEventName();
 	$day = $e->getStartDate()->format("D, d M 'y");
 	$startTime = $e->getStartDate()->format("H:i");
 	$endTime = $e->getEndDate()->format("H:i");
 	
-	echo '<tr><td>';
+	$tdClass = "";
 	
-	$maxLen = 44;
+	if( isset($prevE) )
+	{
+		$prevSDF = $prevE->getStartDate()->format("Y-m-d");
+		$currSDF = $e->getStartDate()->format("Y-m-d");
+		
+		if( $prevSDF != $currSDF )
+		{
+			$tdClass = 'class="dayBreak"';	
+		}
+	}
+	
+	echo '<tr><td '. $tdClass .'>';
 	
 	if( strlen($name) > $maxLen )
 	{
-		$page->addURL("view.php?event=". $e->getEventID(), substr($name,0,$maxLen) . "&#133;");
+		$tName = subStr( $name, 0, $maxLen );
+		$page->addURL("view.php?event=". $id, $tName . "&#133;");
 	}
 	else 
 	{
-		$page->addURL("view.php?event=". $e->getEventID(), $name);
+		$page->addURL("view.php?event=". $id, $name);
 	}
 	
-	echo '</td><td>'. $e->getRoomName() .'</td>';
-	echo '<td>'. $day .'</td><td>'. $startTime .'</td><td>'. $endTime .'</td><tr>';
+	echo '</td><td '. $tdClass .'>';
+	echo $e->getRoomName();
+	echo '</td><td '. $tdClass .'>';
+	echo $day;
+	echo '</td><td '. $tdClass .'>';
+	echo $startTime;
+	echo '</td><td '. $tdClass .'>'; 
+	echo $endTime;
+	echo '</td></tr>';
+	
+	$prevE = $e;
 }
 
 echo '</table><br />';

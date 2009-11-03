@@ -81,6 +81,11 @@ table#userSchedule
 	width: 85%;
 }
 
+#userSchedule thead
+{
+	background: #CCF;
+}
+
 #userSchedule td#day
 {
 	width: 15%;
@@ -99,6 +104,11 @@ table#userSchedule
 #userSchedule td#endTime
 {
 	width: 15%;
+}
+
+#userSchedule td.dayBreak
+{
+	border-top: 2px solid black;
 }
 
 div#addUserEvent_submit
