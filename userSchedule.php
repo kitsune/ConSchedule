@@ -93,15 +93,17 @@ echo '<thead><td id="eventName">Event Name</td><td id="room">Room</td><td id="da
 foreach( $userEvents as $e )
 {
 	$name = $e->getEventName();
-	$day = $e->getStartDate()->format("D, d M Y");
+	$day = $e->getStartDate()->format("D, d M 'y");
 	$startTime = $e->getStartDate()->format("H:i");
 	$endTime = $e->getEndDate()->format("H:i");
 	
 	echo '<tr><td>';
 	
-	if( strlen($name) > 35 )
+	$maxLen = 44;
+	
+	if( strlen($name) > $maxLen )
 	{
-		$page->addURL("view.php?event=". $e->getEventID(), substr($name,0,35) . "&#133;");
+		$page->addURL("view.php?event=". $e->getEventID(), substr($name,0,$maxLen) . "&#133;");
 	}
 	else 
 	{
