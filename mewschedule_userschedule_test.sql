@@ -4,7 +4,7 @@
 #
 # Host: localhost (MySQL 5.1.37)
 # Database: mewschedule_test
-# Generation Time: 2009-10-31 01:50:31 -0700
+# Generation Time: 2009-11-03 00:13:09 -0800
 # ************************************************************
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -151,17 +151,17 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `userSchedule`;
 
 CREATE TABLE `userSchedule` (
-  `us_userScheduleID` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `us_forumName` tinytext NOT NULL,
-  `us_selectedEvents` text NOT NULL,
-  PRIMARY KEY (`us_userScheduleID`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+  `us_userID` int(11) unsigned NOT NULL DEFAULT '0',
+  `us_eventID` int(11) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`us_userID`,`us_eventID`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 LOCK TABLES `userSchedule` WRITE;
 /*!40000 ALTER TABLE `userSchedule` DISABLE KEYS */;
-INSERT INTO `userSchedule` (`us_userScheduleID`,`us_forumName`,`us_selectedEvents`)
+INSERT INTO `userSchedule` (`us_userID`,`us_eventID`)
 VALUES
-	(1,'Kaku','1,5');
+	(1,1),
+	(1,5);
 
 /*!40000 ALTER TABLE `userSchedule` ENABLE KEYS */;
 UNLOCK TABLES;
