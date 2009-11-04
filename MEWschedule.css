@@ -111,8 +111,18 @@ table#userSchedule
 	border-top: 2px solid black;
 }
 
+table.conflicted
+{
+	width: 85%;
+}
+
+.conflicted td.name
+{
+	width: 20%;
+}
+
 div#addUserEvent_submit
 {
-	padding-right: 1em;
+	padding-right: 8%;
 	float: right;
 }
