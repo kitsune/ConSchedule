@@ -40,7 +40,6 @@ if( ! $user->is_User())
 }
 
 // get the user's current event schedule
-
 $uID = $user->get_UserID();
 
 $q = "
@@ -88,7 +87,7 @@ for( $i = 0; $i < $C->result_size(); $i++ )
 $page->printError("Custom schedule for ". $user->get_Username() .".");
 
 echo "<center>";
-echo '<table id="userSchedule" cellpadding=0 cellspacing=0>';
+echo '<table class="userSchedule" cellpadding=0 cellspacing=0>';
 echo '<thead><td id="eventName">';
 echo 'Event Name';
 echo '</td><td id="room">';
@@ -116,6 +115,27 @@ foreach( $userEvents as $e )
 	
 	if( isset($prevE) )
 	{
+		// check for conflict
+		if( isTimeConflict($prevE, $e) )
+		{
+			if( isset($conflicts)){
+				if( ! in_array($prevE, $conflicts) )
+				{
+					$conflicts[] = $prevE;
+				}
+				
+				if( ! in_array($e, $conflicts) )
+				{
+					$conflicts[] = $e;
+				}
+			}
+			else {
+				$conflicts[0] = $prevE;
+				$conflicts[1] = $e;
+			}
+		}
+	
+		// check for day change
 		$prevSDF = $prevE->getStartDate()->format("Y-m-d");
 		$currSDF = $e->getStartDate()->format("Y-m-d");
 		
@@ -151,8 +171,131 @@ foreach( $userEvents as $e )
 }
 
 echo '</table><br />';
+
+// exit if no conflicts were found
+if( count($conflicts) == 0 )
+{
+	$page->addURL("index.php","Return to event schedule.");
+	exit(0);
+}
+
+echo "<hr /><hr />";
+
+$page->printError("Conflicts");
+
+echo "<center>";
+echo '<table class="userSchedule" id="conflicts" cellpadding=0 cellspacing=0>';
+echo '<thead><td id="eventName">';
+echo 'Event Name';
+echo '</td><td id="room">';
+echo 'Room';
+echo '</td><td id="day">';
+echo 'Day';
+echo '</td><td id="startTime">';
+echo 'Start Time';
+echo '</td><td id="endTime">';
+echo 'End Time';
+echo '</td></thead>';
+
+foreach( $conflicts as $e )
+{	
+	$id = $e->getEventID();
+	$name = $e->getEventName();
+	$day = $e->getStartDate()->format("D, d M 'y");
+	$startTime = $e->getStartDate()->format("H:i");
+	$endTime = $e->getEndDate()->format("H:i");
+	
+	$tdClass = "";
+	
+	if( isset($prevE) )
+	{
+		// check for conflict
+		if( isTimeConflict($prevE, $e) )
+		{
+			if( isset($conflicts)){
+				if( ! in_array($prevE, $conflicts) )
+				{
+					$conflicts[] = $prevE;
+				}
+				
+				if( ! in_array($e, $conflicts) )
+				{
+					$conflicts[] = $e;
+				}
+			}
+			else {
+				$conflicts[0] = $prevE;
+				$conflicts[1] = $e;
+			}
+		}
+	
+		// check for day change
+		$prevSDF = $prevE->getStartDate()->format("Y-m-d");
+		$currSDF = $e->getStartDate()->format("Y-m-d");
+		
+		if( $prevSDF != $currSDF )
+		{
+			$tdClass = 'class="dayBreak"';	
+		}
+	}
+	
+	echo '<tr><td '. $tdClass .'>';
+	
+	if( strlen($name) > $maxLen )
+	{
+		$tName = subStr( $name, 0, $maxLen );
+		$page->addURL("view.php?event=". $id, $tName . "&#133;");
+	}
+	else 
+	{
+		$page->addURL("view.php?event=". $id, $name);
+	}
+	
+	echo '</td><td '. $tdClass .'>';
+	echo $e->getRoomName();
+	echo '</td><td '. $tdClass .'>';
+	echo $day;
+	echo '</td><td '. $tdClass .'>';
+	echo $startTime;
+	echo '</td><td '. $tdClass .'>'; 
+	echo $endTime;
+	echo '</td></tr>';
+	
+	$prevE = $e;
+}
+
+echo '</table><br />';
+
+
 $page->addURL("index.php","Return to event schedule.");
 echo '</center>';
 
 
+/* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+ * FUNCTION DEFINITIONS
+ * =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+
+
+function isTimeConflict($reqEvent, $schedEvent) {
+	$req_start = $reqEvent->getStartDate()->format("U");
+	$req_end = $reqEvent->getEndDate()->format("U");
+	
+	$se_start = $schedEvent->getStartDate()->format("U");
+	$se_end = $schedEvent->getEndDate()->format("U");
+	
+	// requested time lies within scheduled time
+	if( $req_start >= $se_start && $req_start < $se_end )
+	{	
+		return TRUE;
+	} 
+	// scheduled time lies within requested time
+ 	else if( $se_start >= $req_start && $se_start < $req_end )
+ 	{
+ 		return TRUE;
+ 	}
+ 	else
+ 	{
+ 		return FALSE;
+ 	}
+}
 ?>

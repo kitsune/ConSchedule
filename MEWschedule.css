@@ -76,37 +76,42 @@ div#addBox
 
 /* USER SCHEDULE SECTION */
 
-table#userSchedule
+table.userSchedule
 {
 	width: 85%;
 }
 
-#userSchedule thead
+.userSchedule thead
 {
 	background: #CCF;
 }
 
-#userSchedule td#day
+.userSchedule#conflicts thead
+{
+	background:#FCC;
+}
+
+.userSchedule td#day
 {
 	width: 15%;
 }
 
-#userSchedule td#room
+.userSchedule td#room
 {
 	width: 15%;
 }
 
-#userSchedule td#startTime
+.userSchedule td#startTime
 {
 	width: 15%;
 }
 
-#userSchedule td#endTime
+.userSchedule td#endTime
 {
 	width: 15%;
 }
 
-#userSchedule td.dayBreak
+.userSchedule td.dayBreak
 {
 	border-top: 2px solid black;
 }
