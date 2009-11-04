@@ -209,26 +209,6 @@ foreach( $conflicts as $e )
 	
 	if( isset($prevE) )
 	{
-		// check for conflict
-		if( isTimeConflict($prevE, $e) )
-		{
-			if( isset($conflicts)){
-				if( ! in_array($prevE, $conflicts) )
-				{
-					$conflicts[] = $prevE;
-				}
-				
-				if( ! in_array($e, $conflicts) )
-				{
-					$conflicts[] = $e;
-				}
-			}
-			else {
-				$conflicts[0] = $prevE;
-				$conflicts[1] = $e;
-			}
-		}
-	
 		// check for day change
 		$prevSDF = $prevE->getStartDate()->format("Y-m-d");
 		$currSDF = $e->getStartDate()->format("Y-m-d");
