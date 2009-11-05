@@ -58,12 +58,12 @@ class Webpage {
 	public function printDaySchedule($schedule, $roomNames, $conOpens, $conCloses) 
 	{
 	
-		// only print 5 24-hour periods maximum
-		$fiveDaysCheck = clone($conOpens);
-		$fiveDaysCheck->modify("+5 days");
-		if( $fiveDaysCheck->format("U") < $conCloses->format("U") )
+		// only print 24 hours from beginning time maximum
+		$dayCheck = clone($conOpens);
+		$dayCheck->modify("+1 days");
+		if( $dayCheck->format("U") < $conCloses->format("U") )
 		{
-			$conCloses = $fiveDaysCheck;
+			$conCloses = $dayCheck;
 		}
 		
 		$halfHoursOpen = ((($conCloses->format("U") - $conOpens->format("U"))/60/60)*2)+1;
