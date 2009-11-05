@@ -132,7 +132,7 @@ if( isset($_GET['day']) )
 
 	if( ! isset($conTimes[$day]) ) 
 	{
-		echo "<h2>Incorrect day passed. Try 0, 1, or 2</h2>"; 
+		echo "<h2>Incorrect day passed.</h2>"; 
 		exit(0);
 	}
 	
