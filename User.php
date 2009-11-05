@@ -20,20 +20,23 @@
  *      MA 02110-1301, USA.
  */
 
+$sServerDocRoot = $_SERVER['DOCUMENT_ROOT'];
+
 require_once($sServerDocRoot . '/forum/SSI.php');
 
 class User {
 	private $admin;
 	private $user;
 	private $username;
+	private $userID;
 	
 	function __construct()
 	{
 		global $context;
-		$self->admin = $context['user']['is_admin'];
-		$self->user = !$context['user']['is_guest'];
-		$self->username = $context['user']['username'];
-		echo $username;
+		$this->admin = $context['user']['is_admin'];
+		$this->user = !$context['user']['is_guest'];
+		$this->username = $context['user']['username'];
+		$this->userID = $context['user']['id'];
 	}
 	
 	public function is_Admin()
@@ -49,6 +52,11 @@ class User {
 	public function get_Username()
 	{
 		return $this->username;
+	}
+
+	public function get_UserID()
+	{
+		return $this->userID();
 	}
 }
 ?>
