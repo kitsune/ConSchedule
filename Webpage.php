@@ -2,8 +2,9 @@
 /*
  *      Webpage.php
  *      
- *      Copyright 2008 Dylan Enloe <ninina@koneko-hime>
- *		Copyright 2009 Drew Fisher <kakudevel@gmail.com>
+ *      Copyright © 2008 Dylan Enloe <ninina@koneko-hime>
+ *		Copyright © 2009 Drew Fisher <kakudevel@gmail.com>
+ *		ALL RIGHTS RESERVED
  *      
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -55,7 +56,16 @@ class Webpage {
 	
 	// conOpens and conCloses are epxected to be of type Date
 	public function printDaySchedule($schedule, $roomNames, $conOpens, $conCloses) 
-	{	
+	{
+	
+		// only print 5 24-hour periods maximum
+		$fiveDaysCheck = clone($conOpens);
+		$fiveDaysCheck->modify("+5 days");
+		if( $fiveDaysCheck->format("U") < $conCloses->format("U") )
+		{
+			$conCloses = $fiveDaysCheck;
+		}
+		
 		$halfHoursOpen = ((($conCloses->format("U") - $conOpens->format("U"))/60/60)*2)+1;
 		$tableTime = clone($conOpens);
 		
