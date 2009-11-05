@@ -1,6 +1,6 @@
 <?php
 /*
- *      test_view.php
+ *      view.php
  *      
  *      Copyright 2009 Drew Fisher <kakudevel@gmail.com>
  *      
@@ -100,7 +100,7 @@ WHERE e_eventID = $eventID AND e_roomID = r_roomID;";
 		echo "<br/ ><hr /><hr /><br/ >";
 		$page->printAdminEdit($event, $eventID, $connection);
 	}
-	else if( $user->get_Username() == $event->getPanelist())
+	else if( $user->get_Username() == $event->getPanelist() && $user->is_User())
 	{
 		//this is the panelist for this panel so give them access to the desc editing
 		echo "<br /><hr /><hr /><br />";
