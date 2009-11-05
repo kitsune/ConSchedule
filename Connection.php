@@ -13,40 +13,35 @@
  * input to avoid injection
  * */
 
-//a hack to make sure the settings stick...need to find out why I need
-//to do this.
-global $database_username, $database_password, $database_server,
-			$database_name;
-
-require_once 'settings.php';
-
 class Connection {
 	private $connection;
 	private $result;
 	
 	function __construct()
-	{	
-		global $database_username, $database_password, $database_server,
-			$database_name;
-			
-		$this->connection = mysql_connect($database_server, 
-			$database_username, $database_password) 
-			or die ("could not connect");
-		
-		mysql_select_db($database_name, $this->connection) 
-			or die (mysql_error());
-		
+	{
+		// constructor is blank as we're using lazy loading
+		// see: http://bit.ly/22yJw1
 	}
 	
 	function __destruct()
 	{
-	//	mysql_close($this->connection);
+		mysql_close($this->connection);
 	}
 	
 	public function query($query)
 	{
-		//$query = $this->db_validate_string($query);
-		$this->result = mysql_query($query, $this->connection) or die("query error: " . mysql_error());
+		if( ! isset($this->connection) )
+		{
+			include_once('settings.php');
+			$this->connection = mysql_connect($database_server, 
+				$database_username, $database_password) 
+				or die ("could not connect");
+			mysql_select_db($database_name, $this->connection) 
+				or die (mysql_error());
+		}
+		
+		$this->result = mysql_query($query, $this->connection) 
+			or die("query error: " . mysql_error());
 	}
 	
 	public function fetch_row()
@@ -55,11 +50,11 @@ class Connection {
 		return $row;
 	}
 
-        public function fetch_assoc()
-        {
-                $row = mysql_fetch_assoc($this->result);
-                return $row;
-        }
+	public function fetch_assoc()
+	{
+		$row = mysql_fetch_assoc($this->result);
+		return $row;
+	}
 	
 	public function result_size()
 	{
