@@ -56,7 +56,7 @@ class User {
 
 	public function get_UserID()
 	{
-		return $this->userID();
+		return $this->userID;
 	}
 }
 ?>
