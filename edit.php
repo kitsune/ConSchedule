@@ -103,7 +103,7 @@ WHERE e_eventID = $eventID;";
 	$connection->query($query);
 	
 }
-else if( $user->get_Username() == $panelist && $action == "panelist" )
+else if( $user->get_Username() == $panelist && $action == "panelist" && $user->is_User())
 {
 	$name = $connection->validate_string($_POST['name']);
 	$desc = $connection->validate_string($_POST['desc']);

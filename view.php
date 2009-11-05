@@ -1,6 +1,6 @@
 <?php
 /*
- *      test_view.php
+ *      view.php
  *      
  *      Copyright 2009 Drew Fisher <kakudevel@gmail.com>
  *      
@@ -58,13 +58,49 @@ WHERE e_eventID = $eventID AND e_roomID = r_roomID;";
 	
 	//ok lets pass this info to the page so it can display it
 	$page->printEvent($event);
+	echo "<center>";
+	echo "<div id=\"addBox\">";
+		
+	if( $user->is_User() )
+	{
+		// figure out if the event is already in the user's schedule
+		$eventID = $event->getEventID();
+		$query = "SELECT us_eventID FROM userSchedule WHERE us_eventID = $eventID;";
+		
+		$connection->query($query);
+		
+		if( $connection->result_size() == 0 )
+		{
+			$page->addURL("addUserEvent.php?event=$eventID","Add this event to your schedule.");
+		}
+		else
+		{
+			echo "This event is in ";
+			$page->addURL("userSchedule.php","your schedule.");
+			echo "<br />";
+			echo '<span style="font-size: small;">[';
+			$page->addURL("deleteUserEvent.php?event=$eventID","Remove");
+			echo "]</span>";
+			
+		}
+
+
+	}
+	else
+	{
+		echo "Register or Sign In on the ";
+		$page->addURL("http://www.mewcon.com/forum/index.php","forums");
+		echo " to add this event to your own custom schedule!";
+	}	
+	echo "</div>";
+	echo "</center>";
 	
 	if( $user->is_Admin() == TRUE)
 	{
 		echo "<br/ ><hr /><hr /><br/ >";
 		$page->printAdminEdit($event, $eventID, $connection);
 	}
-	else if( $user->get_Username() == $event->getPanelist())
+	else if( $user->get_Username() == $event->getPanelist() && $user->is_User())
 	{
 		//this is the panelist for this panel so give them access to the desc editing
 		echo "<br /><hr /><hr /><br />";

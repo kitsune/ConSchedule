@@ -65,3 +65,69 @@ table#viewEvent col.property
 {
 	background: #BBF;
 }
+
+div#addBox
+{
+	width: 35%;
+	padding: 1em .5em;
+	border: 1px dashed black;
+	border-top: none;
+}
+
+/* USER SCHEDULE SECTION */
+
+table.userSchedule
+{
+	width: 85%;
+}
+
+.userSchedule thead
+{
+	background: #CCF;
+}
+
+.userSchedule#conflicts thead
+{
+	background:#FCC;
+}
+
+.userSchedule td#day
+{
+	width: 15%;
+}
+
+.userSchedule td#room
+{
+	width: 15%;
+}
+
+.userSchedule td#startTime
+{
+	width: 15%;
+}
+
+.userSchedule td#endTime
+{
+	width: 15%;
+}
+
+.userSchedule td.dayBreak
+{
+	border-top: 2px solid black;
+}
+
+table.conflicted
+{
+	width: 85%;
+}
+
+.conflicted td.name
+{
+	width: 20%;
+}
+
+div#addUserEvent_submit
+{
+	padding-right: 8%;
+	float: right;
+}
