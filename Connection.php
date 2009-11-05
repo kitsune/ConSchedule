@@ -54,6 +54,12 @@ class Connection {
 		$row = mysql_fetch_row($this->result);
 		return $row;
 	}
+
+        public function fetch_assoc()
+        {
+                $row = mysql_fetch_assoc($this->result);
+                return $row;
+        }
 	
 	public function result_size()
 	{
