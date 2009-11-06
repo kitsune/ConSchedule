@@ -28,54 +28,10 @@ $C = new Connection();
 $page = new Webpage("Add User Event");
 $user = new User();
 
-/*
-// make sure the provided event is valid, make an object of it while we're at it
-if( ! isset($_GET['event']) )
-{
-	$page->printError("EventID must be supplied.");
-	echo "<center>";
-	$page->addURL("index.php","Return to event schedule.");
-	echo "</center>";
-	exit(0);
-}
-
-$eID = $C->validate_string($_GET['event']);
-
-// get the actual event from the db
-$q = "
-SELECT
-	e_eventID, r_roomName, e_dateStart, e_dateEnd, 
-	e_eventName, e_color, e_eventDesc, e_panelist
-FROM
-	events, rooms
-WHERE 
-	e_eventID = ". $eID ."
-	AND
-	r_roomID = e_roomID
-;";
-
-$C->query($q);
-
-if( $C->result_size() != 1 )
-{
-	$page->printError("Problem with passed eventID.");
-	echo "<center>";
-	$page->addURL("index.php","Return to event schedule.");
-	echo "</center>";
-	exit(0);
-}
-
-$row = $C->fetch_assoc();
-
-$reqEvent = new Event(
-	$row['e_eventID'], $row['e_eventName'], $row['r_roomName'], 
-	$row['e_dateStart'],$row['e_dateEnd'], $row['e_eventDesc'], 
-	$row['e_panelist'], $row['e_color']
-);
-*/
-
 $reqEvent = $page->_GET_checkEventID($_GET['event'], $C);
 if( ! isset($reqEvent) ) exit(0);
+
+$eID = $reqEvent->getEventID();
 
 // make sure the visitor is a forum user
 if( ! $user->is_User() )
