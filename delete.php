@@ -28,16 +28,9 @@ $user = new User();
 $page = new Webpage("Delete Event");
 $connection = new Connection();
 
-if(!isset($_GET['event']))
-{
-	echo "<center>";
-	echo "<h2>You need to provide an event to delete one</h2>";
-	$page->addURL("index.php","Return to event schedule.");
-	echo "</center>";
-	exit(0);
-}
+$eventID = $page->_GET_checkEventID( $_GET['event'], $connection, FALSE );
 
-$eventID = $connection->validate_string($_GET['event']);
+if( ! isset($eventID) ) exit(0);
 
 if($user->is_Admin())
 {
@@ -46,8 +39,12 @@ if($user->is_Admin())
 		// they want to delete it so lets delete it
 		$query = "DELETE FROM events WHERE e_eventID = $eventID;";
 		$connection->query($query);
-		echo "<center>Event successfully deleted<br>";
+		
+		$page->printError("Event successfully deleted.");
+		echo "<center>";
 		$page->addURL("index.php","Return to event schedule.");
+		echo "</center>";
+		exit(0);
 	}
 	else
 	{
@@ -66,8 +63,8 @@ if($user->is_Admin())
 }
 else
 {
+	$page->printError("You cannot delete events.");
 	echo "<center>";
-	echo "<h2>You cannot delete events.</h2>";
 	$page->addURL("index.php","Return to event schedule.");
 	echo "</center>";
 }

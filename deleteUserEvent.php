@@ -29,16 +29,10 @@ $user = new User();
 $page = new Webpage("Remove User Event");
 $C = new Connection();
 
-if(!isset($_GET['event']))
-{
-	$page->printError("You need to provide an event to delete.");
-	echo "<center>";
-	$page->addURL("index.php","Return to event schedule.");
-	echo "</center>";
-	exit(0);
-}
+$eID = $page->_GET_checkEventID( $_GET['event'], $C, FALSE );
 
-$eID = $C->validate_string($_GET['event']);
+if( ! isset($eID) ) exit(0);
+
 $uID = $user->get_UserID();
 
 if( isset($_GET['confirm']) )
