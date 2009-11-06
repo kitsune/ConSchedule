@@ -2,7 +2,8 @@
 /*
  *      addUserSchedule.php
  *      
- *      Copyright 2009 Drew Fisher <kakudevel@gmail.com>
+ *      Copyright © 2009 Drew Fisher <kakudevel@gmail.com>
+ *		ALL RIGHTS RESERVED
  *      
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -92,7 +93,33 @@ if(isset($_POST['submit']) )
 	exit(0);
 }
 
-// get the user's current event schedule
+// get the user's current event schedule for the year.
+// Limits pulling to be from YEAR-12-01 00:00:00 to YEAR+1-02-01 00:00:00
+// (00:00 of Feb 1 is just after 23:59 of Jan 31)
+
+$now = date_create();
+$pullStart = date_create();
+$pullEnd = date_create();
+
+//set pull times to midnight
+$pullStart->setTime( 0, 0, 0 );
+$pullEnd->setTime( 0, 0, 0 );
+
+// set initial pull dates. One of these will be off by a year depending
+// on when we're trying to pull.
+$pullStart->setDate( $now->format("Y"), 12, 01 );
+$pullEND->setDate( $now->format("Y"), 02, 01 ); 
+
+//if we're within the month of January, pull "last year's" user schedule.
+if( $now->format("M") == "Jan")
+{
+	$pullStart->modify("-1 year");
+}
+else
+{
+	$pullEnd->modify("+1 year");
+}
+
 $q = "
 SELECT
 	e_eventID, e_eventName, r_roomName, e_dateStart, 
@@ -105,6 +132,12 @@ WHERE
 	us_eventID = e_eventID
 	AND
 	e_roomID = r_roomID
+	AND
+	e_dateStart
+		BETWEEN
+		". $pullStart->format("Y-m-d H:i:s") ."
+		AND
+		". $pullEnd->format("Y-m-d H:i:s") ."
 ORDER BY
 	e_dateStart
 	ASC
@@ -388,5 +421,3 @@ function printTableRows($row1, $row2, $cCount, $hilightRow) {
 	echo "</tr>";
 }
 ?>
-
-
