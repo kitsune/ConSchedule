@@ -28,6 +28,7 @@ $C = new Connection();
 $page = new Webpage("Add User Event");
 $user = new User();
 
+/*
 // make sure the provided event is valid, make an object of it while we're at it
 if( ! isset($_GET['event']) )
 {
@@ -71,6 +72,10 @@ $reqEvent = new Event(
 	$row['e_dateStart'],$row['e_dateEnd'], $row['e_eventDesc'], 
 	$row['e_panelist'], $row['e_color']
 );
+*/
+
+$reqEvent = $page->_GET_checkEventID($_GET['event'], $C);
+if( ! isset($reqEvent) ) exit(0);
 
 // make sure the visitor is a forum user
 if( ! $user->is_User() )

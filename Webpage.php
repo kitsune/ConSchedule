@@ -302,5 +302,58 @@ Edit the Description of this Panel:<br>
 		echo "<h2>". $err ."</h2>";
 		echo "</center>";
 	}
+	
+	// _GET_checkEventID:
+	// checks the passed get param for validity.
+	// prints an error if the param isn't set,
+	// or the eventID doesn't exist.
+	// Returns an Event object if successful, NULL on failure.
+	
+	public function _GET_checkEventID($_GETvar, $connection)
+	{
+		// make sure the provided event is valid, make an object of it while we're at it
+		if( ! isset($_GETvar) )
+		{
+			$this->printError("EventID must be supplied.");
+			echo "<center>";
+			$this->addURL("index.php","Return to event schedule.");
+			echo "</center>";
+			return NULL;
+		}
+		
+		$eID = $connection->validate_string($_GETvar);
+
+		// get the actual event from the db
+		$q = "
+		SELECT
+			e_eventID, r_roomName, e_dateStart, e_dateEnd, 
+			e_eventName, e_color, e_eventDesc, e_panelist
+		FROM
+			events, rooms
+		WHERE 
+			e_eventID = ". $eID ."
+			AND
+			r_roomID = e_roomID
+		;";
+
+		$connection->query($q);
+
+		if( $connection->result_size() != 1 )
+		{
+			$this->printError("Problem with passed eventID.");
+			echo "<center>";
+			$this->addURL("index.php","Return to event schedule.");
+			echo "</center>";
+			return NULL;
+		}
+		
+		$row = $connection->fetch_assoc();
+
+		return new Event(
+			$row['e_eventID'], $row['e_eventName'], $row['r_roomName'], 
+			$row['e_dateStart'],$row['e_dateEnd'], $row['e_eventDesc'], 
+			$row['e_panelist'], $row['e_color']
+		);
+	}
 }
 ?>
