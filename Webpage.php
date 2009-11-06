@@ -334,44 +334,53 @@ Edit the Description of this Panel:<br>
 			return NULL;
 		}
 		
-		// we don't want to query and create an Event object, so
-		// just return the validated eventID
+		$q = NULL;
+		
 		if( $createEventObj == FALSE)
 		{
-			return $eID;
+			// we only care the the event exists, so keep the query simple.
+			$q = "SELECT e_eventID FROM events WHERE e_eventID = $eID;";
 		}
-
-		// get the actual event from the db
-		$q = "
-		SELECT
-			e_eventID, r_roomName, e_dateStart, e_dateEnd, 
-			e_eventName, e_color, e_eventDesc, e_panelist
-		FROM
-			events, rooms
-		WHERE 
-			e_eventID = ". $eID ."
-			AND
-			r_roomID = e_roomID
-		;";
-
+		else
+		{
+			// get the actual event from the db
+			$q = "
+			SELECT
+				e_eventID, r_roomName, e_dateStart, e_dateEnd, 
+				e_eventName, e_color, e_eventDesc, e_panelist
+			FROM
+				events, rooms
+			WHERE 
+				e_eventID = ". $eID ."
+				AND
+				r_roomID = e_roomID
+			;";
+		}
 		$connection->query($q);
 
 		if( $connection->result_size() != 1 )
 		{
-			$this->printError("Problem with passed eventID.");
+			$this->printError("EventID doesn't exist in the database.");
 			echo "<center>";
 			$this->addURL("index.php","Return to event schedule.");
 			echo "</center>";
 			return NULL;
 		}
 		
-		$row = $connection->fetch_assoc();
+		if( $createEventObj == FALSE)
+		{
+			return $eID;
+		}
+		else
+		{
+			$row = $connection->fetch_assoc();
 
-		return new Event(
-			$row['e_eventID'], $row['e_eventName'], $row['r_roomName'], 
-			$row['e_dateStart'],$row['e_dateEnd'], $row['e_eventDesc'], 
-			$row['e_panelist'], $row['e_color']
-		);
+			return new Event(
+				$row['e_eventID'], $row['e_eventName'], $row['r_roomName'], 
+				$row['e_dateStart'],$row['e_dateEnd'], $row['e_eventDesc'], 
+				$row['e_panelist'], $row['e_color']
+			);
+		}
 	}
 }
 ?>

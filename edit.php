@@ -30,17 +30,30 @@ $user = new User();
 $page = new Webpage("Edit Event");
 $connection = new Connection();
 
-if(!isset($_GET['event']))
+// if the visitor isn't even a forum user, they shouldn't be using this page.
+if( ! $user->is_User() )
 {
-	echo "You need to provide an event to edit one";
+	$page->printError("Hey, I don't know you! =O.O=");
+	echo "<center>";
+	echo "Please register or sign in to the ";
+	$page->addURL("http://www.mewcon.com/forum/index.php","forums");
+	echo " if you fancy doing fun things with panels.<br />";
+	$page->addURL("index.php","Return to the event schedule.");
+	echo "<br />";
+	echo "</center>";
 	exit(0);
 }
 
-$eventID = $connection->validate_string($_GET['event']);
+$event = $page->_GET_checkEventID($_GET['event'], $connection);
+if( ! isset($event) ) exit(0);
 
-if(!isset($_GET['update']))
+// typecheck $_GET['update']
+if(!isset($_GET['update']) || $_GET['update'] == "" || is_numeric($_GET['update']) )
 {
-	echo "No edit level supplied";
+	$page->printError("Invalid update parameter.");
+	echo "<center>";
+	$page->addURL("index.php","Return to event schedule.");
+	echo "</center>";
 	exit(0);
 }
 
@@ -49,47 +62,72 @@ $action = $_GET['update'];
 // make sure the supplied update field is valid
 if( $action != "panelist" && $action != "admin" )
 {
-	echo "Unknown edit level: $action.";
+	$page->printError("Unknown edit level: $action");
+	echo "<center>";
+	$page->addURL("index.php","Return to event schedule.");
+	echo "</center>";
 	exit(0);
 }
 
 $name = $connection->validate_string( $_POST['name'] );
-
 if ( str_word_count($name) == 0 )
 {
-	echo "Name cannot be blank. Please go back and supply one.<br />";
-	exit(0);
-}
-// check to make sure the eventID exists within the db
-$query = "SELECT e_eventID, e_panelist FROM events WHERE e_eventID = $eventID;";
-$connection->query($query);
-
-if( $connection->result_size() != 1 ) {
-	echo "EventID does not exist.";
+	$page->printError("Name cannot be blank.");
+	echo "<center>";
+	echo "Please go back and supply one.<br />";
+	echo "<br />";
+	$page->addURL("index.php","Return to event schedule.");
+	echo "</center>";
 	exit(0);
 }
 
-$row = $connection->fetch_assoc();
-$panelist = $row['e_panelist'];
+
+$panelist = $event->getPanelist();
+
+// variables pertinent to either admin or panelist editing
+$eventID = $event->getEventID();
+$name = $connection->validate_string($_POST['name']);
+$desc = $connection->validate_string($_POST['desc']);
 
 if($user->is_Admin() && $action == "admin")
 {
-	$name = $connection->validate_string($_POST['name']);
 	$start = date_create($connection->validate_string($_POST['start']));
 	$end = date_create($connection->validate_string($_POST['end']));
 	$color = $connection->validate_string($_POST['color']);
 	$panelist = $connection->validate_string($_POST['panalist']);
-	$desc = $connection->validate_string($_POST['desc']);
 	$room = $connection->validate_string($_POST['room']);
+	
+	//verify the dates are on a half-hour
+	if( $start->format("m") != "00" || $start->format("m") != "30" )
+	{
+		$page->printError("Start date must be on a half-hour mark.");
+		echo "<center>";
+		$page->addURL("view.php?event=$eventID","Try again.");
+		echo "<br />";
+		$page->addURL("index.php","Return to event schedule.");
+		echo "</center>";
+		exit(0);
+	}
+	
+	if( $end->format("m") != 00 || $end->format("m") != "30")
+	{
+		$page->printError("End date must be on a half-hour mark.");
+		echo "<center>";
+		$page->addURL("view.php?event=$eventID","Try again.");
+		echo "<br />";
+		$page->addURL("index.php","Return to event schedule.");
+		echo "</center>";
+		exit(0);
+	}
 
 	$diff = $end->format("U") - $start->format("U");
 	
 	if( $diff <= 0 )
 	{
+		$page->printError("Invalid dates used.");
 		echo "<center>"; 
-		echo "<h2>Incorrect date(s) passed.</h2>";
-		echo "Make sure the end date is not the same as, or earlier than, the start date.</h2>";
-		echo "</center>"; 
+		echo "Make sure the end date is not the same as, or earlier than, the start date.";
+		echo "<br />";
 		$page->addURL("view.php?event=$eventID","Try again.");
 		echo "<br />";
 		$page->addURL("index.php", "Back to schedule.");
@@ -97,27 +135,31 @@ if($user->is_Admin() && $action == "admin")
 	}
 
 	$query = "
-UPDATE events
-SET e_eventName = '$name', e_roomID = $room, e_dateStart = '" . $start->format("Y-m-d H:i:s") . "', e_dateEnd = '" . $end->format("Y-m-d H:i:s") . "', e_eventDesc = '$desc', e_panelist = '$panelist', e_color = '$color'
-WHERE e_eventID = $eventID;";
+		UPDATE 
+			events
+		SET 
+			e_eventName = '$name', e_roomID = $room, 
+			e_dateStart = '" . $start->format("Y-m-d H:i:s") . "', 
+			e_dateEnd = '" . $end->format("Y-m-d H:i:s") . "',
+			e_eventDesc = '$desc', e_panelist = '$panelist', e_color = '$color'
+		WHERE 
+			e_eventID = $eventID
+	;";
 
 	$connection->query($query);
-	
 }
-else if( $user->get_Username() == $panelist && $action == "panelist" && $user->is_User())
-{
-	$name = $connection->validate_string($_POST['name']);
-	$desc = $connection->validate_string($_POST['desc']);
-	
-	$query = "UPDATE events 
-SET e_eventName = '$name', e_eventDesc = '$desc' 
-WHERE e_eventID = $eventID;";
+else if( $user->get_Username() == $panelist && $action == "panelist" )
+{	
+	$query = "
+		UPDATE events 
+		SET e_eventName = '$name', e_eventDesc = '$desc' 
+		WHERE e_eventID = $eventID;";
 	
 	$connection->query($query);
 }
 
+$page->printError("Event update successful! =^.^=")
 echo "<center>";
-echo "<h2>Event successfully updated</h2>";
 $page->addURL("index.php","Return to main schedule");
 echo "</center>";
 ?>
