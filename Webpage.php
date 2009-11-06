@@ -322,6 +322,16 @@ Edit the Description of this Panel:<br>
 		}
 		
 		$eID = $connection->validate_string($_GETvar);
+		
+		// type check eventID
+		if( is_null($eID) || $eID == '' || ! is_numeric($eID) )
+		{
+			$this->printError("Problem with passed EventID.");
+			echo "<center>";
+			$this->addURL("index.php","Return to event schedule.");
+			echo "</center>";
+			return NULL;
+		}
 
 		// get the actual event from the db
 		$q = "
