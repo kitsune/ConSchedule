@@ -2,7 +2,8 @@
 /*
  *      view.php
  *      
- *      Copyright 2009 Drew Fisher <kakudevel@gmail.com>
+ *      Copyright © 2009 Drew Fisher <kakudevel@gmail.com>
+ *		ALL RIGHTS RESERVED
  *      
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by

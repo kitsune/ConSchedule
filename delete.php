@@ -2,8 +2,9 @@
 /*
  *      delete.php
  *      
- *      Copyright 2008 Dylan Enloe <ninina@Siren>
- *		Copyright 2009 Drew Fisher <kakudevel@gmail.com>
+ *      Copyright © 2008 Dylan Enloe <ninina@Siren>
+ *		Copyright © 2009 Drew Fisher <kakudevel@gmail.com>
+ *		ALL RIGHTS RESERVED
  *      
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -38,6 +39,10 @@ if($user->is_Admin())
 	{
 		// they want to delete it so lets delete it
 		$query = "DELETE FROM events WHERE e_eventID = $eventID;";
+		$connection->query($query);
+		
+		//also remove the event from user schedules
+		$query = "DELETE FROM userSchedule WHERE us_eventID = $eventID;";
 		$connection->query($query);
 		
 		$page->printError("Event successfully deleted.");
