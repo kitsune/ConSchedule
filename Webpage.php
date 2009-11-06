@@ -307,11 +307,12 @@ Edit the Description of this Panel:<br>
 	// checks the passed get param for validity.
 	// prints an error if the param isn't set,
 	// or the eventID doesn't exist.
-	// Returns an Event object if successful, NULL on failure.
-	
-	public function _GET_checkEventID($_GETvar, $connection)
+	// On Success returns an Event object when 
+	// $createEvent is TRUE, or the EventID when $createEvent is FALSE.
+	// On failure always returns NULL.
+	public function _GET_checkEventID($_GETvar, $connection, $createEventObj = TRUE)
 	{
-		// make sure the provided event is valid, make an object of it while we're at it
+		// make sure the provided event is valid
 		if( ! isset($_GETvar) )
 		{
 			$this->printError("EventID must be supplied.");
@@ -331,6 +332,13 @@ Edit the Description of this Panel:<br>
 			$this->addURL("index.php","Return to event schedule.");
 			echo "</center>";
 			return NULL;
+		}
+		
+		// we don't want to query and create an Event object, so
+		// just return the validated eventID
+		if( $createEventObj == FALSE)
+		{
+			return $eID;
 		}
 
 		// get the actual event from the db
