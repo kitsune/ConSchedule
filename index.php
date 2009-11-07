@@ -54,9 +54,9 @@ $roomCount = $C->result_size();
 
 if( $roomCount < 1 ) 
 {
+	$page->printError("No events scheduled.");
 	echo "<center>";
-	echo "<h2>Possible error with database involving rooms. =T.T=</h2>";
-	echo "Please inform Kitsune of the problem via a PM in the forums.<br />";
+	echo "Please check back later. We'll be posting events soon =^.^=";
 	echo "</center>";
 	exit(0);
 }
@@ -90,9 +90,10 @@ $eventCount = $C->result_size();
 
 if( $eventCount < 1 ) 
 {
+	$page->printError("No events scheduled.");
 	echo "<center>";
-	echo "<h2>No events have yet been planned =T.T=</h2>";
-	echo "</center>";
+	echo "Please check back later. We'll be posting events soon =^.^=";
+	echo "</center>";	
 	exit(0);
 }
 
