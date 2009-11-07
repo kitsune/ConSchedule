@@ -382,5 +382,135 @@ Edit the Description of this Panel:<br>
 			);
 		}
 	}
+	
+	function printTableRows($row1, $row2, $cCount, $hilightRow) 
+	{
+		$maxLen = 44; // max length for event name
+		$dayFormat = "d M 'y";
+		
+		// ROW 1
+		
+		if( $hilightRow == 1)
+		{
+			echo "<tr style='background:#CCF;'>";
+		}
+		else
+		{
+			echo "<tr>";
+		}
+		
+		echo "<td>";
+		$name = $row1->getEventName();
+		
+		if( strlen($name) > $maxLen )
+		{
+			$sub = subStr( $name, 0, $maxLen );
+			echo $sub . "&#133;";
+		}
+		else
+		{
+			echo $name;
+		}
+		echo "</td>";
+		echo "<td>". $row1->getRoomName() ."</td>";
+		echo "<td>". $row1->getStartDate()->format($dayFormat) ."</td>";
+		echo "<td style='background: #F99;'>";
+		echo $row1->getStartDate()->format("H:i");
+		echo "</td>";
+		echo "<td style='background: #F99;'>";
+		echo $row1->getEndDate()->format("H:i");
+		echo "</td>";
+		if( $hilightRow == 1 )
+		{
+			echo "<td>Req. Event</td>";
+			if( $cCount == 1 )
+			{
+				echo "<td>";
+				echo "<input type='radio' name='keepReq' value='TRUE' >";
+				echo "</td>";
+				echo "<td>";
+				echo "<input type='radio' name='keepReq' value='FALSE' checked=1>";
+				echo "</td>";
+			} 
+			else
+			{
+				echo "<td colspan=2></td>";
+			}
+		}
+		else
+		{
+			echo "<td>Sched. Event</td>";
+			echo "<td>";
+			echo "<input type='radio' name='keepSched_". ($cCount-1) ."' ";
+			echo "value='". $row1->getEventID() ."_TRUE' checked=1>";
+			echo "</td>";
+			echo "<td>";
+			echo "<input type='radio' name='keepSched_". ($cCount-1) ."' ";
+			echo "value='". $row1->getEventID() ."_FALSE' >";
+			echo "</td>";
+		}
+		echo "</tr>";
+		
+		// ROW 2
+		
+		if( $hilightRow == 2 )
+		{
+			echo "<tr style='background: #CCF;'>";
+		}
+		else 
+		{
+			echo "<tr>";
+		}
+		echo "<td>";
+		$name = $row2->getEventName();
+		
+		if( strlen($name) > $maxLen )
+		{
+			$sub = subStr( $name, 0, $maxLen );
+			echo $sub . "&#133;";
+		}
+		else
+		{
+			echo $name;
+		}
+		echo "</td>";
+		echo "<td>". $row2->getRoomName() ."</td>";
+		echo "<td>". $row2->getStartDate()->format($dayFormat) ."</td>";
+		echo "<td style='background: #F00;'>";
+		echo $row2->getStartDate()->format("H:i");
+		echo "</td>";
+		echo "<td>". $row2->getEndDate()->format("H:i") ."</td>";
+		if( $hilightRow == 2 )
+		{
+			echo "<td>Req. Event</td>";
+			if( $cCount == 1 )
+			{
+				echo "<td>";
+				echo "<input type='radio' name='keepReq' value='TRUE' >";
+				echo "</td>";
+				echo "<td>";
+				echo "<input type='radio' name='keepReq' value='FALSE' checked=1>";
+				echo "</td>";
+			} 
+			else
+			{
+				echo "<td colspan=2></td>";
+			}
+			
+		}
+		else
+		{
+			echo "<td>Sched. Event</td>";
+			echo "<td>";
+			echo "<input type='radio' name='keepSched_". ($cCount-1) ."' ";
+			echo "value='". $row2->getEventID() ."_TRUE' checked=1>";
+			echo "</td>";
+			echo "<td>";
+			echo "<input type='radio' name='keepSched_". ($cCount-1) ."' ";
+			echo "value='". $row2->getEventID() ."_FALSE' >";
+			echo "</td>";
+		}
+		echo "</tr>";
+	}
 }
 ?>
