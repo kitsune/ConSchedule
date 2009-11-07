@@ -185,8 +185,6 @@ echo "<br /><br />";
 $page->addURL("index.php","Return to event schedule.");
 echo "</center>";
 
-
-
 /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
  * FUNCTION DEFINITIONS
  * =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */

@@ -83,7 +83,6 @@ if ( str_word_count($name) == 0 )
 	exit(0);
 }
 
-
 $panelist = $event->getPanelist();
 
 // variables pertinent to either admin or panelist editing

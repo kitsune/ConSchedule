@@ -154,9 +154,9 @@ End: <input type=\"text\" name=\"end\" size=\"16\">
 <br>
 Color to make event (html color, including the #):
 <br>
-<input type=\"text\" name=\"color\">
+<input type=\"text\" name=\"color\" value='#'>
 <br>
-Primary panelist's forum name(may be empty):
+Primary panelist's forum name (may be empty):
 <br>
 <input type=\"text\" name=\"panalist\">
 <br>
