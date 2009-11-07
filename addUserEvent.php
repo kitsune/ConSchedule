@@ -45,6 +45,7 @@ $reqEvent = $page->_GET_checkEventID($_GET['event'], $C);
 if( ! isset($reqEvent)) exit(0);
 
 $uID = $user->get_UserID();
+$eID = $reqEvent->getEventID();
 
 // check if we're processing from the conflict resolution form
 if(isset($_POST['submit']) )
@@ -92,7 +93,6 @@ if(isset($_POST['submit']) )
 
 $startDate = $reqEvent->getStartDate()->format("Y-m-d H:i:s");
 $endDate = $reqEvent->getEndDate()->format("Y-m-d H:i:s");
-$userID = $user->get_UserID();
 
 $q = " SELECT *
 FROM events, userSchedule
@@ -100,7 +100,7 @@ WHERE (('$startDate' > e_dateStart AND '$startDate' < e_dateEnd ) OR
 ('$endDate' > e_dateStart AND '$endDate' < e_dateEnd ) OR
 (e_dateStart > '$startDate' AND e_dateStart < '$endDate' ) OR
 (e_dateEnd > '$startDate' AND e_dateEnd < '$endDate')) 
-AND us_eventID = e_eventID AND us_userID = $userID;";
+AND us_eventID = e_eventID AND us_userID = $uID;";
 
 $C->query($q);
 
