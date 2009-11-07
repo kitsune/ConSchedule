@@ -148,20 +148,91 @@ if($user->is_Admin() && $action == "admin")
 		$page->addURL("index.php", "Back to schedule.");
 		exit(0);
 	}
+	
+	// make sure there isn't a conflict with another event
+	$startStr = $start->format("Y-m-d H:i:00");
+	$endStr = $end->format("Y-m-d H:i:00");
+	
+	$query = "
+		SELECT
+			e_eventName, e_dateStart, e_dateEnd
+		FROM
+			events, rooms
+		WHERE
+			e_eventID != $eventID
+			AND
+			e_roomID = r_roomID
+			AND
+			r_roomID = $room
+			AND
+			(
+				e_dateStart >= '$startStr' AND e_dateStart < '$endStr'
+				OR
+				e_dateEnd > '$startStr' AND e_dateEnd <= '$endStr'
+			)
+	;";
+	
+	$connection->query($query);
+	
+	// we found some conflicts!
+	if( $connection->result_size() > 0 ) {
+	
+		$page->printError("Conflict(s) found!");
+		
+		echo "<center>";
+		echo "<table  id='conflicts' cellpadding=0 cellspacing=0><thead>";
+		echo "<td>Event Name</td>";
+		echo "<td>Start Time</td>";
+		echo "<td>End Time</td>";
+		echo "</thead>";
+		
+		for($i = 0; $i < $connection->result_size(); $i++)
+		{
+			$row = $connection->fetch_assoc();
+			
+			$startDate = date_create( $row['e_dateStart'] );
+			$endDate = date_create( $row['e_dateEnd'] );
+			
+			echo "<tr align='center'>";
+			echo "<td>";
+			echo $row['e_eventName'];
+			echo "</td><td>";
+			echo $startDate->format("H:i");
+			echo "</td><td>";
+			echo $endDate->format("H:i");
+			echo "</td>";
+			echo "</tr>";
+		}
+		echo "</table>";
+		echo "<br />";
+		$page->addURL("add.php", "Try again.");
+		echo "<br /><br />";
+		$page->addURL("index.php", "Return to event schedule.");
+		exit(0);
+	}
 
+	// no conflicts found. Put the event in the schedule!
 	$query = "
 		UPDATE 
 			events
 		SET 
-			e_eventName = '$name', e_roomID = $room, 
+			e_eventName = '$name',
+			e_roomID = $room, 
 			e_dateStart = '" . $start->format("Y-m-d H:i:s") . "', 
 			e_dateEnd = '" . $end->format("Y-m-d H:i:s") . "',
-			e_eventDesc = '$desc', e_panelist = '$panelist', e_color = '$color'
+			e_eventDesc = '$desc',
+			e_panelist = '$panelist', 
+			e_color = '$color'
 		WHERE 
 			e_eventID = $eventID
 	;";
 
 	$connection->query($query);
+	
+	$page->printError("Event update successful! =^.^=");
+	echo "<center>";
+	$page->addURL("index.php","Return to main schedule");
+	echo "</center>";
 }
 else if( $user->get_Username() == $panelist && $action == "panelist" )
 {	
@@ -172,9 +243,4 @@ else if( $user->get_Username() == $panelist && $action == "panelist" )
 	
 	$connection->query($query);
 }
-
-$page->printError("Event update successful! =^.^=")
-echo "<center>";
-$page->addURL("index.php","Return to main schedule");
-echo "</center>";
 ?>

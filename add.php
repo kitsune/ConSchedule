@@ -29,6 +29,7 @@ function __autoload($class_name) {
 #first login info
 $user = new User();
 $page = new Webpage("Add Event");
+$connection = new Connection();
 
 #only admins can add events
 if(!$user->is_Admin())
@@ -42,12 +43,7 @@ if(!$user->is_Admin())
 
 if(isset($_POST['add']))
 {
-	//ok we'll add the entry here.
-	
-	//get data from post and varify it
-	//we need a connection to varify data
-	$connection = new Connection();
-	
+	//ok we'll add the entry here.	
 	$name = $connection->validate_string($_POST['name']);
 	$name = trim($name);
 	
@@ -56,7 +52,7 @@ if(isset($_POST['add']))
 		$page->printError("Name cannot be blank.");
 		echo "<center>";
 		echo "Please go back and supply one.<br /><br />";
-		$page->addURL("add.php","Return to adding an event.");
+		$page->addURL("add.php","Try again.");
 		echo "<br /><br />";
 		$page->addURL("index.php","Return to event schedule.");
 		echo "</center>";
@@ -112,7 +108,7 @@ if(isset($_POST['add']))
 	{
 		$page->printError("Incorrect dates(s) passed.");
 		echo "<center>";
-		echo "Make sure the end date is not the same as, or earlier than, the start date.</h2>";
+		echo "Make sure the end date is not the same as, or earlier than, the start date.";
 		$page->addURL("add.php","Try again.");
 		echo "<br />";
 		$page->addURL("index.php", "Back to schedule.");
@@ -120,7 +116,68 @@ if(isset($_POST['add']))
 		exit(0);
 	}
 	
-	//now we should create the query
+	// make sure there isn't a conflict with another event
+	$startStr = $start->format("Y-m-d H:i:00");
+	$endStr = $end->format("Y-m-d H:i:00");
+	
+	$query = "
+		SELECT
+			e_eventName, e_dateStart, e_dateEnd
+		FROM
+			events, rooms
+		WHERE
+			e_roomID = r_roomID
+			AND
+			r_roomID = $room
+			
+			AND
+			(
+				e_dateStart >= '$startStr' AND e_dateStart < '$endStr'
+				OR
+				e_dateEnd > '$startStr' AND e_dateEnd <= '$endStr'
+			)
+	;";
+	
+	$connection->query($query);
+	
+	// we found some conflicts!
+	if( $connection->result_size() > 0 ) {
+	
+		$page->printError("Conflict(s) found!");
+		
+		echo "<center>";
+		echo "<table  id='conflicts' cellpadding=0 cellspacing=0><thead>";
+		echo "<td>Event Name</td>";
+		echo "<td>Start Time</td>";
+		echo "<td>End Time</td>";
+		echo "</thead>";
+		
+		for($i = 0; $i < $connection->result_size(); $i++)
+		{
+			$row = $connection->fetch_assoc();
+			
+			$startDate = date_create( $row['e_dateStart'] );
+			$endDate = date_create( $row['e_dateEnd'] );
+			
+			echo "<tr align='center'>";
+			echo "<td>";
+			echo $row['e_eventName'];
+			echo "</td><td>";
+			echo $startDate->format("H:i");
+			echo "</td><td>";
+			echo $endDate->format("H:i");
+			echo "</td>";
+			echo "</tr>";
+		}
+		echo "</table>";
+		echo "<br />";
+		$page->addURL("add.php", "Try again.");
+		echo "<br /><br />";
+		$page->addURL("index.php", "Return to event schedule.");
+		exit(0);
+	}
+	
+	//no conflicts found. Put the event in the schedule! 
 	$query = "
 		INSERT INTO 
 			events(	e_roomID, 
@@ -138,16 +195,14 @@ if(isset($_POST['add']))
 			'$color', 
 			'$desc', 
 			'$panelist')
-		;";
+	;";
 		
-	
-	//ok now insert the data
 	$connection->query($query);
 	$row = $connection->get_insert_ID();
 	$eventID = $row[0];
 	
-	
-	echo "<center>Successfully created Event<br>";
+	$page->printError("Successfully created event!")
+	echo "<center>";
 	$page->addURL("view.php?event=$eventID","View Event");
 	echo "<br />";
 	$page->addURL("add.php","Add another Event");
@@ -157,8 +212,6 @@ if(isset($_POST['add']))
 }
 else
 {
-	$connection = new Connection();
-	
 	$page->printError("Add an event");
 	echo "<center>";
 	echo "</center>";

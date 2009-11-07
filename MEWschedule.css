@@ -18,6 +18,12 @@ table td
 	padding: .5em;
 }
 
+table#conflicts thead
+{
+	background:#FCC;
+}
+
+
 .timeColumn 
 {
 	font-weight: bold;
@@ -84,11 +90,6 @@ table.userSchedule
 .userSchedule thead
 {
 	background: #CCF;
-}
-
-.userSchedule#conflicts thead
-{
-	background:#FCC;
 }
 
 .userSchedule td#day
