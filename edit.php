@@ -70,6 +70,8 @@ if( $action != "panelist" && $action != "admin" )
 }
 
 $name = $connection->validate_string( $_POST['name'] );
+$name = trim($name);
+
 if ( str_word_count($name) == 0 )
 {
 	$page->printError("Name cannot be blank.");
@@ -89,6 +91,10 @@ $eventID = $event->getEventID();
 $name = $connection->validate_string($_POST['name']);
 $desc = $connection->validate_string($_POST['desc']);
 
+// trim of excess whitespace
+$name = trim($name);
+$desc = trim($desc);
+
 if($user->is_Admin() && $action == "admin")
 {
 	$start = date_create($connection->validate_string($_POST['start']));
@@ -97,11 +103,17 @@ if($user->is_Admin() && $action == "admin")
 	$panelist = $connection->validate_string($_POST['panalist']);
 	$room = $connection->validate_string($_POST['room']);
 	
+	$panelist = trim($panelist);
+	
 	//verify the dates are on a half-hour
-	if( $start->format("m") != "00" || $start->format("m") != "30" )
+	if( $start->format("i") != "00" && $start->format("i") != "30" )
 	{
 		$page->printError("Start date must be on a half-hour mark.");
 		echo "<center>";
+		echo "You tried: ". $start->format("Y-m-d H:");
+		echo "<span style='color: red;' >";
+		echo $start->format("i");
+		echo "</span><br /><br />";
 		$page->addURL("view.php?event=$eventID","Try again.");
 		echo "<br />";
 		$page->addURL("index.php","Return to event schedule.");
@@ -109,10 +121,14 @@ if($user->is_Admin() && $action == "admin")
 		exit(0);
 	}
 	
-	if( $end->format("m") != 00 || $end->format("m") != "30")
+	if( $end->format("i") != 00 && $end->format("i") != "30")
 	{
 		$page->printError("End date must be on a half-hour mark.");
 		echo "<center>";
+		echo "You tried: ". $end->format("Y-m-d H:");
+		echo "<span style='color: red;' >";
+		echo $end->format("i");
+		echo "</span><br /><br />";
 		$page->addURL("view.php?event=$eventID","Try again.");
 		echo "<br />";
 		$page->addURL("index.php","Return to event schedule.");
