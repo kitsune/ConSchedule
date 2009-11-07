@@ -28,6 +28,7 @@ function __autoload($class_name) {
 
 $C = new Connection();
 $page = new Webpage("Con Schedule Test");
+$user = new User();
 
 
 /* NOTE: there is no code in Webpage::printDaySchedule
@@ -92,8 +93,17 @@ if( $eventCount < 1 )
 {
 	$page->printError("No events scheduled.");
 	echo "<center>";
-	echo "Please check back later. We'll be posting events soon =^.^=";
-	echo "</center>";	
+	if( ! $user->is_Admin() )
+	{
+		echo "Please check back later. We'll be posting events soon =^.^=";
+	}
+	else
+	{
+		echo "Oi, you: ";
+		$page->addURL("add.php","add an event");
+		echo "!";	
+	}
+	echo "</center>";
 	exit(0);
 }
 

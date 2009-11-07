@@ -201,7 +201,7 @@ if(isset($_POST['add']))
 	$row = $connection->get_insert_ID();
 	$eventID = $row[0];
 	
-	$page->printError("Successfully created event!")
+	$page->printError("Successfully created event!");
 	echo "<center>";
 	$page->addURL("view.php?event=$eventID","View Event");
 	echo "<br />";
