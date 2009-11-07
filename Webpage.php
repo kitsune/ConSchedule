@@ -82,7 +82,7 @@ class Webpage {
 		{
 			echo '<tr>';
 			$tF = $tableTime->format("H:i");
-			echo "<td class=\"timeColumn\" style=\"width: 5%;\" align=\"center\">" . $tF . "</td>";
+			echo "<td class=\"timeColumn\" align=\"center\">" . $tF . "</td>";
 		
 			foreach($roomNames as $roomName)
 			{
@@ -92,6 +92,9 @@ class Webpage {
 					if(isset($schedule[$tF][$roomName]))
 					{			
 						//print the item
+						
+						$timeFormat = "H:i / g:i a";
+						
 						$event = $schedule[$tF][$roomName];
 						$name = $event->getEventName();
 						$color = $event->getColor();
@@ -102,7 +105,7 @@ class Webpage {
 							. "\" bgcolor=\"" . $color . "\">";
 						
 						echo "<div class=\"startTime\">";
-						echo $event->getStartDate()->format("H:i");
+						echo $event->getStartDate()->format($timeFormat);
 						echo "</div>";
 						
 						echo "<div class=\"event\">"; 
@@ -110,7 +113,7 @@ class Webpage {
 						echo "</div>";
 						
 						echo "<div class=\"endTime\">";
-						echo $event->getEndDate()->format("H:i");
+						echo $event->getEndDate()->format($timeFormat);
 						echo "</div>";
 						echo"</td>";
 						$wait[$roomName] = $size - 1;

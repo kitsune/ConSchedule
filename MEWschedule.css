@@ -27,6 +27,8 @@ table#conflicts thead
 .timeColumn 
 {
 	font-weight: bold;
+	//font-size: small;
+	width: 5%;
 }
 
 .foundEvent
