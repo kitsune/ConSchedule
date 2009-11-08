@@ -18,7 +18,12 @@ table td
 	padding: .5em;
 }
 
-table#conflicts thead
+table.addPage thead
+{
+	background: #CCF;
+}
+
+table.addPage#conflicts thead
 {
 	background:#FCC;
 }

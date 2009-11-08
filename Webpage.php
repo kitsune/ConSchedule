@@ -69,7 +69,7 @@ class Webpage {
 		$halfHoursOpen = ((($conCloses->format("U") - $conOpens->format("U"))/60/60)*2)+1;
 		$tableTime = clone($conOpens);
 		
-		echo '<table cellpadding=0 cellspacing=0><thead><td></td>';
+		echo '<table class="daySchedule" cellpadding=0 cellspacing=0><thead><td></td>';
 		//initialize the wait on each room to zero
 		//might as well print out the top row too
 		foreach($roomNames as $roomName)
