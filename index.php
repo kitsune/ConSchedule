@@ -74,7 +74,7 @@ if( isset($GETvar) && strlen($GETvar) <= 2) //I doubt we'll ever have more than 
 }
 
 $GETvar = $_GET['date'];
-if( isset($GETvar) && strlen($GETvar) == 8 )
+if( isset($GETvar) && strlen($GETvar) == 8 && ! isset($conday) )
 {
 	$date = $C->validate_string($GETvar);
 }	
