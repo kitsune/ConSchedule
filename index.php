@@ -110,15 +110,15 @@ if( isset($conday) || isset($_GET['date']) )
 	}
 }
 
-/* special check when ?conday is passed and nothing else in case
- * the $conTimes[$conDay]['end'] is before the $defaultEndTime.
+/* special check when ?conday is passed, possibly with a ?startTime, in case
+ * the $conTimes[$conday]['end'] is before the $defaultEndTime.
  * we don't want to print out more times than the official con runs.
  *
  * (NOTE that if a user specifies an ?endTime that goes beyond the conday time,
  * we assume the user knows what they're doing and wants to see till, say, 4am
  * even if the con only goes till 2am.) 
  */
-if( isset($conday) && ! isset($_GET['startTime']) && ! isset($_GET['endTime']) )
+if( isset($conday) && ! isset($_GET['endTime']) )
 {
 	$conEndTime = date_create( $conTimes[$conday]['end'] );
 	
