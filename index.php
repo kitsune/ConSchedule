@@ -50,19 +50,27 @@ $conDayCount = count($conTimes);
 
 // used if _GET['startTime'] or _GET['endTime'] are specified,
 // filled with conTimes span otherwise.
+
 $startDate = NULL;
 $endDate = NULL;
 $date = NULL;
 
 // check for index.php?date=YYYYMMDD[&startTime=HHMM][&endTime=HHMM]
-// or index.php?day=#[&startTime=HHMM][&endTime=HHMM]
+// or index.php?conday=#[&startTime=HHMM][&endTime=HHMM]
 
-$GETvar = $_GET['day'];
+$GETvar = $_GET['conday'];
 if( isset($GETvar) && strlen($GETvar) <= 2) //I doubt we'll ever have more than 99 days of con...
 {
-	$day = $C->validate_string($GETvar);
-	$ex = explode(" ", $conTimes[$day]['start'] );
-	$date = $ex[0];
+	$conday = $C->validate_string($GETvar);
+	if( isset($conTimes[$conday]) )
+	{
+		$ex = explode(" ", $conTimes[$conday]['start'] );
+		$date = $ex[0];
+	}
+	else
+	{
+		$conday = NULL;
+	}	
 }
 
 $GETvar = $_GET['date'];
@@ -71,8 +79,8 @@ if( isset($GETvar) && strlen($GETvar) == 8 )
 	$date = $C->validate_string($GETvar);
 }	
 
-//if either ?day or ?date were passed, check for ?startTime and ?endTime
-if( isset($_GET['day']) || isset($_GET['date']) )
+//if either ?conday or ?date were passed, check for ?startTime and ?endTime
+if( isset($conday) || isset($_GET['date']) )
 {	
 	$GETvar = $_GET['startTime'];
 	if( isset($GETvar) && strlen($GETvar) == 4 )
@@ -102,15 +110,32 @@ if( isset($_GET['day']) || isset($_GET['date']) )
 	}
 }
 
+/* special check when ?conday is passed and nothing else in case
+ * the $conTimes[$conDay]['end'] is before the $defaultEndTime.
+ * we don't want to print out more times than the official con runs.
+ *
+ * (NOTE that if a user specifies an ?endTime that goes beyond the conday time,
+ * we assume the user knows what they're doing and wants to see till, say, 4am
+ * even if the con only goes till 2am.) 
+ */
+if( isset($conday) && ! isset($_GET['startTime']) && ! isset($_GET['endTime']) )
+{
+	$conEndTime = date_create( $conTimes[$conday]['end'] );
+	
+	$diff = $conEndTime->format("U") - $endDate->format("U");
+	
+	if( $diff < 0)
+	{
+		$endDate = date_create( $conTimes[$conday]['end'] );
+	}
+}
+
 //fill in the start and end times with conTimes if not specified via url params
 if( ! isset($startDate) && ! isset($endDate) )
 {
 	$startDate = date_create( $conTimes[0]['start'] );
 	$endDate = date_create( $conTimes[$conDayCount-1]['end'] );	
 }
-
-echo "DateStart: ". $startDate->format("Y-m-d H:i") ."<br />";
-echo "DateEnd: ". $endDate->format("Y-m-d H:i") ."<br />";
 
 $schedule = NULL;
 
@@ -213,33 +238,17 @@ foreach( $roomNames as $roomName )
 
 // print the schedule(s)
 echo "<center>";
-
-if( isset($_GET['day']) ) 
+if( isset($conday) || isset($_GET['date']) )
 {
-	$day = $_GET['day'];
-
-	if( ! isset($conTimes[$day]) ) 
-	{
-		echo "<h2>Incorrect day passed.</h2>"; 
-		exit(0);
-	}
-	
-	$dayStarts = date_create( $conTimes[$day]['start'] );
-	$dayEnds = date_create( $conTimes[$day]['end'] );
-	
 	echo "<hr /><hr />";
-	echo "<h2>";
-	echo "Schedule for " . $dayStarts->format("F d, Y");
-	echo "</h2>";
+	$page->printError("Schedule for " . $startDate->format("F d, Y"));
 	echo "<hr /><hr />";
-	
-	echo "<p>"; 
-	$page->printDaySchedule($schedule, $roomNames, $dayStarts, $dayEnds);
-	echo "</p>"; 
+	echo "<p>";
+	$page->printDaySchedule($schedule, $roomNames, $startDate, $endDate);
+	echo "</p>";
 }
 else
 {
-	
 	for( $i = 0; $i < $conDayCount; $i++ )
 	{
 		$dayStarts = date_create( $conTimes[$i]['start'] );
@@ -255,7 +264,6 @@ else
 		$page->printDaySchedule($schedule, $roomNames, $dayStarts, $dayEnds);
 		echo "</p>"; 
 	}
-} 
-
+}
 echo "</center>"; 
 ?>
