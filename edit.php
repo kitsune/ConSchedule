@@ -180,6 +180,20 @@ if($user->is_Admin() && $action == "admin")
 		$page->printError("Conflict(s) found!");
 		
 		echo "<center>";
+		
+		echo "<h3>Your Event:</h3>";
+		echo "<table class='addPage' id='addedEvent' cellpadding=0 cellspacing=0><thead>";
+		echo "<td>Event Name</td>";
+		echo "<td>Start Time</td>";
+		echo "<td>End Time</td>";
+		echo "</thead>";
+		echo "<tr align='center'>";
+		echo "<td>". $name ."</td>";
+		echo "<td>". $start->format("H:i") ."</td>";
+		echo "<td>". $end->format("H:i") ."</td>";
+		echo "</tr></table>";
+		
+		echo "<h3>Conflicts:</h3>";
 		echo "<table  id='conflicts' cellpadding=0 cellspacing=0><thead>";
 		echo "<td>Event Name</td>";
 		echo "<td>Start Time</td>";
