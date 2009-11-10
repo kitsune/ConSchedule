@@ -118,7 +118,10 @@ if($user->is_Admin() && $action == "admin")
 	$color = $connection->validate_string($_POST['color']);
 	$panelist = $connection->validate_string($_POST['panelist']);
 	
+	//trim excess whitespace
+	$color = trim($color);
 	$panelist = trim($panelist);
+	$desc = trim($panelist);
 	
 	/*
 	//verify the dates are on a half-hour
