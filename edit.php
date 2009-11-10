@@ -48,7 +48,8 @@ $event = $page->_GET_checkEventID($_GET['event'], $connection);
 if( ! isset($event) ) exit(0);
 
 // typecheck $_GET['update']
-if(!isset($_GET['update']) || $_GET['update'] == "" || is_numeric($_GET['update']) )
+$GETvar = $connection->validate_string( $_GET['update'] );
+if(!isset($GETvar) || $GETvar == "" || is_numeric($GETvar) )
 {
 	$page->printError("Invalid update parameter.");
 	echo "<center>";
@@ -57,7 +58,7 @@ if(!isset($_GET['update']) || $_GET['update'] == "" || is_numeric($_GET['update'
 	exit(0);
 }
 
-$action = $_GET['update'];
+$action = $GETvar;
 
 // make sure the supplied update field is valid
 if( $action != "panelist" && $action != "admin" )
@@ -96,14 +97,30 @@ $desc = trim($desc);
 
 if($user->is_Admin() && $action == "admin")
 {
-	$start = date_create($connection->validate_string($_POST['start']));
-	$end = date_create($connection->validate_string($_POST['end']));
+	//validate the _POST vars
+	$name = $connection->validate_string($_POST['name']);
+	$roomID = $connection->validate_string($_POST['room']);
+	
+	$sYear = $connection->validate_string($_POST['startYear']);
+	$sMonth = $connection->validate_string($_POST['startMonth']);
+	$sDay = $connection->validate_string($_POST['startDay']);
+	$sHour = $connection->validate_string($_POST['startHour']);
+	$sMinute = $connection->validate_string($_POST['startMinute']);
+	
+	$eYear = $connection->validate_string($_POST['endYear']);
+	$eMonth = $connection->validate_string($_POST['endMonth']);
+	$eDay = $connection->validate_string($_POST['endDay']);
+	$eHour = $connection->validate_string($_POST['endHour']);
+	$eMinute = $connection->validate_string($_POST['endMinute']);
+
+	$start = date_create($sYear . $sMonth . $sDay . $sHour . $sMinute . "00");
+	$end = date_create($eYear . $eMonth . $eDay . $eHour . $eMinute . "00");
 	$color = $connection->validate_string($_POST['color']);
-	$panelist = $connection->validate_string($_POST['panalist']);
-	$room = $connection->validate_string($_POST['room']);
+	$panelist = $connection->validate_string($_POST['panelist']);
 	
 	$panelist = trim($panelist);
 	
+	/*
 	//verify the dates are on a half-hour
 	if( $start->format("i") != "00" && $start->format("i") != "30" )
 	{
@@ -134,7 +151,9 @@ if($user->is_Admin() && $action == "admin")
 		echo "</center>";
 		exit(0);
 	}
-
+	*/
+	
+	//verify the end time isn't before the start time
 	$diff = $end->format("U") - $start->format("U");
 	
 	if( $diff <= 0 )
@@ -163,7 +182,7 @@ if($user->is_Admin() && $action == "admin")
 			AND
 			e_roomID = r_roomID
 			AND
-			r_roomID = $room
+			r_roomID = $roomID
 			AND
 			(
 				e_dateStart >= '$startStr' AND e_dateStart < '$endStr'
@@ -180,6 +199,20 @@ if($user->is_Admin() && $action == "admin")
 		$page->printError("Conflict(s) found!");
 		
 		echo "<center>";
+		
+		echo "<h3>Your Event:</h3>";
+		echo "<table class='addPage' id='addedEvent' cellpadding=0 cellspacing=0><thead>";
+		echo "<td>Event Name</td>";
+		echo "<td>Start Time</td>";
+		echo "<td>End Time</td>";
+		echo "</thead>";
+		echo "<tr align='center'>";
+		echo "<td>". $name ."</td>";
+		echo "<td>". $start->format("H:i") ."</td>";
+		echo "<td>". $end->format("H:i") ."</td>";
+		echo "</tr></table>";
+		
+		echo "<h3>Conflicts:</h3>";
 		echo "<table  id='conflicts' cellpadding=0 cellspacing=0><thead>";
 		echo "<td>Event Name</td>";
 		echo "<td>Start Time</td>";
@@ -205,7 +238,7 @@ if($user->is_Admin() && $action == "admin")
 		}
 		echo "</table>";
 		echo "<br />";
-		$page->addURL("add.php", "Try again.");
+		$page->addURL("view.php?event=$eventID", "Try again.");
 		echo "<br /><br />";
 		$page->addURL("index.php", "Return to event schedule.");
 		exit(0);
@@ -217,7 +250,7 @@ if($user->is_Admin() && $action == "admin")
 			events
 		SET 
 			e_eventName = '$name',
-			e_roomID = $room, 
+			e_roomID = $roomID, 
 			e_dateStart = '" . $start->format("Y-m-d H:i:s") . "', 
 			e_dateEnd = '" . $end->format("Y-m-d H:i:s") . "',
 			e_eventDesc = '$desc',

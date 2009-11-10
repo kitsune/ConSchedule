@@ -67,7 +67,7 @@ else
 echo "</div>";
 echo "</center>";
 	
-if( $user->is_Admin() == TRUE)
+if( $user->is_Admin() == TRUE && $user->is_User())
 {
 	echo "<br/ ><hr /><hr /><br/ >";
 	$page->printAdminEdit($event, $eventID, $connection);
