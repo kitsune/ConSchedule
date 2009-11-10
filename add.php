@@ -41,7 +41,7 @@ if(!$user->is_Admin())
 	exit(0);
 }
 
-if(isset($_POST['add']))
+if(isset($_GET['action']) && count($_POST) == 15 ) // there are 15 fields used in the add form.
 {
 	//ok we'll add the entry here.	
 	$name = $connection->validate_string($_POST['name']);
@@ -79,7 +79,7 @@ if(isset($_POST['add']))
 	$end = date_create($eYear . $eMonth . $eDay . $eHour . $eMinute . "00");
 	$color = $connection->validate_string($_POST['color']);
 	$panelist = $connection->validate_string($_POST['panelist']);
-	
+	$desc = $connection->validate_string($_POST['desc']);
 	//trim of excess whitepsace
 	$color = trim($color);
 	$panelist = trim($panelist);
@@ -145,7 +145,7 @@ if(isset($_POST['add']))
 		WHERE
 			e_roomID = r_roomID
 			AND
-			r_roomID = $room
+			r_roomID = $roomID
 			
 			AND
 			(

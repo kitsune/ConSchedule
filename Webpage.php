@@ -136,51 +136,100 @@ class Webpage {
 	
 	public function createEventForm($connection)
 	{
-		$query ="
-SELECT r_roomID, r_roomname
-FROM rooms
-ORDER BY (r_roomID);";
+		echo<<<ENDHTML
+		<form action="add.php?action='add'" method="post"
+			enctype="multipart/form-data">
+		<p>
+		Event Name: <br />
+		<input type="text" name="name" />
+		</p>		
+		<p>
+		Room:<br />
+		<select name="room">
+ENDHTML;
+		$query ="SELECT r_roomID, r_roomName FROM rooms ORDER BY (r_roomID) ASC;";
 		$connection->query($query);
-	
-		echo "
-<form action=\"add.php?action=add\" method=\"post\" enctype=\"multipart/form-data\">
-Event Name: 
-<br>
-<input type=\"text\" name=\"name\">
-<br><br />
-NOTE: If an event spans multiple days, you'll have to add the event to each day individually.
-<br><br />
-Time of the event:<br />
-Format is: YYYY-MM-DD HH:MM (e.g. 2009-08-02 14:30)<br />
-Start : <input type=\"text\" name=\"start\" size=\"16\"> 
-End: <input type=\"text\" name=\"end\" size=\"16\">
-<br>
-Color to make event (html color, including the #):
-<br>
-<input type=\"text\" name=\"color\" value='#'>
-<br>
-Primary panelist's forum name (may be empty):
-<br>
-<input type=\"text\" name=\"panalist\">
-<br>
-Description of the event (may be empty):
-<br>
-<textarea name=\"desc\" rows=\"10\" cols=\"60\"></textarea>
-<br>
-Select Room:
-<br>
-<select name=\"room\">";
-		while($row = $connection->fetch_row())
+		while($row = $connection->fetch_assoc())
 		{
-			$roomID = $row[0];
-			$roomname = $row[1];
-			echo "<option value=\"$roomID\">$roomname</option>";
+			$roomID = $row['r_roomID'];
+			$roomname = $row['r_roomName'];
+			echo "<option value='$roomID'>$roomname</option>";
 		}
-		echo "</select>
-<br><br>
-<input type=\"submit\" name=\"add\" value=\"Finished\">
-</form>
-";	
+		
+		//fill in vars
+		$sDYear = date_create()->format("Y");
+		$eDYear = date_create()->format("Y");
+		
+		echo<<<ENDHTML
+		</select>
+		</p>
+		Start Time:<br />
+		<table class="timeForm" cellpadding=0 cellspacing=0">
+		<thead>
+		<td>Year &#150; Month &#150; Day</td>
+		<td>Hour : Minute</td>
+		</thead>
+		<tr>
+		<td>
+			<input type="text" name="startYear" size=4 value="$sDYear" /> &#150; 
+			<select name="startMonth">
+				<option value="12">Dec</option>
+				<option value="01">Jan</option>
+			</select> &#150;
+			<input type="text" name="startDay" size=2 />
+		</td>
+		<td>
+			<input type="text" name="startHour" size=2 /> : 
+			<select name="startMinute">
+				<option value="00">00</option>
+				<option value="30">30</option>
+			</select>
+		</td>	
+		</tr>
+		</table>
+		<br />
+		End Time:<br />
+		<table class="timeForm" cellpadding=0 cellspacing=0">
+		<thead>
+		<td>Year &#150; Month &#150; Day</td>
+		<td>Hour : Minute</td>
+		</thead>
+		<tr>
+		<td>
+			<input type="text" name="endYear" size=4 value="$eDYear" /> &#150; 
+			<select name="endMonth">
+				<option value="12">Dec</option>
+				<option value="01">Jan</option>
+			</select> &#150;
+			<input type="text" name="endDay" size=2 />
+		</td>
+		<td>
+			<input type="text" name="endHour" size=2 /> : 
+			<select name="endMinute">
+				<option value="00">00</option>
+				<option value="30">30</option>
+			</select>
+		</td>	
+		</tr>
+		</table>
+		</p>
+		<p>
+		Color of event (6-digit HTML color, including #)<br />
+		<input type="text" name="color" size=7 value="#FFFFFF" />
+		</p>
+		<p>
+		Primary panelist's name (may be blank):<br />
+		<input type="text" name="panelist" />
+		</p>
+		<p>
+		Description (may be blank):<br />
+		<textarea name="desc" rows=10 cols=60></textarea>
+		</p>
+		<p>
+		<input type="submit" value="Add Event" />
+		</p>
+		</form>
+ENDHTML;
 	}
 	
 	public function printEvent($event)

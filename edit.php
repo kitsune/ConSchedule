@@ -47,12 +47,28 @@ if( ! $user->is_User() )
 $event = $page->_GET_checkEventID($_GET['event'], $connection);
 if( ! isset($event) ) exit(0);
 
+$eventID = $event->getEventID();
+
+// if there's no _POST data, why do anything?
+if( count($_POST) == 0)
+{
+	$page->printError("Something funky happened with the edit form =T.T=");
+	echo "<center>";
+	$page->addURL("view.php?event=$eventID","Try editing again.");
+	echo "<br /><br />";
+	$page->addURL("index.php","Return to event schedule.");
+	echo "</center>";
+	exit(0);
+}
+
 // typecheck $_GET['update']
 $GETvar = $connection->validate_string( $_GET['update'] );
 if(!isset($GETvar) || $GETvar == "" || is_numeric($GETvar) )
 {
 	$page->printError("Invalid update parameter.");
 	echo "<center>";
+	$page->addURL("view.php?event=$eventID","Try editing again.");
+	echo "<br /><br />";
 	$page->addURL("index.php","Return to event schedule.");
 	echo "</center>";
 	exit(0);
@@ -117,6 +133,7 @@ if($user->is_Admin() && $action == "admin")
 	$end = date_create($eYear . $eMonth . $eDay . $eHour . $eMinute . "00");
 	$color = $connection->validate_string($_POST['color']);
 	$panelist = $connection->validate_string($_POST['panelist']);
+	$desc = $connection->validate_string($_POST['desc']);
 	
 	//trim excess whitespace
 	$color = trim($color);
