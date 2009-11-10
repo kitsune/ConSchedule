@@ -40,7 +40,7 @@ table.addPage thead
 	background: #CCF;
 }
 
-table.addPage#conflicts thead
+table#conflicts thead
 {
 	background:#FCC;
 }
