@@ -52,6 +52,8 @@ if( $user->is_User() )
 	if( $connection->result_size() == 0 )
 	{
 		$page->addURL("addUserEvent.php?event=$eventID","Add this event to your schedule.");
+		echo "<br /><br />";
+		$page->addURL("userSchedule.php","View your schedule.");
 	}
 	else
 	{
@@ -69,7 +71,8 @@ else
 	$page->addURL("http://www.mewcon.com/forum/index.php","forums");
 	echo " to add this event to your own custom schedule!";
 }	
-echo "</div>";
+echo "</div><br />";
+$page->addURL("index.php","Back to event schedule.");
 echo "</center>";
 	
 if( $user->is_Admin() == TRUE && $user->is_User())
@@ -83,8 +86,4 @@ else if( $user->get_Username() == $event->getPanelist() && $user->is_User())
 	echo "<br /><hr /><hr /><br />";
 	$page->printPanelistEdit($event, $eventID);
 }
-
-echo "<center>";
-$page->addURL("index.php","Back to event schedule.");
-echo "</center>";
 ?>
