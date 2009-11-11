@@ -40,7 +40,12 @@ if( $user->is_User() )
 {
 	// figure out if the event is already in the user's schedule
 	$eventID = $event->getEventID();
-	$query = "SELECT us_eventID FROM userSchedule WHERE us_eventID = $eventID;";
+	$userID = $user->get_UserID();
+	$query = "
+		SELECT us_eventID 
+		FROM userSchedule 
+		WHERE us_eventID = $eventID
+			AND us_userID = $userID;";
 	
 	$connection->query($query);
 		
