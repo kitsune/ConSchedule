@@ -18,12 +18,29 @@ table td
 	padding: .5em;
 }
 
+table.timeForm{
+	border: none;
+}
+
+table.timeForm thead
+{
+	font-weight: normal;
+	text-align: left;
+}
+
+table.timeForm td
+{
+	border: none;
+	padding: .25em 0em;
+	padding-right: 2em;
+}
+
 table.addPage thead
 {
 	background: #CCF;
 }
 
-table.addPage#conflicts thead
+table#conflicts thead
 {
 	background:#FCC;
 }

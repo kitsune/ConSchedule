@@ -136,51 +136,100 @@ class Webpage {
 	
 	public function createEventForm($connection)
 	{
-		$query ="
-SELECT r_roomID, r_roomname
-FROM rooms
-ORDER BY (r_roomID);";
+		echo<<<ENDHTML
+		<form action="add.php?action='add'" method="post"
+			enctype="multipart/form-data">
+		<p>
+		Event Name: <br />
+		<input type="text" name="name" />
+		</p>		
+		<p>
+		Room:<br />
+		<select name="room">
+ENDHTML;
+		$query ="SELECT r_roomID, r_roomName FROM rooms ORDER BY (r_roomID) ASC;";
 		$connection->query($query);
-	
-		echo "
-<form action=\"add.php?action=add\" method=\"post\" enctype=\"multipart/form-data\">
-Event Name: 
-<br>
-<input type=\"text\" name=\"name\">
-<br><br />
-NOTE: If an event spans multiple days, you'll have to add the event to each day individually.
-<br><br />
-Time of the event:<br />
-Format is: YYYY-MM-DD HH:MM (e.g. 2009-08-02 14:30)<br />
-Start : <input type=\"text\" name=\"start\" size=\"16\"> 
-End: <input type=\"text\" name=\"end\" size=\"16\">
-<br>
-Color to make event (html color, including the #):
-<br>
-<input type=\"text\" name=\"color\" value='#'>
-<br>
-Primary panelist's forum name (may be empty):
-<br>
-<input type=\"text\" name=\"panalist\">
-<br>
-Description of the event (may be empty):
-<br>
-<textarea name=\"desc\" rows=\"10\" cols=\"60\"></textarea>
-<br>
-Select Room:
-<br>
-<select name=\"room\">";
-		while($row = $connection->fetch_row())
+		while($row = $connection->fetch_assoc())
 		{
-			$roomID = $row[0];
-			$roomname = $row[1];
-			echo "<option value=\"$roomID\">$roomname</option>";
+			$roomID = $row['r_roomID'];
+			$roomname = $row['r_roomName'];
+			echo "<option value='$roomID'>$roomname</option>";
 		}
-		echo "</select>
-<br><br>
-<input type=\"submit\" name=\"add\" value=\"Finished\">
-</form>
-";	
+		
+		//fill in vars
+		$sDYear = date_create()->format("Y");
+		$eDYear = date_create()->format("Y");
+		
+		echo<<<ENDHTML
+		</select>
+		</p>
+		Start Time:<br />
+		<table class="timeForm" cellpadding=0 cellspacing=0">
+		<thead>
+		<td>Year &#150; Month &#150; Day</td>
+		<td>Hour : Minute</td>
+		</thead>
+		<tr>
+		<td>
+			<input type="text" name="startYear" size=4 value="$sDYear" /> &#150; 
+			<select name="startMonth">
+				<option value="12">Dec</option>
+				<option value="01">Jan</option>
+			</select> &#150;
+			<input type="text" name="startDay" size=2 />
+		</td>
+		<td>
+			<input type="text" name="startHour" size=2 /> : 
+			<select name="startMinute">
+				<option value="00">00</option>
+				<option value="30">30</option>
+			</select>
+		</td>	
+		</tr>
+		</table>
+		<br />
+		End Time:<br />
+		<table class="timeForm" cellpadding=0 cellspacing=0">
+		<thead>
+		<td>Year &#150; Month &#150; Day</td>
+		<td>Hour : Minute</td>
+		</thead>
+		<tr>
+		<td>
+			<input type="text" name="endYear" size=4 value="$eDYear" /> &#150; 
+			<select name="endMonth">
+				<option value="12">Dec</option>
+				<option value="01">Jan</option>
+			</select> &#150;
+			<input type="text" name="endDay" size=2 />
+		</td>
+		<td>
+			<input type="text" name="endHour" size=2 /> : 
+			<select name="endMinute">
+				<option value="00">00</option>
+				<option value="30">30</option>
+			</select>
+		</td>	
+		</tr>
+		</table>
+		</p>
+		<p>
+		Color of event (6-digit HTML color, including #)<br />
+		<input type="text" name="color" size=7 value="#FFFFFF" />
+		</p>
+		<p>
+		Primary panelist's name (may be blank):<br />
+		<input type="text" name="panelist" />
+		</p>
+		<p>
+		Description (may be blank):<br />
+		<textarea name="desc" rows=10 cols=60></textarea>
+		</p>
+		<p>
+		<input type="submit" value="Add Event" />
+		</p>
+		</form>
+ENDHTML;
 	}
 	
 	public function printEvent($event)
@@ -231,56 +280,132 @@ Select Room:
 		$desc = $event->getDesc();
 		$panelist = $event->getPanelist();
 		$color = $event->getColor();
-		echo "
-<form action=\"edit.php?update=admin&event=$eventID\" method=\"post\" enctype=\"multipart/form-data\">
-Update Event Name: 
-<br>
-<input type=\"text\" name=\"name\" value=\"$name\">
-<br><br>
-Color to make event (html color):
-<br>
-<input type=\"text\" name=\"color\" value=\"$color\">
-<br><br>
-Change the time of the event:
-<br>
-Format is: YYYY-MM-DD HH:MM (e.g. 2009-08-02 14:30)<br />
-Start : <input type=\"text\" name=\"start\" size=\"16\" value = \"" . $start->format("Y-m-d H:i") . "\"> 
-End: <input type=\"text\" name=\"end\" size=\"16\" value = \"" . $end->format("Y-m-d H:i") . "\">
-<br><br>
-Primary panelist's forum name (may be empty):
-<br>
-<input type=\"text\" name=\"panalist\" value= \"$panelist\">
-<br><br>
-Change Room:
-<br>
-<select name=\"room\">";
-		$query ="
-SELECT r_roomID, r_roomname
-FROM rooms
-ORDER BY (r_roomID);";
+		
+		echo<<<ENDHTML
+		<form action="edit.php?update=admin&event=$eventID" method="post"
+			enctype="multipart/form-data">
+		<p>
+		Update Event Name: <br />
+		<input type="text" name="name" value="$name" />
+		</p>		
+		<p>
+		Room:<br />
+		<select name="room">
+ENDHTML;
+		$query ="SELECT r_roomID, r_roomName FROM rooms ORDER BY (r_roomID) ASC;";
+		
 		$connection->query($query);
-		while($row = $connection->fetch_row())
+		
+		while($row = $connection->fetch_assoc())
 		{
-			$roomID = $row[0];
-			$roomname = $row[1];
+			$roomID = $row['r_roomID'];
+			$roomname = $row['r_roomName'];
 			if($room == $roomname)
 			{
-				echo "<option value=\"$roomID\" selected=\"yes\">$roomname</option>";
+				echo "<option value='$roomID' selected='yes'>$roomname</option>";
 			}
 			else
 			{
-				echo "<option value=\"$roomID\">$roomname</option>";
+				echo "<option value='$roomID'>$roomname</option>";
 			}
 		}
-		echo "</select>
-<br><br>
-Edit the Description of this Panel:<br>
-<textarea name=\"desc\" rows=\"10\" cols=\"60\">$desc</textarea>
-<br><br>
-<input type=\"submit\" name=\"add\" value=\"Update\">
-</form><br />";
-	echo "<form action=\"delete.php?event=$eventID\" method=\"post\" enctype=\"multipart/form-data\">";
-	echo "<input type=\"submit\" value=\"Delete Event\"></form><br />";
+		
+		// set up fill-in variables for the date/time input values
+		$sDYear = $start->format("Y");		
+		$sDMonth = $start->format("m");		
+		$sDDay = $start->format("d");		
+		$sDHour = $start->format("H");		
+		$sDMinute = $start->format("i");
+		
+		// current months/hours are supposed to be selected
+		$sDDecSel = ($sDMonth == "12") ? "selected='yes'" : '';
+		$sDJanSel = ($sDMonth == "01") ? "selected='yes'" : '';
+		$sDMin00Sel = ($sDMinute == "00") ? "selected='yes'" : ''; 
+		$sDMin30Sel = ($sDMinute == "30") ? "selected='yes'" : '';
+		
+		$eDYear = $end->format("Y");
+		$eDMonth = $end->format("m");
+		$eDDay = $end->format("d");
+		$eDHour = $end->format("H");
+		$eDMinute = $end->format("i");
+		
+		$eDDecSel = ($eDMonth == "12") ? "selected='yes'" : "";
+		$eDJanSel = ($eDMonth == "01") ? "selected='yes'" : "";
+		$eDMin00Sel = ($eDMinute == "00") ? "selected='yes'" : ''; 
+		$eDMin30Sel = ($eDMinute == "30") ? "selected='yes'" : '';
+		
+		echo<<<ENDHTML
+		</select>
+		</p>
+		Start Time:<br />
+		<table class="timeForm" cellpadding=0 cellspacing=0">
+		<thead>
+		<td>Year &#150; Month &#150; Day</td>
+		<td>Hour : Minute</td>
+		</thead>
+		<tr>
+		<td>
+			<input type="text" name="startYear" size=4 value="$sDYear" /> &#150; 
+			<select name="startMonth">
+				<option value="12" $sDDecSel>Dec</option>
+				<option value="01" $sDJanSel>Jan</option>
+			</select> &#150;
+			<input type="text" name="startDay" size=2 value="$sDDay" />
+		</td>
+		<td>
+			<input type="text" name="startHour" size=2 value="$sDHour" /> : 
+			<select name="startMinute">
+				<option value="00" $sDMin00Sel>00</option>
+				<option value="30" $sDMin30Sel>30</option>
+			</select>
+		</td>	
+		</tr>
+		</table>
+		<br />
+		End Time:<br />
+		<table class="timeForm" cellpadding=0 cellspacing=0">
+		<thead>
+		<td>Year &#150; Month &#150; Day</td>
+		<td>Hour : Minute</td>
+		</thead>
+		<tr>
+		<td>
+			<input type="text" name="endYear" size=4 value="$eDYear" /> &#150; 
+			<select name="endMonth">
+				<option value="12" $eDDecSel>Dec</option>
+				<option value="01" $eDJanSel>Jan</option>
+			</select> &#150;
+			<input type="text" name="endDay" size=2 value="$eDDay" />
+		</td>
+		<td>
+			<input type="text" name="endHour" size=2 value="$eDHour" /> : 
+			<select name="endMinute">
+				<option value="00" $eDMin00Sel>00</option>
+				<option value="30" $eDMin30Sel>30</option>
+			</select>
+		</td>	
+		</tr>
+		</table>
+		</p>
+		<p>
+		Color of event (6-digit HTML color, including #)<br />
+		<input type="text" name="color" size=7 value="$color" />
+		</p>
+		<p>
+		Primary panelist's name (may be blank):<br />
+		<input type="text" name="panelist" value="$panelist" />
+		</p>
+		<p>
+		Description (may be blank):<br />
+		<textarea name="desc" rows=10 cols=60>$desc</textarea>
+		</p>
+		<p>
+		<input type="submit" value="Update" />
+		</p>
+		</form>
+ENDHTML;
+		echo "<form action=\"delete.php?event=$eventID\" method=\"post\" enctype=\"multipart/form-data\">";
+		echo "<input type=\"submit\" value=\"Delete Event\"></form><br />";
 	}
 
 	public function printPanelistEdit($event, $eventID)

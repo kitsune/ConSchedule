@@ -41,7 +41,7 @@ if(!$user->is_Admin())
 	exit(0);
 }
 
-if(isset($_POST['add']))
+if(isset($_GET['action']) && count($_POST) == 15 ) // there are 15 fields used in the add form.
 {
 	//ok we'll add the entry here.	
 	$name = $connection->validate_string($_POST['name']);
@@ -59,18 +59,34 @@ if(isset($_POST['add']))
 		exit(0);
 	}
 	
-	$start = date_create($connection->validate_string($_POST['start']));
-	$end = date_create($connection->validate_string($_POST['end']));
-	$color = $connection->validate_string($_POST['color']);
-	$panelist = $connection->validate_string($_POST['panalist']);
-	$desc = $connection->validate_string($_POST['desc']);
-	$room = $connection->validate_string($_POST['room']);
+	//validate the _POST vars
+	$name = $connection->validate_string($_POST['name']);
+	$roomID = $connection->validate_string($_POST['room']);
 	
+	$sYear = $connection->validate_string($_POST['startYear']);
+	$sMonth = $connection->validate_string($_POST['startMonth']);
+	$sDay = $connection->validate_string($_POST['startDay']);
+	$sHour = $connection->validate_string($_POST['startHour']);
+	$sMinute = $connection->validate_string($_POST['startMinute']);
+	
+	$eYear = $connection->validate_string($_POST['endYear']);
+	$eMonth = $connection->validate_string($_POST['endMonth']);
+	$eDay = $connection->validate_string($_POST['endDay']);
+	$eHour = $connection->validate_string($_POST['endHour']);
+	$eMinute = $connection->validate_string($_POST['endMinute']);
+
+	$start = date_create($sYear . $sMonth . $sDay . $sHour . $sMinute . "00");
+	$end = date_create($eYear . $eMonth . $eDay . $eHour . $eMinute . "00");
+	$color = $connection->validate_string($_POST['color']);
+	$panelist = $connection->validate_string($_POST['panelist']);
+	$desc = $connection->validate_string($_POST['desc']);
 	//trim of excess whitepsace
 	$color = trim($color);
 	$panelist = trim($panelist);
 	$desc = trim($panelist);
 	
+	/*
+	// verify dates are in half-hour format
 	if( $start->format("i") != "00" && $start->format("i") != "30" )
 	{
 		$page->printError("Start date must be on a half-hour mark.");
@@ -100,6 +116,7 @@ if(isset($_POST['add']))
 		echo "</center>";
 		exit(0);
 	}
+	*/
 	
 	//make sure end event isn't = or earlier than the start date
 	$diff = $end->format("U") - $start->format("U");
@@ -128,7 +145,7 @@ if(isset($_POST['add']))
 		WHERE
 			e_roomID = r_roomID
 			AND
-			r_roomID = $room
+			r_roomID = $roomID
 			
 			AND
 			(
@@ -202,7 +219,7 @@ if(isset($_POST['add']))
 					e_eventDesc, 
 					e_panelist)
 		VALUES 
-			($room,
+			($roomID,
 			'" . $start->format("Y-m-d H:i:s") . "',
 			'" . $end->format("Y-m-d H:i:s") . "',
 			'$name', 
