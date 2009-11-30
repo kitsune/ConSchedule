@@ -83,7 +83,35 @@ table#conflicts thead
 	width: 100%;
 }
 
+/* HEADER MENU SECTION */
 
+div#headerMenu
+{
+	border: 2px solid #000;
+	width: 80%;
+	margin: auto;
+	text-align: center;
+}
+
+#headerMenu ul
+{
+	margin: 0em;
+	padding: .5em;
+}
+
+#headerMenu ul li
+{
+	display: inline;
+	padding-left: 1em;
+	padding-right: 1em;
+	border-left: 1px solid black;
+}
+
+#headerMenu ul li:first-child
+{
+	padding-left: 0em;
+	border-left: none;
+}
 /* VIEW EVENT SECTION */
 
 table#viewEvent

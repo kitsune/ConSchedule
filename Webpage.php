@@ -34,7 +34,17 @@ class Webpage {
 	<meta http-equiv=\"content-type\" content=\"text/html;charset=utf-8\" />
 	<LINK href='MEWschedule.css' rel='stylesheet' type='text/css'>
 </head>
-<body>";
+<body>
+<div id='headerMenu'>";
+echo "<ul>";
+echo "<li>";
+	$this->addURL("http://www.mewcon.com","MEWcon Home");
+echo "</li><li>";
+	$this->addURL("index.php","Event Schedule");
+echo "</li><li>";
+	$this->addURL("userSchedule.php","User Schedule");
+echo "</li></ul>";
+echo "</div>";
 	}
 	
 	function __destruct()
