@@ -44,7 +44,7 @@ echo "</li><li>";
 echo "</li><li>";
 	$this->addURL("userSchedule.php","User Schedule");
 echo "</li></ul>";
-echo "</div>";
+echo "</div><br />";
 	}
 	
 	function __destruct()
