@@ -139,26 +139,6 @@ if( ! isset($startDate) && ! isset($endDate) )
 
 $schedule = NULL;
 
-// rooms query
-$q = "SELECT r_roomName FROM rooms;";
-$C->query( $q );
-$roomCount = $C->result_size();
-
-if( $roomCount < 1 ) 
-{
-	$page->printError("No events scheduled.");
-	echo "<center>";
-	echo "Please check back later. We'll be posting events soon =^.^=";
-	echo "</center>";
-	exit(0);
-}
-
-// store the room names
-for( $i=0; $i < $roomCount; $i++ ) {
-	$row = $C->fetch_assoc();
-	$roomNames[$i] = $row['r_roomName'];
-}
-
 // events query
 $q = "
 SELECT 
@@ -174,6 +154,8 @@ WHERE
 		'". $startDate->format("Y-m-d H:i:s") ."'
 		AND
 		'". $endDate->format("Y-m-d H:i:s") ."'
+ORDER BY
+	r_roomID ASC
 ;";
 
 $C->query( $q );
@@ -209,7 +191,7 @@ if( $eventCount < 1 )
 	exit(0);
 }
 
-// create the events
+// create the events and roomNames arrays
 for( $i=0; $i<$eventCount; $i++ ) {
 	$row = $C->fetch_assoc();
 
@@ -218,6 +200,11 @@ for( $i=0; $i<$eventCount; $i++ ) {
 		$row['e_dateStart'],$row['e_dateEnd'], $row['e_eventDesc'], 
 		$row['e_panelist'], $row['e_color'] 
 	);
+	
+	if( ! in_array($row['r_roomName'], $roomNames))
+	{
+		$roomNames[$i] = $row['r_roomName'];
+	}
 }
 
 unset($C); // close the connection
