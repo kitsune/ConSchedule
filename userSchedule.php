@@ -27,14 +27,14 @@ function __autoload($class_name) {
 
 $C = new Connection();
 $user = new User();
-$page = new Webpage("User Schedule Test");
+$page = new Webpage("User Schedule");
 
 if( ! $user->is_User())
 {
 	$page->printError("You must be a forum user to create your own schedule.");
 	echo "<center>";
 	$page->addURL("http://www.mewcon.com/forum/index.php","Go to the forums to Register or Sign In.");
-	echo "<br /><br />";
+	echo "<br><br>";
 	$page->addURL("index.php","Return to the event schedule.");
 	echo "</center>";
 	exit(0);
@@ -87,19 +87,19 @@ for( $i = 0; $i < $C->result_size(); $i++ )
 // print out the table
 $page->printError("Custom schedule for ". $user->get_Username() .".");
 
-echo "<center>";
+echo '<center>';
 echo '<table class="userSchedule" cellpadding=0 cellspacing=0>';
-echo '<thead><td id="eventName">';
+echo '<thead><tr><td class="eventName">';
 echo 'Event Name';
-echo '</td><td id="room">';
+echo '</td><td class="room">';
 echo 'Room';
-echo '</td><td id="day">';
+echo '</td><td class="day">';
 echo 'Day';
-echo '</td><td id="startTime">';
+echo '</td><td class="startTime">';
 echo 'Start Time';
-echo '</td><td id="endTime">';
+echo '</td><td class="endTime">';
 echo 'End Time';
-echo '</td></thead>';
+echo '</td></tr></thead>';
 
 $prevE = NULL; // holder for previous event as we run through the loop
 $maxLen = 44; // max length for event name
@@ -171,32 +171,34 @@ foreach( $userEvents as $e )
 	$prevE = $e;
 }
 
-echo '</table><br />';
+echo '</table><br>';
 
 // exit if no conflicts were found
 if( count($conflicts) == 0 )
 {
 	$page->addURL("index.php","Return to event schedule.");
+	echo "</center>";
 	exit(0);
 }
 
-echo "<hr /><hr />";
+echo "</center>";
+echo "<hr><hr>";
 
 $page->printError("Conflicts");
 
 echo "<center>";
 echo '<table class="userSchedule" id="conflicts" cellpadding=0 cellspacing=0>';
-echo '<thead><td id="eventName">';
+echo '<thead><tr><td class="eventName">';
 echo 'Event Name';
-echo '</td><td id="room">';
+echo '</td><td class="room">';
 echo 'Room';
-echo '</td><td id="day">';
+echo '</td><td class="day">';
 echo 'Day';
-echo '</td><td id="startTime">';
+echo '</td><td class="startTime">';
 echo 'Start Time';
-echo '</td><td id="endTime">';
+echo '</td><td class="endTime">';
 echo 'End Time';
-echo '</td></thead>';
+echo '</td></tr></thead>';
 
 foreach( $conflicts as $e )
 {	
@@ -245,11 +247,11 @@ foreach( $conflicts as $e )
 	$prevE = $e;
 }
 
-echo '</table><br />';
-
+echo '</table><br>';
+echo '</center>';
 
 $page->addURL("index.php","Return to event schedule.");
-echo '</center>';
+
 
 
 /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

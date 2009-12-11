@@ -26,13 +26,12 @@ class Webpage {
 	function __construct($title)
 	{
 		echo "
-<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"
-  \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">
-<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">
+<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"
+\"http://www.w3.org/TR/html4/loose.dtd\">
 <head>
 	<title>Mewcon: $title</title>
-	<meta http-equiv=\"content-type\" content=\"text/html;charset=utf-8\" />
-	<LINK href='MEWschedule.css' rel='stylesheet' type='text/css'>
+	<meta http-equiv=\"content-type\" content=\"text/html;charset=utf-8\">
+	<link href=\"MEWschedule.css\" rel=\"stylesheet\" type=\"text/css\">
 </head>
 <body>
 <div id='headerMenu'>";
@@ -44,7 +43,7 @@ echo "</li><li>";
 echo "</li><li>";
 	$this->addURL("userSchedule.php","User Schedule");
 echo "</li></ul>";
-echo "</div><br />";
+echo "</div><p></p>";
 	}
 	
 	function __destruct()
@@ -68,7 +67,7 @@ echo "</div><br />";
 	public function printDaySchedule($schedule, $roomNames, $conOpens, $conCloses) 
 	{
 	
-		// only print 24 hours from beginning time maximum
+		// only print 24 hours from beginning time
 		$dayCheck = clone($conOpens);
 		$dayCheck->modify("+1 days");
 		if( $dayCheck->format("U") < $conCloses->format("U") )
@@ -79,7 +78,8 @@ echo "</div><br />";
 		$halfHoursOpen = ((($conCloses->format("U") - $conOpens->format("U"))/60/60)*2)+1;
 		$tableTime = clone($conOpens);
 		
-		echo '<table class="daySchedule" cellpadding=0 cellspacing=0><thead><td></td>';
+		echo '<table class="daySchedule" cellpadding=0 cellspacing=0><thead>';
+		echo '<tr><td></td>';
 		//initialize the wait on each room to zero
 		//might as well print out the top row too
 		foreach($roomNames as $roomName)
@@ -88,9 +88,11 @@ echo "</div><br />";
 			$wait[$roomName] = 0;
 		}
 		echo "</thead>";
+		
+		//table body printout
 		for($i=0; $i < $halfHoursOpen; $i+=1)
 		{
-			echo '<tr>';
+			echo "<tr>";
 			$tF = $tableTime->format("H:i");
 			echo "<td class=\"timeColumn\" align=\"center\">" . $tF . "</td>";
 		
@@ -99,10 +101,14 @@ echo "</div><br />";
 				if($wait[$roomName] == 0)
 				{
 					$tF = $tableTime->format("Y-m-d H:i:s");
+					
+					/* if an event for the current looped room starts
+					 * at the current looped time, print the event and
+					 * set the wait so that table printout skips cells it
+					 * shouldn't print because of an event's rowspan.
+					 */ 
 					if(isset($schedule[$tF][$roomName]))
 					{			
-						//print the item
-						
 						$timeFormat = "H:i / g:i a";
 						
 						$event = $schedule[$tF][$roomName];
@@ -150,11 +156,11 @@ echo "</div><br />";
 		<form action="add.php?action='add'" method="post"
 			enctype="multipart/form-data">
 		<p>
-		Event Name: <br />
-		<input type="text" name="name" />
+		Event Name: <br>
+		<input type="text" name="name">
 		</p>		
 		<p>
-		Room:<br />
+		Room:<br>
 		<select name="room">
 ENDHTML;
 		$query ="SELECT r_roomID, r_roomName FROM rooms ORDER BY (r_roomID) ASC;";
@@ -173,7 +179,7 @@ ENDHTML;
 		echo<<<ENDHTML
 		</select>
 		</p>
-		Start Time:<br />
+		Start Time:<br>
 		<table class="timeForm" cellpadding=0 cellspacing=0">
 		<thead>
 		<td>Year &#150; Month &#150; Day</td>
@@ -181,15 +187,15 @@ ENDHTML;
 		</thead>
 		<tr>
 		<td>
-			<input type="text" name="startYear" size=4 value="$sDYear" /> &#150; 
+			<input type="text" name="startYear" size=4 value="$sDYear"> &#150; 
 			<select name="startMonth">
 				<option value="12">Dec</option>
 				<option value="01">Jan</option>
 			</select> &#150;
-			<input type="text" name="startDay" size=2 />
+			<input type="text" name="startDay" size=2>
 		</td>
 		<td>
-			<input type="text" name="startHour" size=2 /> : 
+			<input type="text" name="startHour" size=2> : 
 			<select name="startMinute">
 				<option value="00">00</option>
 				<option value="30">30</option>
@@ -197,8 +203,8 @@ ENDHTML;
 		</td>	
 		</tr>
 		</table>
-		<br />
-		End Time:<br />
+		<br>
+		End Time:<br>
 		<table class="timeForm" cellpadding=0 cellspacing=0">
 		<thead>
 		<td>Year &#150; Month &#150; Day</td>
@@ -206,15 +212,15 @@ ENDHTML;
 		</thead>
 		<tr>
 		<td>
-			<input type="text" name="endYear" size=4 value="$eDYear" /> &#150; 
+			<input type="text" name="endYear" size=4 value="$eDYear"> &#150; 
 			<select name="endMonth">
 				<option value="12">Dec</option>
 				<option value="01">Jan</option>
 			</select> &#150;
-			<input type="text" name="endDay" size=2 />
+			<input type="text" name="endDay" size=2>
 		</td>
 		<td>
-			<input type="text" name="endHour" size=2 /> : 
+			<input type="text" name="endHour" size=2> : 
 			<select name="endMinute">
 				<option value="00">00</option>
 				<option value="30">30</option>
@@ -224,19 +230,19 @@ ENDHTML;
 		</table>
 		</p>
 		<p>
-		Color of event (6-digit HTML color, including #)<br />
-		<input type="text" name="color" size=7 value="#FFFFFF" />
+		Color of event (6-digit HTML color, including #)<br>
+		<input type="text" name="color" size=7 value="#FFFFFF">
 		</p>
 		<p>
-		Primary panelist's name (may be blank):<br />
-		<input type="text" name="panelist" />
+		Primary panelist's name (may be blank):<br>
+		<input type="text" name="panelist">
 		</p>
 		<p>
-		Description (may be blank):<br />
+		Description (may be blank):<br>
 		<textarea name="desc" rows=10 cols=60></textarea>
 		</p>
 		<p>
-		<input type="submit" value="Add Event" />
+		<input type="submit" value="Add Event">
 		</p>
 		</form>
 ENDHTML;
@@ -255,10 +261,10 @@ ENDHTML;
 		echo "<center>";
 		echo "<table id=\"viewEvent\" cellpadding=0 cellspacing=0>";
 		echo "<colgroup>";
-		echo "<col class=\"property\" />";
-		echo "<col class=\"value\" />";
+		echo "<col class=\"property\">";
+		echo "<col class=\"value\">";
 		echo "</colgroup>";
-		echo "<tr><td>Panel<br />Name</td><td>" . $name . "</td></tr>";
+		echo "<tr><td>Panel<br>Name</td><td>" . $name . "</td></tr>";
 		echo "<tr><td>Room</td><td>" . $room . "</td></tr>";
 		echo "<tr><td>Date</td><td>" . $start->format("l, F d Y") . "</td></tr>";
 		echo "<tr><td>Start Time</td><td>" . $start->format("H:i");
@@ -273,7 +279,7 @@ ENDHTML;
 		
 		if( $desc != "")
 		{
-			$desc = str_replace("\\n","<br /><br />",$desc);
+			$desc = str_replace("\\n","<br><br>",$desc);
 			echo "<tr><td>Description</td><td>" . $desc . "</td></tr>";
 		}
 		
@@ -295,11 +301,11 @@ ENDHTML;
 		<form action="edit.php?update=admin&event=$eventID" method="post"
 			enctype="multipart/form-data">
 		<p>
-		Update Event Name: <br />
-		<input type="text" name="name" value="$name" />
+		Update Event Name: <br>
+		<input type="text" name="name" value="$name">
 		</p>		
 		<p>
-		Room:<br />
+		Room:<br>
 		<select name="room">
 ENDHTML;
 		$query ="SELECT r_roomID, r_roomName FROM rooms ORDER BY (r_roomID) ASC;";
@@ -347,7 +353,7 @@ ENDHTML;
 		echo<<<ENDHTML
 		</select>
 		</p>
-		Start Time:<br />
+		Start Time:<br>
 		<table class="timeForm" cellpadding=0 cellspacing=0">
 		<thead>
 		<td>Year &#150; Month &#150; Day</td>
@@ -355,15 +361,15 @@ ENDHTML;
 		</thead>
 		<tr>
 		<td>
-			<input type="text" name="startYear" size=4 value="$sDYear" /> &#150; 
+			<input type="text" name="startYear" size=4 value="$sDYear"> &#150; 
 			<select name="startMonth">
 				<option value="12" $sDDecSel>Dec</option>
 				<option value="01" $sDJanSel>Jan</option>
 			</select> &#150;
-			<input type="text" name="startDay" size=2 value="$sDDay" />
+			<input type="text" name="startDay" size=2 value="$sDDay">
 		</td>
 		<td>
-			<input type="text" name="startHour" size=2 value="$sDHour" /> : 
+			<input type="text" name="startHour" size=2 value="$sDHour"> : 
 			<select name="startMinute">
 				<option value="00" $sDMin00Sel>00</option>
 				<option value="30" $sDMin30Sel>30</option>
@@ -371,8 +377,8 @@ ENDHTML;
 		</td>	
 		</tr>
 		</table>
-		<br />
-		End Time:<br />
+		<br>
+		End Time:<br>
 		<table class="timeForm" cellpadding=0 cellspacing=0">
 		<thead>
 		<td>Year &#150; Month &#150; Day</td>
@@ -380,15 +386,15 @@ ENDHTML;
 		</thead>
 		<tr>
 		<td>
-			<input type="text" name="endYear" size=4 value="$eDYear" /> &#150; 
+			<input type="text" name="endYear" size=4 value="$eDYear"> &#150; 
 			<select name="endMonth">
 				<option value="12" $eDDecSel>Dec</option>
 				<option value="01" $eDJanSel>Jan</option>
 			</select> &#150;
-			<input type="text" name="endDay" size=2 value="$eDDay" />
+			<input type="text" name="endDay" size=2 value="$eDDay">
 		</td>
 		<td>
-			<input type="text" name="endHour" size=2 value="$eDHour" /> : 
+			<input type="text" name="endHour" size=2 value="$eDHour"> : 
 			<select name="endMinute">
 				<option value="00" $eDMin00Sel>00</option>
 				<option value="30" $eDMin30Sel>30</option>
@@ -398,24 +404,24 @@ ENDHTML;
 		</table>
 		</p>
 		<p>
-		Color of event (6-digit HTML color, including #)<br />
-		<input type="text" name="color" size=7 value="$color" />
+		Color of event (6-digit HTML color, including #)<br>
+		<input type="text" name="color" size=7 value="$color">
 		</p>
 		<p>
-		Primary panelist's name (may be blank):<br />
-		<input type="text" name="panelist" value="$panelist" />
+		Primary panelist's name (may be blank):<br>
+		<input type="text" name="panelist" value="$panelist">
 		</p>
 		<p>
-		Description (may be blank):<br />
+		Description (may be blank):<br>
 		<textarea name="desc" rows=10 cols=60>$desc</textarea>
 		</p>
 		<p>
-		<input type="submit" value="Update" />
+		<input type="submit" value="Update">
 		</p>
 		</form>
 ENDHTML;
 		echo "<form action=\"delete.php?event=$eventID\" method=\"post\" enctype=\"multipart/form-data\">";
-		echo "<input type=\"submit\" value=\"Delete Event\"></form><br />";
+		echo "<input type=\"submit\" value=\"Delete Event\"></form><br>";
 	}
 
 	public function printPanelistEdit($event, $eventID)
@@ -441,13 +447,14 @@ Edit the Description of this Panel:<br>
 		echo "</center>";
 	}
 	
-	// _GET_checkEventID:
-	// checks the passed get param for validity.
-	// prints an error if the param isn't set,
-	// or the eventID doesn't exist.
-	// On Success returns an Event object when 
-	// $createEvent is TRUE, or the EventID when $createEvent is FALSE.
-	// On failure always returns NULL.
+	
+	/* _GET_checkEventID:
+	 * Checks the passed GET param for validity.
+	 * Prints an error if the param isn't set, or the eventID doesn't exist.
+	 * On Success returns and event object when $createEventObj is TRUE, or
+	 * the validated EventID when $createEventObj is FALSE.
+	 * On failure always returns null. 
+	 */
 	public function _GET_checkEventID($_GETvar, $connection, $createEventObj = TRUE)
 	{
 		// make sure the provided event is valid

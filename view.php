@@ -52,14 +52,14 @@ if( $user->is_User() )
 	if( $connection->result_size() == 0 )
 	{
 		$page->addURL("addUserEvent.php?event=$eventID","Add this event to your schedule.");
-		echo "<br /><br />";
+		echo "<br><br>";
 		$page->addURL("userSchedule.php","View your schedule.");
 	}
 	else
 	{
 		echo "This event is in ";
 		$page->addURL("userSchedule.php","your schedule.");
-		echo "<br />";
+		echo "<br>";
 		echo '<span style="font-size: small;">[';
 		$page->addURL("deleteUserEvent.php?event=$eventID","Remove");
 		echo "]</span>";			
@@ -71,19 +71,19 @@ else
 	$page->addURL("http://www.mewcon.com/forum/index.php","forums");
 	echo " to add this event to your own custom schedule!";
 }	
-echo "</div><br />";
+echo "</div><br>";
 $page->addURL("index.php","Back to event schedule.");
 echo "</center>";
 	
 if( $user->is_Admin() == TRUE && $user->is_User())
 {
-	echo "<br/ ><hr /><hr /><br/ >";
+	echo "<br/ ><hr><hr><br/ >";
 	$page->printAdminEdit($event, $eventID, $connection);
 }
 else if( $user->get_Username() == $event->getPanelist() && $user->is_User())
 {
 	//this is the panelist for this panel so give them access to the desc editing
-	echo "<br /><hr /><hr /><br />";
+	echo "<br><hr><hr><br>";
 	$page->printPanelistEdit($event, $eventID);
 }
 ?>
