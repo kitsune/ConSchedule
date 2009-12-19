@@ -31,7 +31,7 @@ $page = new Webpage("Con Schedule Test");
 $user = new User();
 
 $defaultStartTime = "08:00:00";
-$defaultEndTime = "02:00:00";
+$defaultEndTime = "03:00:00";
 
 /* NOTE: there is no code in Webpage::printDaySchedule
  * that visually separates days, so if you put a "day's"
@@ -39,11 +39,11 @@ $defaultEndTime = "02:00:00";
  * all you'll get is a big list of half-hour increments from
  * the day's start to its end, whatever time that may be.
  */
-$conTimes[0]['start'] = "2009-12-31 08:00:00";
-$conTimes[0]['end'] = "2010-01-01 02:00:00";
-$conTimes[1]['start'] = "2010-01-01 08:00:00";
+$conTimes[0]['start'] = "2009-12-31 09:00:00";
+$conTimes[0]['end'] = "2010-01-01 03:00:00";
+$conTimes[1]['start'] = "2010-01-01 09:00:00";
 $conTimes[1]['end'] = "2010-01-02 02:00:00";
-$conTimes[2]['start'] = "2010-01-02 08:00:00";
+$conTimes[2]['start'] = "2010-01-02 09:00:00";
 $conTimes[2]['end'] = "2010-01-03 00:00:00";
 
 $conDayCount = count($conTimes);
