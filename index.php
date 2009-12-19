@@ -39,12 +39,14 @@ $defaultEndTime = "03:00:00";
  * all you'll get is a big list of half-hour increments from
  * the day's start to its end, whatever time that may be.
  */
-$conTimes[0]['start'] = "2009-12-31 09:00:00";
-$conTimes[0]['end'] = "2010-01-01 03:00:00";
-$conTimes[1]['start'] = "2010-01-01 09:00:00";
-$conTimes[1]['end'] = "2010-01-02 02:00:00";
-$conTimes[2]['start'] = "2010-01-02 09:00:00";
-$conTimes[2]['end'] = "2010-01-03 00:00:00";
+$conTimes[0]['start'] = "2009-12-30 20:00:00";
+$conTimes[0]['end'] = "2009-12-31 00:00:00";
+$conTimes[1]['start'] = "2009-12-31 09:00:00";
+$conTimes[1]['end'] = "2010-01-01 03:00:00";
+$conTimes[2]['start'] = "2010-01-01 09:00:00";
+$conTimes[2]['end'] = "2010-01-02 02:00:00";
+$conTimes[3]['start'] = "2010-01-02 09:00:00";
+$conTimes[3]['end'] = "2010-01-03 00:00:00";
 
 $conDayCount = count($conTimes);
 
