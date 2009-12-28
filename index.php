@@ -27,8 +27,8 @@ function __autoload($class_name) {
 }
 
 $C = new Connection();
-$page = new Webpage("Con Schedule Test");
 $user = new User();
+$page = new Webpage("Con Schedule Test");
 
 $defaultStartTime = "08:00:00";
 $defaultEndTime = "03:00:00";
