@@ -194,6 +194,7 @@ if( $eventCount < 1 )
 }
 
 // create the events and roomNames arrays
+$roomNames = array();
 for( $i=0; $i<$eventCount; $i++ ) {
 	$row = $C->fetch_assoc();
 
