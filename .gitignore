@@ -1,3 +1,6 @@
 .DS*
 *.bak
 *.diff
+.buildpath
+.project
+.settings
