@@ -25,19 +25,30 @@ table
 	border: 1px solid black;
 	border-right: 0;
 	border-bottom: 0;
+	height: 100%;
+	width: 100%;
 }
 
 table thead
 {
 	font-weight: bold;
 	text-align: center;
+	position: fixed;
+	top: 0px;
+	left: 8px;
+	background-color: #fff;
+
+	z-index: 10;
 }
 
-table td
+table td, table th
 {
 	border-bottom: 1px solid black;
 	border-right: 1px solid black;
 	padding: .5em;
+	vertical-align: middle;
+	height: 3em;
+	width: 13.2857%;
 }
 
 table.timeForm{
@@ -68,13 +79,16 @@ table#conflicts thead
 }
 
 
-.timeColumn 
+.timeColumn
 {
 	font-weight: bold;
-	//font-size: small;
-	width: 5%;
+	width: 7%;
 }
 
+.event_container {
+	position: relative;
+	z-index: 9;
+}
 .foundEvent
 {
 	padding: 0em;
@@ -88,11 +102,18 @@ table#conflicts thead
 	text-align: center;
 	border-bottom: 1px dashed black;
 	width: 100%;
+	position: absolute;
+	top: 0px;
+	left: 0px;
 }
 
 .foundEvent .event
 {
-	margin: .5em;
+	text-align: center;
+	position: absolute;
+	width: 100%;
+	left: 0px;
+	top: 50%;
 }
 
 .foundEvent .endTime
@@ -103,6 +124,9 @@ table#conflicts thead
 	text-align: center;
 	border-top: 1px dashed black;
 	width: 100%;
+	position: absolute;
+	bottom: 0px;
+	left: 0px;
 }
 
 /* HEADER MENU SECTION */
@@ -166,7 +190,7 @@ table.userSchedule
 	background: #CCF;
 }
 
-.userSchedule td#day
+.userSchedule td#day, .userSchedule th#day
 {
 	width: 15%;
 }
