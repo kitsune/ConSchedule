@@ -4,6 +4,7 @@
  *      
  *      Copyright © 2008 Dylan Enloe <ninina@koneko-hime>
  *		Copyright © 2009 Drew Fisher <kakudevel@gmail.com>
+ *		Copyright © 2009,2010 Mark Harviston <infinull@gmail.com>
  *		ALL RIGHTS RESERVED
  *      
  *      This program is free software; you can redistribute it and/or modify
@@ -32,42 +33,7 @@ class Webpage {
 	<title>Mewcon: $title</title>
 	<meta http-equiv="content-type" content="text/html;charset=utf-8">
 	<link href="MEWschedule.css" rel="stylesheet" type="text/css">
-<script type="text/javascript" language="javascript">
-//<!--
-
-window.onload = function(){
-	var divs = document.getElementsByTagName('div');
-	for(var i = 0; i < divs.length; i+=1){
-		if(divs[i].className == 'event_container'){
-			divs[i].style.height = '' + divs[i].parentNode.clientHeight + 'px';
-			//Unnecessary after PHP fix
-			if(divs[i].parentNode.rowSpan == 1){
-				for(var j = 0; j < divs[i].children.length; j+=1){
-					if(divs[i].children[j].className == 'startTime'){
-						divs[i].children[j].style.display='none';
-					}else if(divs[i].children[j].className == 'endTime'){
-						divs[i].children[j].style.display='none';
-					}
-				}
-			}
-		}else if (divs[i].className == 'event'){
-			divs[i].style.marginTop = '-'+(divs[i].clientHeight)/2+'px';
-			//divs[i].offsetTop -= (divs[i].clientHeight)/2;
-		}
-	}
-	theads=document.getElementsByTagName('thead');
-	var the_width = (document.body.offsetWidth );
-	for(var i = 0; i < theads.length; i+=1){
-		theads[i].style.width = the_width + 'px';
-		ths = theads[i].children[0].children;
-		ths[0].style.width = (.07 * the_width) + 'px';
-		for(var j=1; j < theads[i].children.length; j+=1){
-			theads[0].style.width = (.132857 * the_width) + 'px';
-		}
-	}
-}
-//-->
-</script>
+<script type="text/javascript" language="javascript" src="MEWschedule.js"></script>
 </head>
 <body>
 <div id='headerMenu'>
@@ -132,7 +98,7 @@ echo "</div><p></p>";
 		{
 			$tF = $tableTime->format("g:i a");
 			echo "<tr>
-			<th class=\"timeColumn\" align=\"center\">$tF</th>";
+			<th class=\"timeColumn\">$tF</th>";
 		
 			foreach($roomNames as $roomName)
 			{

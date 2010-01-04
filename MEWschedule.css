@@ -2,6 +2,7 @@
  *      MEWSchedule.css
  *      
  *      Copyright © 2009 Drew Fisher <kakudevel@gmail.com>
+ *      Copyright © 2009,2010 Mark Harviston <infinull@gmail.com>
  *		ALL RIGHTS RESERVED
  *      
  *      This program is free software; you can redistribute it and/or modify
@@ -20,13 +21,17 @@
  *      MA 02110-1301, USA.
  */
  
+body
+{
+	background-color: #FFF;
+	margin-top: 3em;
+}
+
 table
 {
-	border: 1px solid black;
-	border-right: 0;
-	border-bottom: 0;
 	height: 100%;
 	width: 100%;
+	border-collapse: collapse;
 }
 
 table thead
@@ -37,18 +42,12 @@ table thead
 	top: 0px;
 	left: 8px;
 	background-color: #fff;
-
 	z-index: 10;
 }
 
 table td, table th
 {
-	border-bottom: 1px solid black;
-	border-right: 1px solid black;
-	padding: .5em;
-	vertical-align: middle;
-	height: 3em;
-	width: 13.2857%;
+	border: 1px solid black;
 }
 
 table.timeForm{
@@ -82,7 +81,8 @@ table#conflicts thead
 .timeColumn
 {
 	font-weight: bold;
-	width: 7%;
+	text-align: center;
+	height: 3em;
 }
 
 .event_container {
@@ -112,6 +112,7 @@ table#conflicts thead
 	text-align: center;
 	position: absolute;
 	width: 100%;
+	height: auto;
 	left: 0px;
 	top: 50%;
 }
