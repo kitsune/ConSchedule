@@ -101,7 +101,7 @@ echo "</div><p></p>";
 		for($i=0; $i < $halfHoursOpen; $i+=1)
 		{
 			echo "<tr>";
-			$tF = $tableTime->format("H:i");
+			$tF = $tableTime->format("g:i a");
 			echo "<td class=\"timeColumn\" align=\"center\">" . $tF . "</td>";
 		
 			foreach($roomNames as $roomName)
