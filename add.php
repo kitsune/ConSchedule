@@ -85,39 +85,6 @@ if(isset($_GET['action']) && count($_POST) == 15 ) // there are 15 fields used i
 	$panelist = trim($panelist);
 	$desc = trim($panelist);
 	
-	/*
-	// verify dates are in half-hour format
-	if( $start->format("i") != "00" && $start->format("i") != "30" )
-	{
-		$page->printError("Start date must be on a half-hour mark.");
-		echo "<center>";
-		echo "You tried: ". $start->format("Y-m-d H:");
-		echo "<span style='color: red;' >";
-		echo $start->format("i");
-		echo "</span><br /><br />";
-		$page->addURL("add.php","Try again.");
-		echo "<br />";
-		$page->addURL("index.php","Return to event schedule.");
-		echo "</center>";
-		exit(0);
-	}
-	
-	if( $end->format("i") != "00" && $end->format("i") != "30")
-	{
-		$page->printError("End date must be on a half-hour mark.");
-		echo "<center>";
-		echo "You tried: ". $end->format("Y-m-d H:");
-		echo "<span style='color: red;' >";
-		echo $end->format("i");
-		echo "</span><br /><br />";
-		$page->addURL("add.php","Try again.");
-		echo "<br />";
-		$page->addURL("index.php","Return to event schedule.");
-		echo "</center>";
-		exit(0);
-	}
-	*/
-	
 	//make sure end event isn't = or earlier than the start date
 	$diff = $end->format("U") - $start->format("U");
 	
@@ -247,6 +214,20 @@ else
 	echo "<center>";
 	echo "</center>";
 	echo "<hr /><hr />";
-	$page->createEventForm($connection);
+	
+	$room = null;
+	$date = null;
+		
+	if( isset($_GET['room']) )
+	{
+		$room = $connection->validate_string($_GET['room']);
+	}
+
+	if( isset($_GET['date']) )
+	{
+		$date = $connection->validate_string($_GET['date']);
+	}
+	
+	$page->createEventForm($connection, $room, $date);
 }
 ?>

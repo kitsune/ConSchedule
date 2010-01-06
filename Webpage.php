@@ -23,8 +23,12 @@
  */
 
 class Webpage {
+
+	private $user;
+	
 	function __construct($title, $user)
 	{
+		$this->user = $user;
 		echo "
 <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"
 \"http://www.w3.org/TR/html4/loose.dtd\">
@@ -144,7 +148,17 @@ echo "</div><p></p>";
 					}
 					else
 					{
-						echo "<td> </td>";
+						if( $this->user->is_Admin() )
+						{
+							echo "<td>";
+							$s = "room=$roomName&date=". $tableTime->format("YmdHis");
+							$this->addURL("add.php?". $s, "+");
+							echo "</td>";
+						}
+						else
+						{
+							echo "<td>&nbsp;</td>";
+						}
 					}
 				}
 				else
@@ -158,8 +172,10 @@ echo "</div><p></p>";
 		echo '</table>';
 	}
 	
-	public function createEventForm($connection)
+	public function createEventForm($connection, $room = null, $date = null)
 	{
+		$start = ( isset($date))? date_create($date) : null;
+			
 		echo<<<ENDHTML
 		<form action="add.php?action='add'" method="post"
 			enctype="multipart/form-data">
@@ -177,66 +193,28 @@ ENDHTML;
 		{
 			$roomID = $row['r_roomID'];
 			$roomname = $row['r_roomName'];
-			echo "<option value='$roomID'>$roomname</option>";
+			
+			// check if $roomName was specified and select if equal
+			if( isset($room) && $room == $roomname)
+			{
+				echo "<option value='$roomID' selected='yes'>$roomname</option>";
+			}
+			else
+			{
+				echo "<option value='$roomID'>$roomname</option>";
+			}
 		}
+		echo "</select>";
 		
-		//fill in vars
-		$sDYear = date_create()->format("Y");
-		$eDYear = date_create()->format("Y");
-		
+		if( isset($date) )
+		{
+			$this->commonDateSelectForm($start);
+		}
+		else
+		{
+			$this->commonDateSelectForm();
+		}
 		echo<<<ENDHTML
-		</select>
-		</p>
-		Start Time:<br>
-		<table class="timeForm" cellpadding=0 cellspacing=0">
-		<thead>
-		<td>Year &#150; Month &#150; Day</td>
-		<td>Hour : Minute</td>
-		</thead>
-		<tr>
-		<td>
-			<input type="text" name="startYear" size=4 value="$sDYear"> &#150; 
-			<select name="startMonth">
-				<option value="12">Dec</option>
-				<option value="01">Jan</option>
-			</select> &#150;
-			<input type="text" name="startDay" size=2>
-		</td>
-		<td>
-			<input type="text" name="startHour" size=2> : 
-			<select name="startMinute">
-				<option value="00">00</option>
-				<option value="30">30</option>
-			</select>
-		</td>	
-		</tr>
-		</table>
-		<br>
-		End Time:<br>
-		<table class="timeForm" cellpadding=0 cellspacing=0">
-		<thead>
-		<td>Year &#150; Month &#150; Day</td>
-		<td>Hour : Minute</td>
-		</thead>
-		<tr>
-		<td>
-			<input type="text" name="endYear" size=4 value="$eDYear"> &#150; 
-			<select name="endMonth">
-				<option value="12">Dec</option>
-				<option value="01">Jan</option>
-			</select> &#150;
-			<input type="text" name="endDay" size=2>
-		</td>
-		<td>
-			<input type="text" name="endHour" size=2> : 
-			<select name="endMinute">
-				<option value="00">00</option>
-				<option value="30">30</option>
-			</select>
-		</td>	
-		</tr>
-		</table>
-		</p>
 		<p>
 		Color of event (6-digit HTML color, including #)<br>
 		<input type="text" name="color" size=7 value="#FFFFFF">
@@ -333,13 +311,84 @@ ENDHTML;
 				echo "<option value='$roomID'>$roomname</option>";
 			}
 		}
+		echo "</select>";
+
+		$this->commonDateSelectForm($start, $end);
+		
+		echo<<<ENDHTML
+		<p>
+		Color of event (6-digit HTML color, including #)<br>
+		<input type="text" name="color" size=7 value="$color">
+		</p>
+		<p>
+		Primary panelist's name (may be blank):<br>
+		<input type="text" name="panelist" value="$panelist">
+		</p>
+		<p>
+		Description (may be blank):<br>
+		<textarea name="desc" rows=10 cols=60>$desc</textarea>
+		</p>
+		<p>
+		<input type="submit" value="Update">
+		</p>
+		</form>
+ENDHTML;
+		echo "<form action=\"delete.php?event=$eventID\" method=\"post\" enctype=\"multipart/form-data\">";
+		echo "<input type=\"submit\" value=\"Delete Event\"></form><br>";
+	}
+	
+	public function commonDateSelectForm($start = null, $end = null)
+	{
+		
+		if( isset($start) && ! isset($end) )
+		{
+			$end = clone($start);
+			$end->modify("+30 minutes");
+		}
 		
 		// set up fill-in variables for the date/time input values
-		$sDYear = $start->format("Y");		
-		$sDMonth = $start->format("m");		
-		$sDDay = $start->format("d");		
-		$sDHour = $start->format("H");		
-		$sDMinute = $start->format("i");
+		
+		if( isset($start) )
+		{
+			$sDYear = $start->format("Y");		
+			$sDMonth = $start->format("m");		
+			$sDDay = $start->format("d");		
+			$sDHour = $start->format("H");		
+			$sDMinute = $start->format("i");
+		}
+		else
+		{
+			$sDYear = date_create()->format("Y");
+			$sDMonth = "";		
+			$sDDay = "";	
+			$sDHour = "";	
+			$sDMinute = "";
+		
+			// current months/hours are supposed to be selected
+			$sDDecSel = ($sDMonth == "12") ? "selected='yes'" : '';
+			$sDJanSel = ($sDMonth == "01") ? "selected='yes'" : '';
+			$sDMin00Sel = ($sDMinute == "00") ? "selected='yes'" : ''; 
+			$sDMin30Sel = ($sDMinute == "30") ? "selected='yes'" : '';
+		}
+		
+		if( isset($end) )
+		{
+			$eDYear = $end->format("Y");
+			$eDMonth = $end->format("m");
+			$eDDay = $end->format("d");
+			$eDHour = $end->format("H");
+			$eDMinute = $end->format("i");
+		
+			
+		}
+		else
+		{
+			$eDYear = date_create()->format("Y");
+			$eDMonth = "";
+			$eDDay = "";
+			$eDHour = "";
+			$eDMinute = "";
+		}
 		
 		// current months/hours are supposed to be selected
 		$sDDecSel = ($sDMonth == "12") ? "selected='yes'" : '';
@@ -347,20 +396,13 @@ ENDHTML;
 		$sDMin00Sel = ($sDMinute == "00") ? "selected='yes'" : ''; 
 		$sDMin30Sel = ($sDMinute == "30") ? "selected='yes'" : '';
 		
-		$eDYear = $end->format("Y");
-		$eDMonth = $end->format("m");
-		$eDDay = $end->format("d");
-		$eDHour = $end->format("H");
-		$eDMinute = $end->format("i");
-		
 		$eDDecSel = ($eDMonth == "12") ? "selected='yes'" : "";
-		$eDJanSel = ($eDMonth == "01") ? "selected='yes'" : "";
-		$eDMin00Sel = ($eDMinute == "00") ? "selected='yes'" : ''; 
-		$eDMin30Sel = ($eDMinute == "30") ? "selected='yes'" : '';
+			$eDJanSel = ($eDMonth == "01") ? "selected='yes'" : "";
+			$eDMin00Sel = ($eDMinute == "00") ? "selected='yes'" : ''; 
+			$eDMin30Sel = ($eDMinute == "30") ? "selected='yes'" : '';
 		
 		echo<<<ENDHTML
-		</select>
-		</p>
+		<div>
 		Start Time:<br>
 		<table class="timeForm" cellpadding=0 cellspacing=0">
 		<thead>
@@ -410,26 +452,8 @@ ENDHTML;
 		</td>	
 		</tr>
 		</table>
-		</p>
-		<p>
-		Color of event (6-digit HTML color, including #)<br>
-		<input type="text" name="color" size=7 value="$color">
-		</p>
-		<p>
-		Primary panelist's name (may be blank):<br>
-		<input type="text" name="panelist" value="$panelist">
-		</p>
-		<p>
-		Description (may be blank):<br>
-		<textarea name="desc" rows=10 cols=60>$desc</textarea>
-		</p>
-		<p>
-		<input type="submit" value="Update">
-		</p>
-		</form>
+		</div>
 ENDHTML;
-		echo "<form action=\"delete.php?event=$eventID\" method=\"post\" enctype=\"multipart/form-data\">";
-		echo "<input type=\"submit\" value=\"Delete Event\"></form><br>";
 	}
 
 	public function printPanelistEdit($event, $eventID)
