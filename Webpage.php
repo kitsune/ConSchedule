@@ -3,7 +3,7 @@
  *      Webpage.php
  *      
  *      Copyright © 2008 Dylan Enloe <ninina@koneko-hime>
- *		Copyright © 2009 Drew Fisher <kakudevel@gmail.com>
+ *		Copyright © 2009, 2010 Drew Fisher <kakudevel@gmail.com>
  *		ALL RIGHTS RESERVED
  *      
  *      This program is free software; you can redistribute it and/or modify
@@ -23,7 +23,7 @@
  */
 
 class Webpage {
-	function __construct($title)
+	function __construct($title, $user)
 	{
 		echo "
 <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"
@@ -42,7 +42,15 @@ echo "</li><li>";
 	$this->addURL("index.php","Event Schedule");
 echo "</li><li>";
 	$this->addURL("userSchedule.php","User Schedule");
-echo "</li></ul>";
+echo "</li>";
+// admin menu stuff
+if( $user->is_Admin() )
+{
+	echo "<li>";
+	$this->addURL("add.php","Add Event");
+	echo "</li>";
+}
+echo "</ul>";
 echo "</div><p></p>";
 	}
 	

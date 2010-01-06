@@ -2,7 +2,7 @@
 /*
  *      userSchedule.php
  *      
- *      Copyright © 2009 Drew Fisher <kakudevel@gmail.com>
+ *      Copyright © 2009, 2010 Drew Fisher <kakudevel@gmail.com>
  *		ALL RIGHTS RESERVED
  *      
  *      This program is free software; you can redistribute it and/or modify
@@ -27,7 +27,7 @@ function __autoload($class_name) {
 
 $C = new Connection();
 $user = new User();
-$page = new Webpage("User Schedule");
+$page = new Webpage("User Schedule", $user);
 
 if( ! $user->is_User())
 {

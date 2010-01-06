@@ -3,7 +3,7 @@
  *      index.php
  *
  *      Copyright © 2008 Dylan Enloe <ninina@koneko-hime>
- *      Copyright © 2009 Drew Fisher <kakudevel@gmail.com>
+ *      Copyright © 2009, 2010 Drew Fisher <kakudevel@gmail.com>
  *		ALL RIGHTS RESERVED
  *      
  *      This program is free software; you can redistribute it and/or modify
@@ -28,7 +28,7 @@ function __autoload($class_name) {
 
 $C = new Connection();
 $user = new User();
-$page = new Webpage("Con Schedule Test");
+$page = new Webpage("Con Schedule Test", $user);
 
 $defaultStartTime = "08:00:00";
 $defaultEndTime = "03:00:00";

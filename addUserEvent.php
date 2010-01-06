@@ -2,7 +2,8 @@
 /*
  *      addUserSchedule.php
  *      
- *      Copyright 2009 Drew Fisher <kakudevel@gmail.com>
+ *      Copyright © 2009, 2010 Drew Fisher <kakudevel@gmail.com>
+ *		ALL RIGHTS RESERVED
  *      
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -25,8 +26,9 @@ function __autoload($class_name) {
 }
 
 $C = new Connection();
-$page = new Webpage("Add User Event");
 $user = new User();
+$page = new Webpage("Add User Event", $user);
+
 
 // make sure the visitor is a forum user
 if( ! $user->is_User() )
