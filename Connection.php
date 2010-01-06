@@ -1,4 +1,4 @@
-<?php
+<?
 /* 
  * Copyright © 2009 Dylan Enloe
  * ALL RIGHTS RESERVED
