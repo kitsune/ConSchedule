@@ -2,7 +2,7 @@
 /*
  *      view.php
  *      
- *      Copyright © 2009 Drew Fisher <kakudevel@gmail.com>
+ *      Copyright © 2009, 2010 Drew Fisher <kakudevel@gmail.com>
  *		ALL RIGHTS RESERVED
  *      
  *      This program is free software; you can redistribute it and/or modify
@@ -26,8 +26,9 @@ function __autoload($class_name) {
 }
 
 $connection = new Connection();
-$page = new Webpage("Test View Event");
 $user = new User();
+$page = new Webpage("Test View Event", $user);
+
 
 $event = $page->_GET_checkEventID($_GET['event'], $connection);
 if( $event == NULL ) exit(0);

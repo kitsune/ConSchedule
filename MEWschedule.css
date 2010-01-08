@@ -1,8 +1,7 @@
 /*
  *      MEWSchedule.css
  *      
- *      Copyright © 2009 Drew Fisher <kakudevel@gmail.com>
- *      Copyright © 2009,2010 Mark Harviston <infinull@gmail.com>
+ *      Copyright © 2009, 2010 Drew Fisher <kakudevel@gmail.com>
  *		ALL RIGHTS RESERVED
  *      
  *      This program is free software; you can redistribute it and/or modify
@@ -31,9 +30,9 @@ body
 
 table
 {
-	height: 100%;
-	width: 100%;
-	border-collapse: collapse;
+	border: 1px solid black;
+	border-right: 0;
+	border-bottom: 0;
 }
 
 table thead
@@ -49,10 +48,13 @@ table thead
 	background-color: #fff;
 }
 
-table td, table th
+table td
 {
 	width: 13%;
 	border: 1px solid black;
+	border-bottom: 1px solid black;
+	border-right: 1px solid black;
+	padding: .5em;
 }
 
 table.timeForm{
@@ -83,18 +85,15 @@ table#conflicts thead
 }
 
 
-.timeColumn
+.timeColumn 
 {
 	font-weight: bold;
 	text-align: center;
 	height: 3em;
 	width: 7%;
+	//font-size: small;
 }
 
-.event_container {
-	position: relative;
-	z-index: 9;
-}
 .foundEvent
 {
 	padding: 0em;
@@ -108,19 +107,11 @@ table#conflicts thead
 	text-align: center;
 	border-bottom: 1px dashed black;
 	width: 100%;
-	position: absolute;
-	top: 0px;
-	left: 0px;
 }
 
 .foundEvent .event
 {
-	text-align: center;
-	position: absolute;
-	width: 100%;
-	height: auto;
-	left: 0px;
-	top: 50%;
+	margin: .5em;
 }
 
 .foundEvent .endTime
@@ -131,9 +122,6 @@ table#conflicts thead
 	text-align: center;
 	border-top: 1px dashed black;
 	width: 100%;
-	position: absolute;
-	bottom: 0px;
-	left: 0px;
 }
 
 /* HEADER MENU SECTION */
@@ -197,7 +185,7 @@ table.userSchedule
 	background: #CCF;
 }
 
-.userSchedule td#day, .userSchedule th#day
+.userSchedule td#day
 {
 	width: 15%;
 }

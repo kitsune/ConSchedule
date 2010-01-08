@@ -3,7 +3,7 @@
  *      edit.php
  *      
  *      Copyright © 2008 Dylan Enloe <ninina@Siren>
- *		Copyright © 2009 Drew Fisher <kakudevel@gmail.com>
+ *		Copyright © 2009, 2010 Drew Fisher <kakudevel@gmail.com>
  *		ALL RIGHTS RESERVED
  *      
  *      This program is free software; you can redistribute it and/or modify
@@ -27,7 +27,7 @@ function __autoload($class_name) {
 
 #first login info
 $user = new User();
-$page = new Webpage("Edit Event");
+$page = new Webpage("Edit Event", $user);
 $connection = new Connection();
 
 // if the visitor isn't even a forum user, they shouldn't be using this page.

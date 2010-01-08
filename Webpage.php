@@ -3,8 +3,7 @@
  *      Webpage.php
  *      
  *      Copyright © 2008 Dylan Enloe <ninina@koneko-hime>
- *		Copyright © 2009 Drew Fisher <kakudevel@gmail.com>
- *		Copyright © 2009,2010 Mark Harviston <infinull@gmail.com>
+ *		Copyright © 2009, 2010 Drew Fisher <kakudevel@gmail.com>
  *		ALL RIGHTS RESERVED
  *      
  *      This program is free software; you can redistribute it and/or modify
@@ -24,21 +23,18 @@
  */
 
 class Webpage {
-	function __construct($title)
+	function __construct($title, $user)
 	{
-		echo <<<EOHTML
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-"http://www.w3.org/TR/html4/loose.dtd">
+		echo "
+<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"
+\"http://www.w3.org/TR/html4/loose.dtd\">
 <head>
 	<title>Mewcon: $title</title>
-	<meta http-equiv="content-type" content="text/html;charset=utf-8">
-	<link href="MEWschedule.css" rel="stylesheet" type="text/css">
-<script type="text/javascript" language="javascript" src="MEWschedule.js"></script>
+	<meta http-equiv=\"content-type\" content=\"text/html;charset=utf-8\">
+	<link href=\"MEWschedule.css\" rel=\"stylesheet\" type=\"text/css\">
 </head>
 <body>
-<div id='headerMenu'>
-EOHTML;
-
+<div id='headerMenu'>";
 echo "<ul>";
 echo "<li>";
 	$this->addURL("http://www.mewcon.com","MEWcon Home");
@@ -46,7 +42,15 @@ echo "</li><li>";
 	$this->addURL("index.php","Event Schedule");
 echo "</li><li>";
 	$this->addURL("userSchedule.php","User Schedule");
-echo "</li></ul>";
+echo "</li>";
+// admin menu stuff
+if( $user->is_Admin() )
+{
+	echo "<li>";
+	$this->addURL("add.php","Add Event");
+	echo "</li>";
+}
+echo "</ul>";
 echo "</div><p></p>";
 	}
 	
@@ -88,7 +92,7 @@ echo "</div><p></p>";
 		//might as well print out the top row too
 		foreach($roomNames as $roomName)
 		{
-			echo "<th>$roomName</td>";
+			echo "<td style=\"width: 13%;\">$roomName</td>";
 			$wait[$roomName] = 0;
 		}
 		echo "</thead>";
@@ -96,9 +100,9 @@ echo "</div><p></p>";
 		//table body printout
 		for($i=0; $i < $halfHoursOpen; $i+=1)
 		{
-			$tF = $tableTime->format("g:i a");
-			echo "<tr>
-			<th class=\"timeColumn\">$tF</th>";
+			echo "<tr>";
+			$tF = $tableTime->format("H:i");
+			echo "<td class=\"timeColumn\" align=\"center\">" . $tF . "</td>";
 		
 			foreach($roomNames as $roomName)
 			{
@@ -113,7 +117,7 @@ echo "</div><p></p>";
 					 */ 
 					if(isset($schedule[$tF][$roomName]))
 					{			
-						$timeFormat = "g:i a";
+						$timeFormat = "H:i / g:i a";
 						
 						$event = $schedule[$tF][$roomName];
 						$name = $event->getEventName();
@@ -121,22 +125,21 @@ echo "</div><p></p>";
 						$size = $event->getEventLengthInHalfHours();
 						$eventID = $event->getEventID();
 						
-						echo "<td class=\"foundEvent\" rowspan=\"$size\" bgcolor=\"$color\">
-						<div class=\"event_container\">
+						echo "<td class=\"foundEvent\" rowspan=\"" . $size
+							. "\" bgcolor=\"" . $color . "\">";
 						
-						<div class=\"startTime\">
-						{$event->getStartDate()->format($timeFormat)}
-						</div>
+						echo "<div class=\"startTime\">";
+						echo $event->getStartDate()->format($timeFormat);
+						echo "</div>";
 						
-						<div class=\"event\">";
+						echo "<div class=\"event\">"; 
 						$this->addURL("view.php?event=$eventID",$name);
-						echo "</div>
+						echo "</div>";
 						
-						<div class=\"endTime\">
-						{$event->getEndDate()->format($timeFormat)}
-						</div>
-						</div>
-						</td>";
+						echo "<div class=\"endTime\">";
+						echo $event->getEndDate()->format($timeFormat);
+						echo "</div>";
+						echo"</td>";
 						$wait[$roomName] = $size - 1;
 					}
 					else
