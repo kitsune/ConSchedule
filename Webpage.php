@@ -83,7 +83,7 @@ echo "</div><p></p>";
 		$tableTime = clone($conOpens);
 		
 		echo '<table class="daySchedule" cellpadding=0 cellspacing=0><thead>';
-		echo '<tr><th class="timeColumn"></th>';
+		echo '<tr><th class="timeColumn">Time</th>';
 		//initialize the wait on each room to zero
 		//might as well print out the top row too
 		foreach($roomNames as $roomName)

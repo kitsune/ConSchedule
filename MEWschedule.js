@@ -74,10 +74,10 @@ function col_width_set(){
 }
 
 window.onload = function(){
-	col_width_set();
+	//col_width_set();
 	center_stuff();
 }
 
 window.onresize = function(){
-	col_width_set();
+	//col_width_set();
 }
