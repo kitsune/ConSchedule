@@ -36,6 +36,7 @@ class Webpage {
 	<title>Mewcon: $title</title>
 	<meta http-equiv=\"content-type\" content=\"text/html;charset=utf-8\">
 	<link href=\"MEWschedule.css\" rel=\"stylesheet\" type=\"text/css\">
+	<script type=\"text/javascript\" language=\"javascript\" src=\"MEWschedule.js\"></script>
 </head>
 <body>
 <div id='headerMenu'>";
@@ -91,12 +92,13 @@ echo "</div><p></p>";
 		$tableTime = clone($conOpens);
 		
 		echo '<table class="daySchedule" cellpadding=0 cellspacing=0><thead>';
-		echo '<tr><td></td>';
+		echo "<caption><h2>Schedule for {$conOpens->format('F d, Y')}</h2></caption>";
+		echo '<tr><th class="timeColumn">Time</th>';
 		//initialize the wait on each room to zero
 		//might as well print out the top row too
 		foreach($roomNames as $roomName)
 		{
-			echo "<td style=\"width: 13%;\">$roomName</td>";
+			echo "<td>$roomName</td>";
 			$wait[$roomName] = 0;
 		}
 		echo "</thead>";
@@ -129,21 +131,28 @@ echo "</div><p></p>";
 						$size = $event->getEventLengthInHalfHours();
 						$eventID = $event->getEventID();
 						
-						echo "<td class=\"foundEvent\" rowspan=\"" . $size
-							. "\" bgcolor=\"" . $color . "\">";
+
+						echo "<td class=\"foundEvent\" rowspan=\"$size\" bgcolor=\"$color\">
+						<div class=\"event_container\">";
 						
-						echo "<div class=\"startTime\">";
-						echo $event->getStartDate()->format($timeFormat);
-						echo "</div>";
+						if($size > 1){
+							echo "<div class=\"startTime\">
+							{$event->getStartDate()->format($timeFormat)}
+							</div>";
+						}
 						
-						echo "<div class=\"event\">"; 
+						echo "<div class=\"event\">";
 						$this->addURL("view.php?event=$eventID",$name);
 						echo "</div>";
 						
-						echo "<div class=\"endTime\">";
-						echo $event->getEndDate()->format($timeFormat);
-						echo "</div>";
-						echo"</td>";
+						if($size > 1){
+							echo "<div class=\"endTime\">
+							{$event->getEndDate()->format($timeFormat)}
+							</div>";
+						}
+
+						echo "</div>
+						</td>";
 						$wait[$roomName] = $size - 1;
 					}
 					else

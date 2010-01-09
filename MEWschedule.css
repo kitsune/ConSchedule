@@ -20,11 +20,17 @@
  *      MA 02110-1301, USA.
  */
  
+body
+{
+	background-color: #FFF;
+	margin-left: 8px;
+	margin-right: 8px;
+}
+
 table
 {
-	border: 1px solid black;
-	border-right: 0;
-	border-bottom: 0;
+	border-collapse: collapse;
+	width: 100%;
 }
 
 table thead
@@ -33,11 +39,28 @@ table thead
 	text-align: center;
 }
 
-table td
+table td, table th
 {
-	border-bottom: 1px solid black;
-	border-right: 1px solid black;
+	border: 1px solid black;
 	padding: .25em;
+	top: 0px;
+	left: 8px;
+	background-color: #fff;
+	width: 13%;
+}
+
+caption, caption h2
+{
+	border-top: 1px double #000;
+	border-bottom: 1px double #000;
+	margin-top: 8px;
+	margin-bottom: 8px;
+}
+
+caption h2
+{
+	padding-top: 8px;
+	padding-bottom: 8px;
 }
 
 table.timeForm{
@@ -75,6 +98,8 @@ table#conflicts thead
 	font-weight: bold;
 	//font-size: small;
 	width: 4%;
+	text-align: center;
+	height: 3em;
 }
 
 .foundEvent

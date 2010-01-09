@@ -228,9 +228,6 @@ foreach( $roomNames as $roomName )
 echo "<center>";
 if( isset($conday) || isset($_GET['date']) )
 {
-	echo "<hr><hr>";
-	$page->printError("Schedule for " . $startDate->format("F d, Y"));
-	echo "<hr><hr><br>";
 	$page->printDaySchedule($schedule, $roomNames, $startDate, $endDate);
 }
 else
@@ -240,11 +237,6 @@ else
 		$dayStarts = date_create( $conTimes[$i]['start'] );
 		$dayEnds = date_create( $conTimes[$i]['end'] );
 	
-		echo "<hr><hr>";
-		echo "<h2>";
-		echo "Schedule for " . $dayStarts->format("F d, Y");
-		echo "</h2>";
-		echo "<hr><hr><br>";
 		$page->printDaySchedule($schedule, $roomNames, $dayStarts, $dayEnds); 
 	}
 }
