@@ -132,7 +132,7 @@ echo "</div><p></p>";
 						$eventID = $event->getEventID();
 						
 
-						echo "<td class=\"foundEvent\" rowspan=\"$size\" bgcolor=\"$color\">
+						echo "<td class=\"foundEvent\" rowspan=\"$size\" style=\"background-color:$color\">
 						<div class=\"event_container\">";
 						
 						if($size > 1){

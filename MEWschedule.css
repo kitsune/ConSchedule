@@ -107,6 +107,9 @@ table#conflicts thead
 	padding: 0em;
 }
 
+.event_container {
+	position: relative;
+}
 .foundEvent .startTime
 {
 	padding:  2px 0em;
@@ -115,11 +118,21 @@ table#conflicts thead
 	text-align: center;
 	border-bottom: 1px dashed black;
 	width: 100%;
+	position: absolute;
+	top: 0px;
 }
 
 .foundEvent .event
 {
+	position: absolute;
+    /*TODO: Drew choose:
+	text-align: center;
+	width: 100%;
+	or:
+	*/
 	margin: .5em;
+	/* but not both, (or get fancy with dummy divs)*/
+    top: 50%;
 }
 
 .foundEvent .endTime
@@ -130,6 +143,8 @@ table#conflicts thead
 	text-align: center;
 	border-top: 1px dashed black;
 	width: 100%;
+	position: absolute;
+	bottom: 0px;
 }
 
 /* HEADER MENU SECTION */
