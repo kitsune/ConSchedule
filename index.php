@@ -60,10 +60,9 @@ $date = NULL;
 // check for index.php?date=YYYYMMDD[&startTime=HHMM][&endTime=HHMM]
 // or index.php?conday=#[&startTime=HHMM][&endTime=HHMM]
 
-$GETvar = $_GET['conday'];
-if( isset($GETvar) && strlen($GETvar) <= 2) //I doubt we'll ever have more than 99 days of con...
+if( isset($_GET['conday']) && strlen($_GET['conday']) <= 2) //I doubt we'll ever have more than 99 days of con...
 {
-	$conday = $C->validate_string($GETvar);
+	$conday = $C->validate_string($_GET['conday']);
 	if( isset($conTimes[$conday]) )
 	{
 		$ex = explode(" ", $conTimes[$conday]['start'] );
@@ -75,10 +74,9 @@ if( isset($GETvar) && strlen($GETvar) <= 2) //I doubt we'll ever have more than 
 	}	
 }
 
-$GETvar = $_GET['date'];
-if( isset($GETvar) && strlen($GETvar) == 8 && ! isset($conday) )
+if( isset($_GET['date']) && strlen($_GET['date']) == 8 && ! isset($conday) )
 {
-	$date = $C->validate_string($GETvar);
+	$date = $C->validate_string($_GET['date']);
 }	
 
 //if either ?conday or ?date were passed, check for ?startTime and ?endTime
