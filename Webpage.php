@@ -83,6 +83,7 @@ echo "</div><p></p>";
 		$tableTime = clone($conOpens);
 		
 		echo '<table class="daySchedule" cellpadding=0 cellspacing=0><thead>';
+		echo "<caption><h2>Schedule for {$conOpens->format('F d, Y')}</h2></caption>";
 		echo '<tr><th class="timeColumn">Time</th>';
 		//initialize the wait on each room to zero
 		//might as well print out the top row too
@@ -122,20 +123,25 @@ echo "</div><p></p>";
 						$eventID = $event->getEventID();
 						
 						echo "<td class=\"foundEvent\" rowspan=\"$size\" bgcolor=\"$color\">
-						<div class=\"event_container\">
+						<div class=\"event_container\">";
 						
-						<div class=\"startTime\">
-						{$event->getStartDate()->format($timeFormat)}
-						</div>
+						if($size > 1){
+							echo "<div class=\"startTime\">
+							{$event->getStartDate()->format($timeFormat)}
+							</div>";
+						}
 						
-						<div class=\"event\">";
+						echo "<div class=\"event\">";
 						$this->addURL("view.php?event=$eventID",$name);
-						echo "</div>
+						echo "</div>";
 						
-						<div class=\"endTime\">
-						{$event->getEndDate()->format($timeFormat)}
-						</div>
-						</div>
+						if($size > 1){
+							echo "<div class=\"endTime\">
+							{$event->getEndDate()->format($timeFormat)}
+							</div>";
+						}
+
+						echo "</div>
 						</td>";
 						$wait[$roomName] = $size - 1;
 					}
