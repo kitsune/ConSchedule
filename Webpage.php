@@ -98,7 +98,7 @@ echo "</div><p></p>";
 		//might as well print out the top row too
 		foreach($roomNames as $roomName)
 		{
-			echo "<td>$roomName</td>";
+			echo "<th>$roomName</th>";
 			$wait[$roomName] = 0;
 		}
 		echo "</thead>";
@@ -108,7 +108,7 @@ echo "</div><p></p>";
 		{
 			echo "<tr>";
 			$tF = $tableTime->format("g:i a");
-			echo "<td class=\"timeColumn\" align=\"center\">" . $tF . "</td>";
+			echo "<td class=\"timeColumn\">" . $tF . "</td>";
 		
 			foreach($roomNames as $roomName)
 			{

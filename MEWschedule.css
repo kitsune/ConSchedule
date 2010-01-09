@@ -49,6 +49,11 @@ table td, table th
 	width: 13%;
 }
 
+table th{
+	font-weight: bold;
+	text-align: center;
+}
+
 caption, caption h2
 {
 	border-top: 1px double #000;
