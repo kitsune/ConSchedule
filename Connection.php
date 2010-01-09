@@ -18,6 +18,10 @@
 global $database_username, $database_password, $database_server,
 			$database_name;
 
+if(!file_exists('settings.php')){
+	die('rename settings.default.php to settings.php and edit it to include your database settings');
+}
+
 require_once 'settings.php';
 
 class Connection {
