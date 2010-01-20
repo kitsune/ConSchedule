@@ -37,6 +37,13 @@ table thead
 {
 	font-weight: bold;
 	text-align: center;
+	/*
+	position: fixed;
+	top: 0px;
+	left: 8px;
+	z-index: 10;
+	*/
+	background-color: #fff;
 }
 
 table td, table th
@@ -66,6 +73,9 @@ caption h2
 {
 	padding-top: 8px;
 	padding-bottom: 8px;
+	border-bottom: 1px solid black;
+	border-right: 1px solid black;
+	padding: .25em;
 }
 
 table.timeForm{
@@ -101,10 +111,8 @@ table#conflicts thead
 .timeColumn 
 {
 	font-weight: bold;
-	//font-size: small;
+	height: 2em;
 	width: 4%;
-	text-align: center;
-	height: 3em;
 }
 
 .foundEvent
@@ -130,14 +138,8 @@ table#conflicts thead
 .foundEvent .event
 {
 	position: absolute;
-    /*TODO: Drew choose:
-	text-align: center;
-	width: 100%;
-	or:
-	*/
 	margin: .5em;
-	/* but not both, (or get fancy with dummy divs)*/
-    top: 50%;
+	top: 50%;
 }
 
 .foundEvent .endTime

@@ -27,6 +27,16 @@ function center_stuff(){
 			divs[i].style.height = '' + divs[i].parentNode.offsetHeight + 'px';
 
 			//remove start/end from half-hour
+			//TODO: make PHP fix
+			if(divs[i].parentNode.rowSpan == 1){
+				for(var j = 0; j < divs[i].children.length; j+=1){
+					if(divs[i].children[j].className == 'startTime'){
+						divs[i].children[j].style.display='none';
+					}else if(divs[i].children[j].className == 'endTime'){
+						divs[i].children[j].style.display='none';
+					}
+				}
+			}
 		} else if(divs[i].className == 'event'){
 			var to_set = Math.round(divs[i].offsetHeight/2);
 			divs[i].style.marginTop = '-'+ to_set + 'px';
