@@ -1,4 +1,3 @@
-<<<<<<< HEAD:Webpage.php
 <?php
 /*
  *      Webpage.php
