@@ -101,7 +101,7 @@ echo "</div><p></p>";
 		for($i=0; $i < $halfHoursOpen; $i+=1)
 		{
 			echo "<tr>";
-			$tF = $tableTime->format("H:i");
+			$tF = $tableTime->format("g:i a");
 			echo "<td class=\"timeColumn\" align=\"center\">" . $tF . "</td>";
 		
 			foreach($roomNames as $roomName)
@@ -117,7 +117,7 @@ echo "</div><p></p>";
 					 */ 
 					if(isset($schedule[$tF][$roomName]))
 					{			
-						$timeFormat = "H:i / g:i a";
+						$timeFormat = "g:i a / H:i";
 						
 						$event = $schedule[$tF][$roomName];
 						$name = $event->getEventName();
@@ -128,18 +128,24 @@ echo "</div><p></p>";
 						echo "<td class=\"foundEvent\" rowspan=\"" . $size
 							. "\" bgcolor=\"" . $color . "\">";
 						
-						echo "<div class=\"startTime\">";
-						echo $event->getStartDate()->format($timeFormat);
-						echo "</div>";
+						if( $size > 1 )
+						{
+							echo "<div class=\"startTime\">";
+							echo $event->getStartDate()->format($timeFormat);
+							echo "</div>";
+						}
 						
 						echo "<div class=\"event\">"; 
 						$this->addURL("view.php?event=$eventID",$name);
 						echo "</div>";
 						
-						echo "<div class=\"endTime\">";
-						echo $event->getEndDate()->format($timeFormat);
-						echo "</div>";
-						echo"</td>";
+						if( $size > 1 )
+						{
+							echo "<div class=\"endTime\">";
+							echo $event->getEndDate()->format($timeFormat);
+							echo "</div>";
+							echo"</td>";
+						}
 						$wait[$roomName] = $size - 1;
 					}
 					else

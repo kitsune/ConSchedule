@@ -48,13 +48,12 @@ table thead
 	background-color: #fff;
 }
 
-table td
+table td, table th
 {
 	width: 13%;
-	border: 1px solid black;
 	border-bottom: 1px solid black;
 	border-right: 1px solid black;
-	padding: .5em;
+	padding: .25em;
 }
 
 table.timeForm{
@@ -89,9 +88,8 @@ table#conflicts thead
 {
 	font-weight: bold;
 	text-align: center;
-	height: 3em;
-	width: 7%;
-	//font-size: small;
+	height: 2em;
+	width: 4%;
 }
 
 .foundEvent
